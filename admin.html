@@ -53,6 +53,7 @@
                   loginList.appendChild(div);
                 });
               }
+              // Update stats
               document.querySelectorAll(".stats .text-2xl")[0].textContent = storedData.length;
               const lastLogin = storedData.length > 0 ? storedData[storedData.length - 1].timestamp : "N/A";
               document.querySelectorAll(".stats .text-2xl")[1].textContent = lastLogin;

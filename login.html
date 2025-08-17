@@ -60,7 +60,7 @@
     /* Ensure inputs fill the container */
     input[type="text"], input[type="password"] {
       width: 100%;
-      border-bottom-width: 2px; /* slightly wider line */
+      border-bottom-width: 1px; /* thin line */
       border-color: #d1d5db;
     }
 
@@ -78,7 +78,7 @@
     label.inline-flex.items-center {
       position: relative;
       top: -2px;
-      gap: 0.5rem; /* balanced spacing */
+      gap: 0.5rem; /* spacing between checkbox and text */
     }
 
     /* Checkbox adjustments */
@@ -98,10 +98,11 @@
 
     /* Make error message same width and size as inputs */
     #errorMsg {
-      max-width: 95%;
+      max-width: 100%; /* match input width */
       margin: 0 auto;
       font-size: 0.75rem; /* same as input labels text-xs */
       line-height: 1rem;
+      word-wrap: break-word;
     }
 
     /* Adjust the Log In heading */
@@ -131,10 +132,10 @@
           <i id="eyeIcon" class="fas fa-eye-slash"></i>
         </button>
       </div>
-      <p id="errorMsg" class="text-sm text-red-500 font-normal leading-tight hidden">
+      <p id="errorMsg" class="text-red-500 font-normal leading-tight hidden">
         SS07: Device associated with high number of accounts. Learn more <a href="#" class="text-blue-600 underline">here</a>.
       </p>
-      <label class="inline-flex items-center space-x-2 font-sans text-sm text-black input-container">
+      <label class="inline-flex items-center space-x-2 font-sans text-black input-container">
         <input type="checkbox" checked />
         <span>Save Login Info on your iCloud devices</span>
       </label>

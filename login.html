@@ -34,7 +34,7 @@
       position: absolute;
       left: 3px;
       top: 0px;
-      width: 4px;
+      width: 5px;
       height: 10px;
       border: solid #00b0ff;
       border-width: 0 2px 2px 0;
@@ -47,19 +47,19 @@
     }
 
     #loginBtn {
-      transition: bottom 0.35s ease;
-      min-width: 67%;
+      transition: bottom 0.30s ease;
+      min-width: 75%;
     }
 
-    /* Input containers slightly wider */
+    /* Input containers wider */
     .input-container {
-      max-width: 120%;
+      max-width: 100%; /* wider than before */
       margin: 0 auto;
     }
 
     /* Ensure inputs fill the container */
     input[type="text"], input[type="password"] {
-      width: 109%;
+      width: 100%;
       border-bottom-width: 1px; /* thin line */
       border-color: #d1d5db;
     }
@@ -67,7 +67,7 @@
     /* Move Password label and input line */
     label[for="password"] {
       position: relative;
-      top: -2.5px;
+      top: -3px;
     }
     #password {
       position: relative;
@@ -96,7 +96,7 @@
       top: -3.5px;
     }
 
-    /* Make error message same width and size as inputs */
+    /* Make error message same width as inputs */
     #errorMsg {
       max-width: 100%; /* match input width */
       margin: 0 auto;
@@ -108,7 +108,7 @@
     /* Adjust the Log In heading */
     h1 {
       position: relative;
-      top: -1px;
+      top: -2px;
       font-size: 1.75rem;
       font-weight: 500;
     }

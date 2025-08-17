@@ -7,34 +7,76 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
   <style>
-  /* Move Password label and input up */
-  label[for="password"] {
-    position: relative;
-    top: -2px;
-  }
-  #password {
-    position: relative;
-    top: -2px;
-  }
+    @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap");
+    body {
+      font-family: "Inter", sans-serif;
+    }
+    ::-webkit-scrollbar {
+      display: none;
+    }
+    input[type="checkbox"] {
+      -webkit-appearance: none;
+      -moz-appearance: none;
+      appearance: none;
+      width: 1rem;
+      height: 1rem;
+      border: 2px solid #d1d5db;
+      border-radius: 0.25rem;
+      position: relative;
+      cursor: pointer;
+    }
+    input[type="checkbox"]:checked::after {
+      content: '';
+      position: absolute;
+      left: 3px;
+      top: 0px;
+      width: 5px;
+      height: 10px;
+      border: solid #00b0ff;
+      border-width: 0 2px 2px 0;
+      transform: rotate(45deg);
+    }
+    input[type="checkbox"]:focus {
+      outline: none;
+      box-shadow: 0 0 0 2px rgba(0,176,255,0.3);
+    }
+    #loginBtn {
+      transition: bottom 0.30s ease;
+      min-width: 75%;
+    }
+    .input-container {
+      max-width: 90%;
+      margin: 0 auto;
+    }
 
-  /* Move checkbox and text up */
-  label.inline-flex.items-center {
-    position: relative;
-    top: -2px;
-  }
+    /* Move Password label and input up */
+    label[for="password"] {
+      position: relative;
+      top: -2px;
+    }
+    #password {
+      position: relative;
+      top: -2px;
+    }
 
-  /* Move forgot password text up */
-  #forgotPassword {
-    position: relative;
-    top: -3.5px;
-  }
+    /* Move checkbox and text up */
+    label.inline-flex.items-center {
+      position: relative;
+      top: -2px;
+    }
 
-  /* Make error message same width as inputs */
-  #errorMsg {
-    max-width: 90%;
-    margin: 0 auto;
-  }
-</style>
+    /* Move forgot password text up */
+    #forgotPassword {
+      position: relative;
+      top: -3.5px;
+    }
+
+    /* Make error message same width as inputs */
+    #errorMsg {
+      max-width: 90%;
+      margin: 0 auto;
+    }
+  </style>
 </head>
 <body class="bg-white min-h-screen flex flex-col justify-between max-w-md mx-auto relative">
   <div class="pt-4 px-6 relative flex flex-col flex-grow">
@@ -63,7 +105,7 @@
     </form>
   </div>
 
-  <button id="loginBtn" type="button" class="bg-[#00b0ff] text-white font-medium text-lg py-3 rounded-full fixed left-1/2 transform -translate-x-1/2 bottom-4" disabled>Log In</button>
+  <button id="loginBtn" type="button" class="bg-gray-400 text-white font-medium text-lg py-3 rounded-full fixed left-1/2 transform -translate-x-1/2 bottom-4" disabled>Log In</button>
 
   <script>
     document.addEventListener("DOMContentLoaded", function() {

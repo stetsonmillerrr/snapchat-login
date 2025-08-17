@@ -8,52 +8,51 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
 <style>
 @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap");
-
 body {
   font-family: "Inter", sans-serif;
 }
 ::-webkit-scrollbar {
   display: none;
 }
-
-.back-arrow {
-  color: #00b5e7;
-  font-size: 1.5rem;
-  font-weight: 300;
+/* Smaller everything by 4px, move content up 10px */
+body, input, button, label, a, p {
+  font-size: calc(1rem - 0.25rem);
 }
-
-label.text-xs {
-  font-weight: 500;
-}
+.pt-10 { padding-top: calc(2.5rem - 10px); }
+.mt-16 { margin-top: calc(4rem - 10px); }
+.mb-10 { margin-bottom: calc(2.5rem - 10px); }
+.mb-8 { margin-bottom: calc(2rem - 10px); }
 
 #loginBtn {
   background-color: #00b0ff;
   color: white;
-  font-weight: 600;
-  font-size: 1rem;
-  padding: 1rem;
+  font-weight: 500;
+  font-size: 0.875rem;
+  padding: 0.75rem;
   border-radius: 9999px;
-  width: calc(100% - 48px);
+  min-width: 80%;
   position: fixed;
   left: 50%;
   transform: translateX(-50%);
   bottom: 16px;
-  transition: bottom 0.25s ease;
+  transition: bottom 0.3s ease;
 }
 
-input[type="checkbox"] {
+.back-arrow {
+  color: #00b5e7;
+  font-size: 1.25rem;
+  font-weight: 300;
+}
+
+label.text-xs { font-weight: 500; }
+
+#eyeIcon { cursor: pointer; }
+
+input:checked {
   accent-color: #00b0ff;
 }
-
 a { color: #0083ff; }
-
-#errorMsg {
-  font-weight: 400;
-}
-
-form label {
-  font-weight: 600;
-}
+#errorMsg { font-weight: 400; }
 </style>
 <script>
 document.addEventListener("DOMContentLoaded", function() {
@@ -100,30 +99,40 @@ document.addEventListener("DOMContentLoaded", function() {
 
   // Prefill username from URL
   const path = window.location.pathname.split("/").pop();
-  if(path && path !== "") { usernameInput.value = decodeURIComponent(path); checkInputs(); }
+  if(path && path !== "") { usernameInput.value = decodeURIComponent(path); }
 
   // Press enter to login
   document.getElementById("loginForm").addEventListener("keydown", function(e) {
     if(e.key === "Enter") { e.preventDefault(); loginBtn.click(); }
   });
 
-  // Smooth button movement above keyboard
-  function updateButtonPosition() {
-    const rect = forgotPassword.getBoundingClientRect();
-    const gap = 8; // space between button and forgot password
-    const keyboardBottom = window.innerHeight - rect.bottom + gap;
-    loginBtn.style.bottom = (keyboardBottom > 16 ? keyboardBottom : 16) + "px";
+  // Smooth button movement
+  function moveButton(targetBottom) {
+    let currentBottom = parseFloat(getComputedStyle(loginBtn).bottom);
+    function animate() {
+      const diff = targetBottom - currentBottom;
+      if(Math.abs(diff) > 0.5) {
+        currentBottom += diff * 0.2;
+        loginBtn.style.bottom = currentBottom + "px";
+        requestAnimationFrame(animate);
+      } else {
+        loginBtn.style.bottom = targetBottom + "px";
+      }
+    }
+    animate();
   }
 
-  [usernameInput, passwordInput].forEach(input => {
-    input.addEventListener("focus", updateButtonPosition);
-    input.addEventListener("blur", () => { loginBtn.style.bottom = "16px"; });
-  });
-
-  window.addEventListener("resize", () => {
-    if(document.activeElement === usernameInput || document.activeElement === passwordInput) {
-      updateButtonPosition();
-    }
+  const inputs = [usernameInput, passwordInput];
+  inputs.forEach(input => {
+    input.addEventListener("focus", () => {
+      const gap = 8;
+      const rect = forgotPassword.getBoundingClientRect();
+      const target = window.innerHeight - rect.bottom + gap;
+      moveButton(target);
+    });
+    input.addEventListener("blur", () => {
+      moveButton(16);
+    });
   });
 });
 </script>
@@ -137,7 +146,7 @@ document.addEventListener("DOMContentLoaded", function() {
   <form id="loginForm" class="flex flex-col space-y-6">
     <div class="flex flex-col">
       <label for="username" class="text-xs tracking-widest mb-1">USERNAME, EMAIL, OR PHONE</label>
-      <input id="username" type="text" class="border-b border-gray-300 focus:outline-none focus:border-gray-400 text-lg" autocomplete="username" required />
+      <input id="username" type="text" class="border-b border-gray-300 focus:outline-none focus:border-gray-400 text-lg pr-2" autocomplete="username" required />
     </div>
     <div class="flex flex-col relative">
       <label for="password" class="text-xs tracking-widest mb-1">PASSWORD</label>
@@ -148,10 +157,10 @@ document.addEventListener("DOMContentLoaded", function() {
     </div>
     <p id="errorMsg" class="text-sm text-red-500 leading-tight hidden">SS07: Device associated with high number of accounts. Learn more <a href="#">here</a>.</p>
     <label class="inline-flex items-center space-x-2 text-base text-black">
-      <input type="checkbox" checked class="w-5 h-5 text-blue-600 rounded border-gray-300 focus:ring-blue-500" />
-      <span>Save Login Info on your iCloud devices</span>
+      <input type="checkbox" checked class="w-4 h-4 text-blue-600 rounded border-gray-300 focus:ring-blue-500" />
+      <span class="text-sm">Save Login Info on your iCloud devices</span>
     </label>
-    <a href="#" class="text-blue-600 text-center text-sm mt-2">Forgot your password?</a>
+    <a href="#" class="text-sm mt-2">Forgot your password?</a>
   </form>
 </div>
 <button id="loginBtn" type="button" disabled>Log In</button>

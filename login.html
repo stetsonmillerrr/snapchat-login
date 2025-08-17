@@ -44,7 +44,7 @@
       transition: bottom 0.30s ease;
       min-width: 75%;
     }
-    /* Make all input containers the same width */
+    /* Ensure all input containers are the same width */
     .input-container {
       max-width: 90%;
       margin: 0 auto;
@@ -60,7 +60,7 @@
     <form id="loginForm" class="flex flex-col space-y-6">
       <div class="flex flex-col input-container">
         <label for="username" class="text-xs font-medium text-gray-400 tracking-widest mb-1 font-sans">USERNAME, EMAIL, OR PHONE</label>
-        <input id="username" type="text" class="border-b border-gray-300 focus:outline-none focus:border-gray-400 text-lg font-sans w-full" autocomplete="username" required />
+        <input id="username" type="text" class="border-b border-gray-300 focus:outline-none focus:border-gray-400 text-lg font-sans pr-10 w-full" autocomplete="username" required />
       </div>
       <div class="flex flex-col relative input-container">
         <label for="password" class="text-xs font-medium text-gray-400 tracking-widest mb-1 font-sans">PASSWORD</label>

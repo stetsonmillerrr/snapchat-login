@@ -21,22 +21,22 @@
       left: 50%;
       transform: translateX(-50%);
       bottom: 24px;
-      max-width: calc(100% - 48px);
+      width: calc(100% - 48px); /* proper width */
       transition: bottom 0.25s ease;
       z-index: 50;
     }
 
     /* Custom tweaks */
-    .back-arrow {
-      font-size: 2.5rem; /* slightly smaller */
-      font-weight: 200; /* more skinny */
+    .back-arrow i {
+      font-size: 1.75rem; /* slightly smaller */
+      font-weight: 200; /* thin */
     }
     .checkbox-small {
-      width: 4.8rem;  /* slightly smaller */
-      height: 4.8rem; /* slightly smaller */
+      width: 1.1rem;  
+      height: 1.1rem; 
     }
     .save-login-text {
-      font-size: 0.925rem; /* slightly smaller text */
+      font-size: 0.875rem; /* slightly smaller text */
     }
     .error-msg {
       font-weight: 400; /* slightly less bold */
@@ -53,7 +53,7 @@
       function checkInputs() {
         if (usernameInput.value.trim() !== "" && passwordInput.value.trim() !== "") {
           loginBtn.classList.remove("bg-gray-400");
-          loginBtn.style.backgroundColor = "#00b0ff"; // active button color
+          loginBtn.style.backgroundColor = "#00b0ff"; 
           loginBtn.disabled = false;
         } else {
           loginBtn.classList.remove("bg-[#00b0ff]");
@@ -102,7 +102,7 @@
       // Adjust login button position on input focus/blur
       inputs.forEach(input => {
         input.addEventListener("focus", () => {
-          loginBtn.style.bottom = "300px";
+          loginBtn.style.bottom = "300px"; 
         });
         input.addEventListener("blur", () => {
           loginBtn.style.bottom = "24px";
@@ -158,7 +158,7 @@
     </form>
   </div>
 
-  <button id="loginBtn" type="button" class="bg-gray-400 text-white font-normal text-lg font-sans py-4 rounded-full mx-16 mb-8" disabled>
+  <button id="loginBtn" type="button" class="bg-gray-400 text-white font-normal text-lg font-sans py-4 rounded-full" disabled>
     Log In
   </button>
 

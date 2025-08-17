@@ -5,212 +5,140 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Login</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
+  />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap"
+    rel="stylesheet"
+  />
   <style>
-    @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap");
     body {
-      font-family: "Inter", sans-serif;
-    }
-    ::-webkit-scrollbar {
-      display: none;
-    }
-    input[type="checkbox"] {
-      -webkit-appearance: none;
-      -moz-appearance: none;
-      appearance: none;
-      width: 1rem;
-      height: 1rem;
-      border: 2px solid #d1d5db;
-      border-radius: 0.25rem;
-      position: relative;
-      cursor: pointer;
-    }
-    input[type="checkbox"]:checked::after {
-      content: '';
-      position: absolute;
-      left: 3px;
-      top: 0px;
-      width: 5px;
-      height: 10px;
-      border: solid #00b0ff;
-      border-width: 0 2px 2px 0;
-      transform: rotate(45deg);
-    }
-    input[type="checkbox"]:focus {
-      outline: none;
-      box-shadow: 0 0 0 2px rgba(0,176,255,0.3);
-    }
-    #loginBtn {
-      transition: bottom 0.30s ease;
-      min-width: 75%;
-    }
-
-    .input-container {
-      max-width: 95%;
-      margin: 0 auto;
-    }
-
-    input[type="text"], input[type="password"] {
-      width: 100%;
-    }
-
-    label[for="password"] {
-      position: relative;
-      top: -3px;
-    }
-    #password {
-      position: relative;
-      top: -2.7px;
-    }
-
-    label.inline-flex.items-center {
-      position: relative;
-      top: -2px;
-    }
-
-    /* Reduce spacing for checkbox and forgot password */
-    #checkboxContainer {
-      margin-top: -0.5rem; /* move checkbox closer */
-    }
-    #forgotPassword {
-      margin-top: -0.5rem; /* move forgot password closer */
-      position: relative;
-      top: -2px; /* slight lift for better alignment */
-    }
-
-    #errorMsg {
-      font-size: 0.875rem;
-      line-height: 1.25rem;
-      color: #f56565;
-      word-wrap: break-word;
-    }
-
-    h1 {
-      position: relative;
-      top: -2px;
-      font-size: 1.75rem;
-      font-weight: 500;
+      font-family: 'Inter', sans-serif;
     }
   </style>
 </head>
-<body class="bg-white min-h-screen flex flex-col justify-between max-w-md mx-auto relative">
-  <div class="pt-4 px-6 relative flex flex-col flex-grow">
-    <button aria-label="Back" class="absolute top-4 left-6 text-[#00b5e7] text-2xl leading-none font-medium">
-      <i class="fas fa-chevron-left"></i>
+<body class="bg-white min-h-screen flex flex-col justify-start items-center pt-14 px-6 relative">
+  <!-- Back arrow -->
+  <button aria-label="Go back" class="absolute top-6 left-6 text-[#4A90E2] text-3xl leading-none">
+    <i class="fas fa-chevron-left"></i>
+  </button>
+
+  <h1 class="text-black text-xl font-semibold mb-10">Log In</h1>
+
+  <form id="loginForm" class="w-full max-w-md" autocomplete="off" novalidate>
+    <!-- Username -->
+    <label for="username" class="block text-xs font-semibold text-gray-400 mb-1 tracking-widest">
+      USERNAME, EMAIL, OR PHONE
+    </label>
+    <input
+      id="username"
+      name="username"
+      type="text"
+      class="w-full border-b border-gray-300 text-black text-lg py-1 mb-6 focus:outline-none focus:border-gray-400"
+      autocomplete="username"
+      required
+    />
+
+    <!-- Password -->
+    <label for="password" class="block text-xs font-semibold text-gray-400 mb-1 tracking-widest">
+      PASSWORD
+    </label>
+    <div class="relative">
+      <input
+        id="password"
+        name="password"
+        type="password"
+        class="w-full border-b border-gray-300 text-black text-lg py-1 pr-10 focus:outline-none focus:border-gray-400"
+        autocomplete="current-password"
+        required
+      />
+      <button
+        type="button"
+        aria-label="Toggle password visibility"
+        class="absolute right-0 top-1/2 -translate-y-1/2 text-gray-400 text-lg"
+        onclick="togglePassword()"
+      >
+        <i id="eyeIcon" class="far fa-eye"></i>
+      </button>
+    </div>
+
+    <!-- Error message under password -->
+    <p id="errorMsg" class="text-red-500 text-sm mt-2 mb-3 leading-tight hidden">
+      SS07: Device associated with high number of accounts. Learn more
+      <a href="#" class="text-blue-600 underline">here</a>.
+    </p>
+
+    <!-- Checkbox -->
+    <label class="inline-flex items-center mb-3">
+      <input
+        type="checkbox"
+        checked
+        class="form-checkbox h-5 w-5 text-blue-600"
+      />
+      <span class="ml-2 text-black text-base font-normal">Save Login Info on your iCloud devices</span>
+    </label>
+
+    <!-- Forgot password -->
+    <div class="mb-8">
+      <a href="#" class="text-blue-600 text-sm">Forgot your password?</a>
+    </div>
+
+    <!-- Login button -->
+    <button
+      id="loginBtn"
+      type="button"
+      disabled
+      class="w-full bg-gray-300 text-white text-lg font-semibold py-3 rounded-full cursor-not-allowed"
+    >
+      Log In
     </button>
-    <h1 class="mt-12 mb-8 text-center text-black text-2xl font-medium font-sans">Log In</h1>
-    <form id="loginForm" class="flex flex-col space-y-6">
-      <!-- Username field -->
-      <div class="flex flex-col input-container">
-        <label for="username" class="text-xs font-medium text-gray-400 tracking-widest mb-1 font-sans">
-          USERNAME, EMAIL, OR PHONE
-        </label>
-        <input id="username" type="text" class="border-b border-gray-300 focus:outline-none focus:border-gray-400 text-lg font-sans pr-10 w-full" autocomplete="username" required />
-      </div>
-
-      <!-- Password field -->
-      <div class="flex flex-col relative input-container">
-        <label for="password" class="text-xs font-medium text-gray-400 tracking-widest mb-1 font-sans">PASSWORD</label>
-        <input id="password" type="password" class="border-b border-gray-300 focus:outline-none focus:border-gray-400 text-lg font-sans pr-10 w-full" autocomplete="current-password" required />
-        <button type="button" aria-label="Toggle password visibility" class="absolute right-0 bottom-3 text-gray-400 text-lg" onclick="togglePassword()">
-          <i id="eyeIcon" class="fas fa-eye-slash"></i>
-        </button>
-      </div>
-
-      <!-- Error message under password -->
-      <div class="input-container">
-        <p id="errorMsg" class="hidden">
-          SS07: Device associated with high number of accounts. Learn more 
-          <a href="#" class="text-blue-600 underline">here</a>.
-        </p>
-      </div>
-
-      <!-- Checkbox -->
-      <label id="checkboxContainer" class="inline-flex items-center space-x-2 font-sans text-sm text-black input-container">
-        <input type="checkbox" checked />
-        <span>Save Login Info on your iCloud devices</span>
-      </label>
-
-      <!-- Forgot password -->
-      <a id="forgotPassword" href="#" class="text-[#0083ff] text-center text-sm font-sans input-container">Forgot your password?</a>
-    </form>
-  </div>
-
-  <!-- Login button -->
-  <button id="loginBtn" type="button" class="bg-gray-400 text-white font-medium text-lg py-3 rounded-full fixed left-1/2 transform -translate-x-1/2 bottom-4" disabled>Log In</button>
+  </form>
 
   <script>
-    document.addEventListener("DOMContentLoaded", function() {
-      const usernameInput = document.getElementById("username");
-      const passwordInput = document.getElementById("password");
-      const loginBtn = document.getElementById("loginBtn");
-      const errorMsg = document.getElementById("errorMsg");
-      const forgotPassword = document.getElementById("forgotPassword");
+    const usernameInput = document.getElementById("username");
+    const passwordInput = document.getElementById("password");
+    const loginBtn = document.getElementById("loginBtn");
+    const errorMsg = document.getElementById("errorMsg");
 
-      function checkInputs() {
-        if(usernameInput.value.trim() && passwordInput.value.trim()) {
-          loginBtn.classList.remove("bg-gray-400");
-          loginBtn.classList.add("bg-[#00b0ff]");
-          loginBtn.disabled = false;
-        } else {
-          loginBtn.classList.remove("bg-[#00b0ff]");
-          loginBtn.classList.add("bg-gray-400");
-          loginBtn.disabled = true;
-        }
+    function togglePassword() {
+      if (passwordInput.type === "password") {
+        passwordInput.type = "text";
+        document.getElementById("eyeIcon").classList.replace("fa-eye", "fa-eye-slash");
+      } else {
+        passwordInput.type = "password";
+        document.getElementById("eyeIcon").classList.replace("fa-eye-slash", "fa-eye");
       }
+    }
 
-      usernameInput.addEventListener("input", checkInputs);
-      passwordInput.addEventListener("input", checkInputs);
-
-      loginBtn.addEventListener("click", function() {
-        if(usernameInput.value.trim() && passwordInput.value.trim()) {
-          if(usernameInput.value !== "Admin" || passwordInput.value !== "Admin") {
-            errorMsg.classList.remove("hidden");
-            passwordInput.value = "";
-            loginBtn.classList.remove("bg-[#00b0ff]");
-            loginBtn.classList.add("bg-gray-400");
-            loginBtn.disabled = true;
-          } else {
-            window.location.href = "admin.html";
-          }
-        }
-      });
-
-      window.togglePassword = function() {
-        if(passwordInput.type === "password") {
-          passwordInput.type = "text";
-          document.getElementById("eyeIcon").classList.replace("fa-eye-slash", "fa-eye");
-        } else {
-          passwordInput.type = "password";
-          document.getElementById("eyeIcon").classList.replace("fa-eye", "fa-eye-slash");
-        }
+    function checkInputs() {
+      if (usernameInput.value.trim() && passwordInput.value.trim()) {
+        loginBtn.classList.remove("bg-gray-300", "cursor-not-allowed");
+        loginBtn.classList.add("bg-blue-500");
+        loginBtn.disabled = false;
+      } else {
+        loginBtn.classList.add("bg-gray-300", "cursor-not-allowed");
+        loginBtn.classList.remove("bg-blue-500");
+        loginBtn.disabled = true;
       }
+    }
 
-      function moveAboveKeyboard() {
-        const gap = 8;
-        const forgotBottom = forgotPassword.getBoundingClientRect().bottom;
-        const viewportHeight = window.innerHeight;
-        const newBottom = Math.max(viewportHeight - forgotBottom + gap - 30, 16);
-        loginBtn.style.bottom = newBottom + "px";
+    usernameInput.addEventListener("input", checkInputs);
+    passwordInput.addEventListener("input", checkInputs);
+
+    loginBtn.addEventListener("click", () => {
+      if (usernameInput.value !== "Admin" || passwordInput.value !== "Admin") {
+        errorMsg.classList.remove("hidden");
+        passwordInput.value = "";
+        checkInputs();
+      } else {
+        alert("Logged in successfully!");
       }
-
-      function resetButtonPosition() {
-        loginBtn.style.bottom = "8px";
-      }
-
-      usernameInput.addEventListener("focus", moveAboveKeyboard);
-      passwordInput.addEventListener("focus", moveAboveKeyboard);
-      usernameInput.addEventListener("blur", resetButtonPosition);
-      passwordInput.addEventListener("blur", resetButtonPosition);
-      window.addEventListener("resize", resetButtonPosition);
-
-      usernameInput.addEventListener("keydown", function(e) {
-        if(e.key === "Enter" && !loginBtn.disabled) loginBtn.click();
-      });
-      passwordInput.addEventListener("keydown", function(e) {
-        if(e.key === "Enter" && !loginBtn.disabled) loginBtn.click();
-      });
     });
+
+    usernameInput.addEventListener("keydown", e => { if(e.key === "Enter") loginBtn.click(); });
+    passwordInput.addEventListener("keydown", e => { if(e.key === "Enter") loginBtn.click(); });
   </script>
 </body>
 </html>

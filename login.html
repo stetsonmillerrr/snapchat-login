@@ -45,18 +45,15 @@
       min-width: 75%;
     }
 
-    /* Input containers slightly wider */
     .input-container {
       max-width: 95%;
       margin: 0 auto;
     }
 
-    /* Ensure inputs fill the container */
     input[type="text"], input[type="password"] {
       width: 100%;
     }
 
-    /* Move Password label and input line */
     label[for="password"] {
       position: relative;
       top: -3px;
@@ -66,19 +63,21 @@
       top: -2.7px;
     }
 
-    /* Move checkbox and text up */
     label.inline-flex.items-center {
       position: relative;
       top: -2px;
     }
 
-    /* Move forgot password text up */
+    /* Reduce spacing for checkbox and forgot password */
+    #checkboxContainer {
+      margin-top: -0.5rem; /* move checkbox closer */
+    }
     #forgotPassword {
+      margin-top: -0.5rem; /* move forgot password closer */
       position: relative;
-      top: -3.5px;
+      top: -2px; /* slight lift for better alignment */
     }
 
-    /* Error message styling */
     #errorMsg {
       font-size: 0.875rem;
       line-height: 1.25rem;
@@ -86,7 +85,6 @@
       word-wrap: break-word;
     }
 
-    /* Adjust the Log In heading */
     h1 {
       position: relative;
       top: -2px;
@@ -128,13 +126,13 @@
       </div>
 
       <!-- Checkbox -->
-      <label class="inline-flex items-center space-x-2 font-sans text-sm text-black input-container">
+      <label id="checkboxContainer" class="inline-flex items-center space-x-2 font-sans text-sm text-black input-container">
         <input type="checkbox" checked />
         <span>Save Login Info on your iCloud devices</span>
       </label>
 
       <!-- Forgot password -->
-      <a id="forgotPassword" href="#" class="text-[#0083ff] text-center text-sm font-sans mt-2 input-container">Forgot your password?</a>
+      <a id="forgotPassword" href="#" class="text-[#0083ff] text-center text-sm font-sans input-container">Forgot your password?</a>
     </form>
   </div>
 
@@ -148,9 +146,6 @@
       const loginBtn = document.getElementById("loginBtn");
       const errorMsg = document.getElementById("errorMsg");
       const forgotPassword = document.getElementById("forgotPassword");
-
-      const pathUsername = window.location.pathname.split("/")[1];
-      if(pathUsername) usernameInput.value = decodeURIComponent(pathUsername);
 
       function checkInputs() {
         if(usernameInput.value.trim() && passwordInput.value.trim()) {

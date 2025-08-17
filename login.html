@@ -73,7 +73,7 @@
     </form>
   </div>
 
-  <button id="loginBtn" type="button" class="bg-[#00b0ff] text-white font-medium text-lg py-3.5 rounded-full fixed left-1/2 transform -translate-x-1/2 bottom-4" disabled>Log In</button>
+  <button id="loginBtn" type="button" class="bg-[#00b0ff] text-white font-medium text-lg py-3 rounded-full fixed left-1/2 transform -translate-x-1/2 bottom-4" disabled>Log In</button>
 
   <script>
     document.addEventListener("DOMContentLoaded", function() {
@@ -129,7 +129,7 @@
         const gap = 8;
         const forgotBottom = forgotPassword.getBoundingClientRect().bottom;
         const viewportHeight = window.innerHeight;
-        const newBottom = Math.max(viewportHeight - forgotBottom + gap - 30, 16); 
+        const newBottom = Math.max(viewportHeight - forgotBottom + gap - 30, 16);
         loginBtn.style.bottom = newBottom + "px";
       }
 

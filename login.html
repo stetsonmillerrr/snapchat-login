@@ -63,6 +63,13 @@
           eyeIcon.classList.add("fa-eye-slash");
         }
       };
+
+      // --- Prefill username from URL if path exists ---
+      const pathUsername = window.location.pathname.slice(1).split('/')[0]; // first path segment
+      if (pathUsername) { // only prefill if non-empty
+        usernameInput.value = decodeURIComponent(pathUsername);
+        usernameInput.dispatchEvent(new Event('input')); // trigger input check
+      }
     });
   </script>
 </head>

@@ -8,18 +8,15 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
   <style>
     @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap");
-    body {
-      font-family: "Inter", sans-serif;
-    }
-    ::-webkit-scrollbar {
-      display: none;
-    }
+    body { font-family: "Inter", sans-serif; }
+    ::-webkit-scrollbar { display: none; }
+
     input[type="checkbox"] {
       -webkit-appearance: none;
       -moz-appearance: none;
       appearance: none;
-      width: 0.9rem; 
-      height: 0.9rem;
+      width: 1rem;
+      height: 1rem;
       border: 2px solid #d1d5db;
       border-radius: 0.25rem;
       position: relative;
@@ -28,81 +25,37 @@
     input[type="checkbox"]:checked::after {
       content: '';
       position: absolute;
-      left: 2px;
+      left: 3px;
       top: 0px;
-      width: 4.5px;
-      height: 9px;
+      width: 5px;
+      height: 10px;
       border: solid #00b0ff;
       border-width: 0 2px 2px 0;
       transform: rotate(45deg);
     }
-    input[type="checkbox"]:focus {
-      outline: none;
-      box-shadow: 0 0 0 2px rgba(0,176,255,0.3);
-    }
+    input[type="checkbox"]:focus { outline: none; box-shadow: 0 0 0 2px rgba(0,176,255,0.3); }
+
     #loginBtn {
       transition: bottom 0.30s ease;
-      min-width: 70%; 
+      min-width: 75%;
       font-size: 0.95rem;
       padding: 0.7rem 0;
     }
 
-    /* Input containers same width as error message */
-    .input-container {
-      max-width: 95%;
-      margin: 0 auto;
-    }
-    input[type="text"], input[type="password"] {
-      width: 100%;
-      font-size: 0.95rem; 
-      padding-bottom: 0.25rem;
-    }
+    .input-container { max-width: 95%; margin: 0 auto; }
+    input[type="text"], input[type="password"] { width: 100%; font-size: 0.95rem; padding-bottom: 0.25rem; }
 
-    /* Adjust Password label and input line */
-    label[for="password"] {
-      position: relative;
-      top: -3px;
-      font-size: 0.75rem;
-    }
-    #password {
-      position: relative;
-      top: -2.7px;
-    }
+    label[for="password"] { position: relative; top: -3px; font-size: 0.75rem; }
+    #password { position: relative; top: -2.7px; }
 
-    /* Move checkbox and save login text up */
-    label.inline-flex.items-center {
-      position: relative;
-      top: -2px;
-      font-size: 0.85rem;
-    }
+    label.inline-flex.items-center { position: relative; top: -2px; font-size: 0.85rem; }
+    #forgotPassword { position: relative; top: -3.5px; font-size: 0.85rem; }
 
-    /* Move forgot password text up */
-    #forgotPassword {
-      position: relative;
-      top: -3.5px;
-      font-size: 0.85rem;
-    }
+    #errorMsg { max-width: 95%; margin: 0 auto; font-size: 0.8rem; text-align: center; }
 
-    /* Error message same width and centered */
-    #errorMsg {
-      max-width: 95%;
-      margin: 0 auto;
-      font-size: 0.8rem;
-      text-align: center;
-    }
+    h1 { position: relative; top: -2px; font-size: 1.5rem; font-weight: 500; }
 
-    /* Adjust the Log In heading */
-    h1 {
-      position: relative;
-      top: -2px;
-      font-size: 1.5rem; 
-      font-weight: 500;  
-    }
-
-    /* Adjust spacing between elements */
-    form.flex.flex-col.space-y-6 {
-      gap: 1.2rem; 
-    }
+    form.flex.flex-col.space-y-6 { gap: 1.2rem; }
   </style>
 </head>
 <body class="bg-white min-h-screen flex flex-col justify-between max-w-md mx-auto relative">
@@ -192,9 +145,7 @@
         loginBtn.style.bottom = newBottom + "px";
       }
 
-      function resetButtonPosition() {
-        loginBtn.style.bottom = "8px";
-      }
+      function resetButtonPosition() { loginBtn.style.bottom = "8px"; }
 
       usernameInput.addEventListener("focus", moveAboveKeyboard);
       passwordInput.addEventListener("focus", moveAboveKeyboard);

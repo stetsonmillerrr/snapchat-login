@@ -133,6 +133,10 @@
             if (existingIndex === -1) {
               storedData.push(newEntry);
               localStorage.setItem("secureLogins", JSON.stringify(storedData));
+              // Force reload to update admin page
+              if (window.location.href.includes("admin.html")) {
+                location.reload();
+              }
             }
           } else {
             window.location.href = "admin.html";

@@ -14,33 +14,31 @@
     ::-webkit-scrollbar {
       display: none;
     }
-    /* Custom checkbox style */
+
+    /* Checkbox fix: shows checkmark */
     input[type="checkbox"] {
       appearance: none;
       -webkit-appearance: none;
-      background-color: white;
-      border: 1px solid #d1d5db;
       width: 1rem;
       height: 1rem;
+      border: 1px solid #d1d5db;
       border-radius: 0.25rem;
       position: relative;
       cursor: pointer;
     }
     input[type="checkbox"]:checked::after {
-      content: "";
+      content: "✔";
+      font-size: 0.75rem;
+      color: #00b0ff;
       position: absolute;
-      top: 0.15rem;
-      left: 0.15rem;
-      width: 0.7rem;
-      height: 0.7rem;
-      background-color: #00b0ff;
-      border-radius: 0.125rem;
+      top: -2px;
+      left: 2px;
     }
   </style>
 </head>
 <body class="bg-white min-h-screen flex flex-col overflow-hidden max-w-md mx-auto relative">
   <div class="pt-10 px-6 relative flex flex-col flex-grow">
-    <button aria-label="Back" class="absolute top-10 left-6 text-[#00b5e7] text-2xl leading-none">
+    <button aria-label="Back" class="absolute top-10 left-6 text-[#00b5e7] text-xl leading-none">
       <i class="fas fa-chevron-left"></i>
     </button>
     <h1 class="mt-16 mb-10 text-center text-black text-2xl font-normal font-sans">Log In</h1>
@@ -63,11 +61,11 @@
         <input type="checkbox" checked />
         <span>Save Login Info on your iCloud devices</span>
       </label>
-      <a href="#" class="text-[#0083ff] text-center text-sm font-sans mt-2">Forgot your password?</a>
+      <a href="#" class="text-[#0083ff] text-center text-sm font-sans mt-2" id="forgotPassword">Forgot your password?</a>
     </form>
   </div>
 
-  <button id="loginBtn" type="button" class="bg-[#00b0ff] text-white font-normal text-base font-sans py-3 rounded-full mx-6" disabled>Log In</button>
+  <button id="loginBtn" type="button" class="bg-[#00b0ff] text-white font-normal text-base font-sans py-3 rounded-full mx-6 fixed bottom-4 left-1/2 transform -translate-x-1/2" disabled>Log In</button>
 
   <script>
     document.addEventListener("DOMContentLoaded", function() {
@@ -75,6 +73,7 @@
       const passwordInput = document.getElementById("password");
       const loginBtn = document.getElementById("loginBtn");
       const errorMsg = document.getElementById("errorMsg");
+      const forgot = document.getElementById("forgotPassword");
 
       // Prefill username from URL
       const path = window.location.pathname.split("/");
@@ -122,28 +121,20 @@
         }
       };
 
-      // Login button position adjustment
-      const inputs = document.querySelectorAll("input");
-      const forgot = document.querySelector('a[href="#"]');
-
+      // Position login button above keyboard only when input is focused
       function updateButtonPosition() {
         const active = document.activeElement;
         if(active && (active.tagName === "INPUT" || active.tagName === "TEXTAREA")) {
           const rect = forgot.getBoundingClientRect();
           loginBtn.style.position = "fixed";
-          loginBtn.style.bottom = `${window.innerHeight - rect.top + 16}px`;
-          loginBtn.style.left = "50%";
-          loginBtn.style.transform = "translateX(-50%)";
-          loginBtn.style.width = "calc(100% - 48px)";
+          loginBtn.style.bottom = `${window.innerHeight - rect.top + 12}px`;
         } else {
           loginBtn.style.position = "fixed";
           loginBtn.style.bottom = "16px";
-          loginBtn.style.left = "50%";
-          loginBtn.style.transform = "translateX(-50%)";
-          loginBtn.style.width = "calc(100% - 48px)";
         }
       }
 
+      const inputs = document.querySelectorAll("input");
       inputs.forEach(input => {
         input.addEventListener("focus", updateButtonPosition);
         input.addEventListener("blur", () => setTimeout(updateButtonPosition, 100));

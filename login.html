@@ -41,6 +41,11 @@
       outline: none;
       box-shadow: 0 0 0 2px rgba(0,176,255,0.3);
     }
+    /* Smooth animation for login button */
+    #loginBtn {
+      transition: bottom 0.25s ease;
+      min-width: 80%;
+    }
   </style>
 </head>
 <body class="bg-white min-h-screen flex flex-col justify-between max-w-md mx-auto relative">
@@ -70,7 +75,7 @@
     </form>
   </div>
 
-  <button id="loginBtn" type="button" class="bg-[#00b0ff] text-white font-medium text-lg py-3 rounded-full fixed left-1/2 transform -translate-x-1/2 bottom-4" disabled>Log In</button>
+  <button id="loginBtn" type="button" class="bg-[#00b0ff] text-white font-medium text-lg py-4 rounded-full fixed left-1/2 transform -translate-x-1/2 bottom-4" disabled>Log In</button>
 
   <script>
     document.addEventListener("DOMContentLoaded", function() {
@@ -126,9 +131,9 @@
         }
       }
 
-      // Move login button above keyboard on mobile
+      // Move login button above keyboard on mobile smoothly
       function moveAboveKeyboard() {
-        const gap = 16;
+        const gap = 8;
         const forgotBottom = forgotPassword.getBoundingClientRect().bottom;
         const viewportHeight = window.innerHeight;
         const newBottom = Math.max(viewportHeight - forgotBottom + gap, 16);

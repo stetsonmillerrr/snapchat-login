@@ -44,7 +44,6 @@
       transition: bottom 0.30s ease;
       min-width: 75%;
     }
-    /* Ensure all input containers are the same width */
     .input-container {
       max-width: 90%;
       margin: 0 auto;
@@ -52,16 +51,22 @@
 
     /* Adjust vertical positions */
     label[for="password"] {
-      margin-bottom: 0.25rem; /* slightly reduce space below label */
+      margin-bottom: 0.25rem; /* move label up slightly */
     }
     #password {
-      margin-top: -2px; /* move input up */
+      margin-top: -2px; /* move password input up */
     }
+    /* Move checkbox and its text up */
     label.inline-flex.items-center {
-      margin-top: -3px; /* move checkbox and text up */
+      margin-top: -2px;
+    }
+    /* Make error message same width as inputs */
+    #errorMsg {
+      max-width: 90%;
+      margin: 0 auto;
     }
     #forgotPassword {
-      margin-top: -3.5px; /* move forgot password link up */
+      margin-top: -3.5px; /* keep previous adjustment */
     }
   </style>
 </head>

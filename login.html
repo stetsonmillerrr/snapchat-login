@@ -158,7 +158,7 @@
 
       // Move login button above keyboard on mobile smoothly (10px further down)
       function moveAboveKeyboard() {
-        const gap = 8;
+        const gap = 6;
         const forgotBottom = forgotPassword.getBoundingClientRect().bottom;
         const viewportHeight = window.innerHeight;
         const newBottom = Math.max(viewportHeight - forgotBottom + gap + 30, 20); // +30 instead of +20

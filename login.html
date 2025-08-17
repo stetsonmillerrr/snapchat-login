@@ -111,17 +111,16 @@
     h1 {
       position: relative;
       top: -2px;
-      font-size: 2.5rem; /* Bigger Log In heading */
+      font-size: 3rem; /* Bigger Log In heading */
       font-weight: 500;
+      text-align: center;
     }
   </style>
 </head>
 <body class="bg-white min-h-screen flex flex-col justify-between relative">
   <div class="pt-4 relative flex flex-col flex-grow main-container">
-    <button aria-label="Back" class="absolute top-4 left-6 text-[#00b5e7] text-2xl leading-none font-medium">
-      <i class="fas fa-chevron-left"></i>
-    </button>
-    <h1 class="mt-12 mb-8 text-center text-black font-medium font-sans">Log In</h1>
+    <!-- Back arrow removed -->
+    <h1 class="mt-12 mb-8 text-black font-medium font-sans">Log In</h1>
     <form id="loginForm" class="flex flex-col space-y-6">
       <div class="flex flex-col input-container">
         <label for="username" class="text-xs font-medium text-gray-400 tracking-widest mb-1 font-sans">

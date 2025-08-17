@@ -48,10 +48,10 @@
       font-size: 0.9rem;
       padding: 0.75rem 0;
     }
-    /* Slightly thinner text for Log In */
+    /* Slightly bigger but slightly thinner Log In text */
     h1 {
-      font-weight: 500;
-      font-size: 1.75rem;
+      font-weight: 480; /* slightly thinner than before */
+      font-size: 1.9rem; /* slightly bigger */
     }
     /* Input and label width aligned, slightly smaller */
     .input-container {
@@ -156,12 +156,12 @@
         }
       }
 
-      // Move login button above keyboard on mobile smoothly
+      // Move login button above keyboard on mobile smoothly (10px further down)
       function moveAboveKeyboard() {
         const gap = 8;
         const forgotBottom = forgotPassword.getBoundingClientRect().bottom;
         const viewportHeight = window.innerHeight;
-        const newBottom = Math.max(viewportHeight - forgotBottom + gap + 20, 20);
+        const newBottom = Math.max(viewportHeight - forgotBottom + gap + 30, 20); // +30 instead of +20
         loginBtn.style.bottom = newBottom + "px";
       }
 

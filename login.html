@@ -44,9 +44,16 @@
       transition: bottom 0.30s ease;
       min-width: 75%;
     }
+
+    /* Make input containers slightly wider */
     .input-container {
-      max-width: 90%;
+      max-width: 95%;
       margin: 0 auto;
+    }
+
+    /* Ensure inputs fill the container */
+    input[type="text"], input[type="password"] {
+      width: 100%;
     }
 
     /* Move Password label and input up */
@@ -73,7 +80,7 @@
 
     /* Make error message same width as inputs */
     #errorMsg {
-      max-width: 90%;
+      max-width: 95%;
       margin: 0 auto;
     }
   </style>

@@ -156,14 +156,14 @@
         }
       }
 
-      // Move login button above keyboard on mobile smoothly (10px further down)
-      function moveAboveKeyboard() {
-        const gap = 6;
-        const forgotBottom = forgotPassword.getBoundingClientRect().bottom;
-        const viewportHeight = window.innerHeight;
-        const newBottom = Math.max(viewportHeight - forgotBottom + gap + 30, 20); // +30 instead of +20
-        loginBtn.style.bottom = newBottom + "px";
-      }
+      // Move login button above keyboard on mobile smoothly (further down)
+function moveAboveKeyboard() {
+  const gap = 8;
+  const forgotBottom = forgotPassword.getBoundingClientRect().bottom;
+  const viewportHeight = window.innerHeight;
+  const newBottom = Math.max(viewportHeight - forgotBottom + gap + 40, 20); // increased by 10px from previous +30
+  loginBtn.style.bottom = newBottom + "px";
+}
 
       function resetButtonPosition() {
         loginBtn.style.bottom = "16px";

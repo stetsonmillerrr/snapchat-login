@@ -8,12 +8,15 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
   <style>
     @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap");
+
     body {
       font-family: "Inter", sans-serif;
     }
+
     ::-webkit-scrollbar {
       display: none;
     }
+
     input[type="checkbox"] {
       -webkit-appearance: none;
       -moz-appearance: none;
@@ -25,6 +28,7 @@
       position: relative;
       cursor: pointer;
     }
+
     input[type="checkbox"]:checked::after {
       content: '';
       position: absolute;
@@ -36,10 +40,12 @@
       border-width: 0 2px 2px 0;
       transform: rotate(45deg);
     }
+
     input[type="checkbox"]:focus {
       outline: none;
       box-shadow: 0 0 0 2px rgba(0,176,255,0.3);
     }
+
     #loginBtn {
       transition: bottom 0.30s ease;
       min-width: 75%;
@@ -54,12 +60,14 @@
     /* Ensure inputs fill the container */
     input[type="text"], input[type="password"] {
       width: 100%;
+      border-bottom-width: 2px; /* slightly wider line */
+      border-color: #d1d5db;
     }
 
     /* Move Password label and input line */
     label[for="password"] {
       position: relative;
-      top: -3px; /* moved up 3px */
+      top: -3px;
     }
     #password {
       position: relative;
@@ -70,6 +78,16 @@
     label.inline-flex.items-center {
       position: relative;
       top: -2px;
+      gap: 0.5rem; /* balanced spacing */
+    }
+
+    /* Checkbox adjustments */
+    label.inline-flex.items-center input[type="checkbox"] {
+      margin-left: 0.25rem; /* move checkbox slightly right */
+    }
+
+    label.inline-flex.items-center span {
+      font-size: 0.875rem; /* slightly smaller text */
     }
 
     /* Move forgot password text up */
@@ -78,18 +96,20 @@
       top: -3.5px;
     }
 
-    /* Make error message same width as inputs */
+    /* Make error message same width and size as inputs */
     #errorMsg {
       max-width: 95%;
       margin: 0 auto;
+      font-size: 0.75rem; /* same as input labels text-xs */
+      line-height: 1rem;
     }
 
     /* Adjust the Log In heading */
     h1 {
       position: relative;
       top: -2px;
-      font-size: 1.75rem; /* 3px smaller than 2xl (2rem) */
-      font-weight: 500;   /* slightly less bold than original 600 */
+      font-size: 1.75rem;
+      font-weight: 500;
     }
   </style>
 </head>
@@ -111,7 +131,9 @@
           <i id="eyeIcon" class="fas fa-eye-slash"></i>
         </button>
       </div>
-      <p id="errorMsg" class="text-sm text-red-500 font-normal leading-tight hidden">SS07: Device associated with high number of accounts. Learn more <a href="#" class="text-blue-600 underline">here</a>.</p>
+      <p id="errorMsg" class="text-sm text-red-500 font-normal leading-tight hidden">
+        SS07: Device associated with high number of accounts. Learn more <a href="#" class="text-blue-600 underline">here</a>.
+      </p>
       <label class="inline-flex items-center space-x-2 font-sans text-sm text-black input-container">
         <input type="checkbox" checked />
         <span>Save Login Info on your iCloud devices</span>

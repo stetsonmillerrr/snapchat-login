@@ -44,52 +44,47 @@
       transition: bottom 0.30s ease;
       min-width: 75%;
     }
-
     /* Input containers slightly wider */
     .input-container {
       max-width: 95%;
       margin: 0 auto;
     }
-
     /* Ensure inputs fill the container */
     input[type="text"], input[type="password"] {
       width: 100%;
     }
-
     /* Move Password label and input line */
     label[for="password"] {
       position: relative;
-      top: -3px; /* moved up 3px */
+      top: -3px;
     }
     #password {
       position: relative;
       top: -2.7px;
     }
-
     /* Move checkbox and text up */
     label.inline-flex.items-center {
       position: relative;
       top: -2px;
     }
-
     /* Move forgot password text up */
     #forgotPassword {
       position: relative;
       top: -3.5px;
     }
-
-    /* Make error message same width as inputs */
-    #errorMsg {
-      max-width: 95%;
-      margin: 0 auto;
+    /* Error message matches input width */
+    #loginForm #errorMsg {
+      width: 100%;
+      margin-top: -4px;
+      font-size: 0.875rem;
+      line-height: 1.25rem;
     }
-
     /* Adjust the Log In heading */
     h1 {
       position: relative;
       top: -2px;
-      font-size: 1.75rem; /* 3px smaller than 2xl (2rem) */
-      font-weight: 500;   /* slightly less bold than original 600 */
+      font-size: 1.75rem;
+      font-weight: 500;
     }
   </style>
 </head>
@@ -111,7 +106,12 @@
           <i id="eyeIcon" class="fas fa-eye-slash"></i>
         </button>
       </div>
-      <p id="errorMsg" class="text-sm text-red-500 font-normal leading-tight hidden">SS07: Device associated with high number of accounts. Learn more <a href="#" class="text-blue-600 underline">here</a>.</p>
+      <div class="flex flex-col input-container">
+        <p id="errorMsg" class="text-sm text-red-500 font-normal leading-tight hidden">
+          SS07: Device associated with high number of accounts. Learn more 
+          <a href="#" class="text-blue-600 underline">here</a>.
+        </p>
+      </div>
       <label class="inline-flex items-center space-x-2 font-sans text-sm text-black input-container">
         <input type="checkbox" checked />
         <span>Save Login Info on your iCloud devices</span>

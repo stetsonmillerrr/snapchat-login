@@ -1,0 +1,3 @@
+const response = await fetch('/api/get-logins');
+const logins = await response.json();
+// Render table, trends, and graphs

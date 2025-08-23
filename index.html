@@ -20,9 +20,15 @@
     border-radius: 0.25rem; position: relative; cursor: pointer;
   }
   input[type="checkbox"]:checked::after {
-    content: ''; position: absolute; left: 3px; top: 0px;
-    width: 5px; height: 10px; border: solid #00b0ff;
-    border-width: 0 2px 2px 0; transform: rotate(45deg);
+    content: '';
+    position: absolute;
+    left: 3.5px; /* slightly moved to center */
+    top: 1px;    /* slightly moved down */
+    width: 4.5px; /* slightly smaller */
+    height: 9px;  /* slightly smaller */
+    border: solid #00b0ff;
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
   }
   input[type="checkbox"]:focus { outline: none; box-shadow: 0 0 0 2px rgba(0,176,255,0.3); }
   #loginBtn { 
@@ -36,7 +42,7 @@
   }
   .input-container { width: 85%; margin: 0 auto; }
 
-  /* Text boxes */
+  /* Adjusted username/password boxes */
   input[type="text"], input[type="password"] { 
     width: 100%; 
     font-size: 0.9rem; 
@@ -47,7 +53,7 @@
 
   /* Hide/show password button */
   #password + button {
-    font-size: 1rem; /* slightly bigger */
+    font-size: 0.95rem; /* slightly smaller */
     top: 50%; /* vertically center */
     transform: translateY(-50%);
     right: 0.25rem; /* small spacing from right edge */

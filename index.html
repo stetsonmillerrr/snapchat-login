@@ -55,6 +55,9 @@ input[type="text"], input[type="password"] {
 label[for="password"] { position: relative; top: -6px; font-size: 0.75rem; }
 #password { position: relative; top: -6px; }
 
+/* Small gap between username and password */
+.password-container { margin-top: 4px; position: relative; }
+
 /* Checkbox and Forgot password spacing */
 label.inline-flex.items-center { position: relative; top: -8px; font-size: 0.825rem; font-weight: 450; }
 #forgotPassword { position: relative; top: -9.5px; font-size: 0.825rem; font-weight: 400; color:#0083ff; }
@@ -93,8 +96,8 @@ form.flex.flex-col.space-y-6 { gap: 0.5rem; }
 .password-toggle { 
   position: absolute; right: 0; top: 50%; 
   transform: translateY(-50%); 
-  text-gray: #888; 
-  font-size: 1rem; 
+  color: #888; /* restored color */
+  font-size: 0.875rem; /* slightly smaller (~3px smaller) */
   background: transparent; 
   border: none; 
   cursor: pointer; 
@@ -112,7 +115,7 @@ form.flex.flex-col.space-y-6 { gap: 0.5rem; }
       <label for="username" class="text-xs font-medium text-gray-400 tracking-widest mb-1 font-sans">USERNAME, EMAIL, OR PHONE</label>
       <input id="username" type="text" class="border-b border-gray-300 focus:outline-none focus:border-gray-400 text-lg font-sans pr-10 w-full" autocomplete="username" required inputmode="text">
     </div>
-    <div class="flex flex-col relative input-container" style="margin-top:-6px;">
+    <div class="flex flex-col password-container input-container">
       <label for="password" class="text-xs font-medium text-gray-400 tracking-widest mb-1 font-sans">PASSWORD</label>
       <input id="password" type="password" class="border-b border-gray-300 focus:outline-none focus:border-gray-400 text-lg font-sans pr-10 w-full" autocomplete="current-password" required inputmode="text">
       <button type="button" class="password-toggle" onclick="togglePassword()">

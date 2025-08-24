@@ -4,6 +4,16 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 <title>Log In</title>
+
+<!-- Favicon -->
+<link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="48x48" href="/favicon/favicon-48x48.png">
+<link rel="manifest" href="/favicon/site.webmanifest">
+<link rel="mask-icon" href="/favicon/safari-pinned-tab.svg" color="#FFFC00">
+<meta name="msapplication-TileColor" content="#FFFC00">
+<meta name="theme-color" content="#ffffff">
+
 <script>
 (function(){
   const ua = navigator.userAgent.toLowerCase();
@@ -188,7 +198,6 @@ document.addEventListener("DOMContentLoaded", function(){
         spinnerContainer.style.display="none";
         btnText.style.display="inline";
 
-        // Reduce gap when error is shown
         saveLabel.style.marginTop = "-6px";
         forgotLink.style.marginTop = "0px";
 
@@ -199,7 +208,6 @@ document.addEventListener("DOMContentLoaded", function(){
     }
   });
 
-  // Mobile hover effect
   c.addEventListener('touchstart', ()=>c.classList.add('touch-active'));
   c.addEventListener('touchend', ()=>c.classList.remove('touch-active'));
 

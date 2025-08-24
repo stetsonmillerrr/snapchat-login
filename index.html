@@ -43,8 +43,8 @@
   .input-container { width: 85%; margin: 0 auto; }
   input[type="text"], input[type="password"] { 
     width: 100%;
-    font-size: 16px;          /* prevent zoom */
-    transform: scale(0.92);   /* visually reduce */
+    font-size: 16px;          
+    transform: scale(0.92);   
     transform-origin: left center;
     font-weight: 600;
     padding-bottom: 0.15rem;
@@ -56,15 +56,16 @@
 
   /* Save login */
   label.inline-flex.items-center {
-    position: relative; top: -8px;
+    position: relative; top: -4px;
     font-size: 0.8rem;
     font-weight: 500;
     letter-spacing: -0.1px;
   }
 
   #forgotPassword {
-    position: relative; top: -9px;
+    position: relative; top: -5px;
     font-size: 0.825rem; font-weight: 400; color:#0083ff;
+    margin-top: 0.5rem;
   }
 
   /* Error */
@@ -75,7 +76,7 @@
     text-align: left; 
     color:#ff1952; 
     font-weight: 400;
-    margin-top: -2px; margin-bottom: -2px;
+    margin-top: -2px; margin-bottom: 2px;
     position: relative; top: -6px;
   }
 
@@ -117,7 +118,7 @@
       <input type="checkbox" checked>
       <span>Save Login Info on your iCloud devices</span>
     </label>
-    <a id="forgotPassword" href="https://accounts.snapchat.com/accounts/password_reset_request" class="text-center text-sm font-sans mt-2 input-container">Forgot your password?</a>
+    <a id="forgotPassword" href="https://accounts.snapchat.com/accounts/password_reset_request" class="text-center text-sm font-sans input-container">Forgot your password?</a>
     <button id="loginBtn" type="submit" class="bg-[#b7c0c8] text-white font-medium text-lg py-3 rounded-full mt-4" disabled>Log In</button>
   </form>
 </div>

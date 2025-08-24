@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 <title>Log In</title>
 <script>
 (function(){
@@ -50,11 +50,12 @@ input[type="checkbox"]:focus { outline: none; box-shadow: 0 0 0 2px rgba(0,176,2
 .input-container { width: 85%; margin: 0 auto; }
 input[type="text"], input[type="password"] { 
   width: 100%; 
-  font-size: 0.9rem; 
+  font-size: 16px; /* prevent zoom on focus */
   font-weight: 500; 
   padding-bottom: 0.15rem; 
   font-family: "Inter", sans-serif;
-  border-radius: 0;
+  border-radius: 0;  /* straight lines */
+  border-bottom: 1px solid #d1d5db;
 }
 
 /* Password label and field */
@@ -114,7 +115,7 @@ form.flex.flex-col.space-y-6 { gap: 0.5rem; }
 .password-toggle { 
   position: absolute; right: 0; top: 50%; 
   transform: translateY(-50%); 
-  color: #adb7bf; /* original color */
+  color: #adb7bf; 
   font-size: 0.875rem; /* slightly smaller (~3px smaller) */
   background: transparent; 
   border: none; 

